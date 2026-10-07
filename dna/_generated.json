@@ -82,6 +82,14 @@
       "hash": "0xe1140f9ec75aba0a"
     },
     {
+      "name": "dna-plan",
+      "package": "dna_plan",
+      "ecosystem": "pub",
+      "resolvedVersion": "0.3.0",
+      "via": null,
+      "hash": "0x78d3445b36b4f971"
+    },
+    {
       "name": "self",
       "package": null,
       "ecosystem": null,
@@ -272,6 +280,10 @@
     {
       "path": "doc/guides/install-guide/install-vscode-guide.md",
       "hash": "0x06855fb60670890e"
+    },
+    {
+      "path": "doc/guides/pm-repo-guide.md",
+      "hash": "0xfe33e8538098b0f3"
     },
     {
       "path": "doc/guides/readme-dna-guide.md",
