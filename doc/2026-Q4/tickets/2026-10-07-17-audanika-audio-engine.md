@@ -236,8 +236,9 @@ roughly 22 to 32 engineer-weeks.
   transport segments and capabilities, provider vtable), the notices file
   convention and its check. Depends on S00, S0 and on the first release of
   `aud_midi_standard` (midi-001).
-- S2 (XL, done 2026-10-08, ticket 19; the headless host, the stress
-  tests and the watchdog split off as S2b, ticket 20) `aud_audio_graph`: engine with
+- S2 (XL, in progress: the engine, the Dart API and the document are
+  ticket 19, done 2026-10-08; the headless host, the stress tests and
+  the watchdog remain as S2b, ticket 20) `aud_audio_graph`: engine with
   typed ports, persistent node instances and immutable programs, graph
   transactions with revision
   acknowledgements, fades and retirement (graph-003), the realtime
