@@ -178,9 +178,9 @@ extension on iOS, M4 the backing player with time stretching;
 everything else follows M4. Step numbers
 are stable labels and no longer read in sequence. A step names the
 steps it depends on; steps without a dependency inside a milestone run
-in parallel. Every step becomes a GitHub issue in `aud_audio_pm` whose
-number is its ticket ID (process-001) and gets its own plan file in
-`tickets/` before it starts. Sizes are rough estimates for one
+in parallel. Every step becomes a ticket numbered in `doc/issues.md` of
+`aud_audio_pm` (process-003) and gets its own plan file in `tickets/`
+before it starts. Sizes are rough estimates for one
 experienced engineer — S up to one week, M two to three weeks, L four
 to six weeks, XL more — made without knowing the team; they are
 re-estimated when owners are named (open question 5). M1 adds up to
@@ -205,7 +205,7 @@ roughly 22 to 32 engineer-weeks.
   Depends on nothing.
 - S0 Spikes, split into decision gates so that the mobile foundation
   waits for nothing else:
-  - S0-mobile ⏳ next (M, gates M1): (a) a C++ sine reaches the device on iOS
+  - S0-mobile (M, gates M1, done 2026-10-08 on the simulator and the emulator, ticket 5; real devices open): (a) a C++ sine reaches the device on iOS
     and Android through a `package_ffi` hook build, controlled from
     Dart, with measured callback period and command latency; (d) the
     sfizz fork builds for iOS and Android (clang-19 fix) and a legacy
@@ -558,6 +558,8 @@ effort follow the class of the ticket (process-002):
   releases, desktop and web follow (release-001).
 - Ticket IDs: GitHub issue numbers of `aud_audio_pm`, status on an
   organization Projects board; 17 stays the exception (process-001).
+  Superseded on 2026-10-08: the numbers live in `doc/issues.md` of this
+  repo, no GitHub issues (process-003).
 - Further suggestions (R28): all planned — six new packages in phase 7,
   the cross-cutting ones folded into existing steps (scope-001).
 - External review of the engine contracts: ten of eleven points

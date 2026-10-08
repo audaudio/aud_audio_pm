@@ -218,6 +218,9 @@ in a separate process or is replaced by a native view (plugin-001).
   [packages.jsonc](packages.jsonc), created by ticket 2); the pubspecs
   reference each other by git references with `tag_pattern` according
   to the package graph until the packages are on pub.dev (repos-001).
+- Builds: third-party C and C++ is vendored as the subset the linker
+  needs and compiled by each package's build hook; the ABI header of the
+  core is included, never linked (build-001).
 - Naming: every public class carries the prefix `Aud` in Dart and C++,
   C symbols the prefix `aud_`; this document omits the prefix for
   brevity (naming-001).

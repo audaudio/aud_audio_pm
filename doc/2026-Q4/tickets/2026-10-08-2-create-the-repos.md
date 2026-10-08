@@ -131,6 +131,7 @@ dependencies:
 
 ## Open questions
 
-1. The organization Projects board (process-001) needs the `project`
-   scope of the GitHub CLI, which the current token lacks; create it by
-   hand or grant the scope with `gh auth refresh -s project`?
+None. The organization Projects board of process-001 was the open
+question of this ticket; it is not created, because the ticket numbers
+and their status live in `doc/issues.md` of this repo since 2026-10-08
+(process-003).
