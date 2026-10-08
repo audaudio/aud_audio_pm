@@ -14,3 +14,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   repair of the docs site
 - [2026-10-08-19-build-the-audio-graph.md](2026-10-08-19-build-the-audio-graph.md)
   — ticket 19: the audio graph engine of `aud_audio_graph` (step S2)
+- [2026-10-08-20-add-the-headless-host.md](2026-10-08-20-add-the-headless-host.md)
+  — ticket 20: the headless host, the stress tests and the watchdog of
+  `aud_audio_graph` (step S2b)

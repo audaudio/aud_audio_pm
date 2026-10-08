@@ -14,7 +14,7 @@ Next number: 21
 | 17 | Audanika Audio Engine: concept, decisions and ticket plan | done | [2026-10-07-17-audanika-audio-engine.md](2026-Q4/tickets/2026-10-07-17-audanika-audio-engine.md) |
 | 18 | S1: Define the core contracts of aud_audio_core | done | [2026-10-08-18-define-the-core-contracts.md](2026-Q4/tickets/2026-10-08-18-define-the-core-contracts.md) |
 | 19 | S2: Build the audio graph | in review | [2026-10-08-19-build-the-audio-graph.md](2026-Q4/tickets/2026-10-08-19-build-the-audio-graph.md) |
-| 20 | S2b: Add the headless host, stress tests and watchdog | open | |
+| 20 | S2b: Add the headless host, stress tests and watchdog | in review | [2026-10-08-20-add-the-headless-host.md](2026-Q4/tickets/2026-10-08-20-add-the-headless-host.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the

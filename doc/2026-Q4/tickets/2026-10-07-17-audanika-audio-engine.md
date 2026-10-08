@@ -236,9 +236,9 @@ roughly 22 to 32 engineer-weeks.
   transport segments and capabilities, provider vtable), the notices file
   convention and its check. Depends on S00, S0 and on the first release of
   `aud_midi_standard` (midi-001).
-- S2 (XL, in progress: the engine, the Dart API and the document are
-  ticket 19, done 2026-10-08; the headless host, the stress tests and
-  the watchdog remain as S2b, ticket 20) `aud_audio_graph`: engine with
+- S2 (XL, done 2026-10-08: the engine, the Dart API and the document in
+  ticket 19; the headless host, the stress tests and the watchdog as S2b
+  in ticket 20) `aud_audio_graph`: engine with
   typed ports, persistent node instances and immutable programs, graph
   transactions with revision
   acknowledgements, fades and retirement (graph-003), the realtime
@@ -603,8 +603,9 @@ All suggestions were planned on 2026-10-08 (scope-001):
 - `aud_dsp_spatial`: S25.
 - MIDI 2.0 and MPE: per-note controllers in the core's UMP event model
   (S1) and note expressions in the plugin shells (S18, S19).
-- Real-time safety tooling: the watchdog and the counters in S2,
-  RealtimeSanitizer in CI in S22.
+- Real-time safety tooling: the watchdog and the counters in S2, which
+  also runs the native tests under RealtimeSanitizer and ThreadSanitizer
+  where the machine has them (ticket 20); both in CI in S22.
 - The benchmark app: `aud_audio_bench`, S24.
 - Remote control: service discovery and remote sessions in S7, the
   remote mode of the graph editor in S16.

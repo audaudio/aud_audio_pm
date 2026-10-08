@@ -4,10 +4,14 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 10)
-- Open work: default budgets and asset loads (with the sampler); the
-  interruption behaviour per platform (S3). The states, the handshake
-  with the audio thread and the reprepare sequence are implemented in
-  ticket 19
+- Open work: default budgets, the sample cache, cancellable and
+  reference-counted asset loads (with the sampler, S9); the interruption
+  behaviour per platform (S3). The states, the handshake with the audio
+  thread and the reprepare sequence are implemented in ticket 19; ticket
+  20 proved the route change under load - the transport keeps its
+  position across a new sample rate and a stop, tracked notes get note
+  offs with the first block after the restart, pending events survive -
+  and added asset references to graph documents
 
 ## Decision
 
