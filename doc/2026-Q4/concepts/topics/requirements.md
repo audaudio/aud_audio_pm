@@ -113,6 +113,9 @@ and plans can link to them as R1 … R28.
 - R33 `Aud` is the prefix of all classes (naming-001).
 - R34 A multitrack backing player with loop capability and tempo changes
   without pitch change (backing-001).
+- R35 Create all repos at the beginning and link them according to the
+  dependency graph, in the first phase by git references with
+  `tag_pattern` in `pubspec.yaml` (repos-001).
 
 ## Readings and name corrections
 

@@ -2,6 +2,7 @@
 
 | ID | Status | Date | Decision | Open work |
 | --- | --- | --- | --- | --- |
+| [repos-001](repos-001.md) | accepted | 2026-10-08 | All repos created up front (S00), wired by git references with tag_pattern per the package graph, initial tags, ocean refreshed | Initial version; switch to pub.dev |
 | [family-001](family-001.md) | proposed | 2026-10-07 | One repo per package, the aud_audio family, shared major version; the AUv3 shell is aud_audio_auv3 | none |
 | [interop-001](interop-001.md) | proposed | 2026-10-07 | Dart never runs on the audio thread; FFI command queue, ring buffers, build hooks, C ABI | Measure queue and event latency in the spike |
 | [interop-002](interop-002.md) | proposed | 2026-10-08 | Real-time contract: queue classes, capacities, overflow and late-event policies, note-off recovery, notification thread for Dart wake-ups | Capacities and per-block budget |

@@ -19,8 +19,9 @@ are listed as R1 to R28 in
 Four milestones, all on iOS and Android (release-003):
 
 - M1, the sampler: the Audanika app plays its instruments through
-  `aud_dsp_sampler` on the new engine — S0-mobile, S1, S2, S3, S4, S8
-  (minimal bridge), S9, a minimal S22 and S24, S29a (release-002).
+  `aud_dsp_sampler` on the new engine — S00 (all repos), S0-mobile, S1,
+  S2, S3, S4, S8 (minimal bridge), S9, a minimal S22 and S24, S29a
+  (release-002).
 - M2, reverb and delay: the first effects ticket S10a and the app
   migration S29b.
 - M3, AUv3 on iOS: `aud_audio_auv3` (S20) over the headless host, so
@@ -160,10 +161,11 @@ flowchart BT
   app[App] --> umbrella & dsp & midi & seq
 ```
 
-Rules of the family (family-001): one repo per package in `audaudio`,
-`dna_audanika` in every repo, shared major version, released together
-per gg ticket, the umbrella pins caret ranges of the same minor, apps
-depend on `aud_audio` plus the DSP packages they use.
+Rules of the family (family-001, repos-001): one repo per package in
+`audaudio`, all created up front and wired by git references with
+`tag_pattern` until pub.dev, `dna_audanika` in every repo, shared major
+version, released together per gg ticket, the umbrella pins exact
+versions, apps depend on `aud_audio` plus the DSP packages they use.
 
 ## Steps (each a later gg ticket)
 
@@ -183,6 +185,21 @@ roughly 22 to 32 engineer-weeks.
 
 ### Milestone M1: the sampler on iOS and Android
 
+- S00 (M) Create the repos: every package of the family gets its repo
+  in the `audaudio` organization before any implementation — created
+  from the matching template (`dart create -t package`,
+  `flutter create --template=package_ffi` for C and C++ through hooks,
+  the Flutter package template for the UI packages, rljson.github.io
+  for the docs site), with the `dna_audanika` layer, `index.jsonc`,
+  README, CHANGELOG, the quick-check workflow and the GitHub ruleset.
+  The pubspecs are wired to each other according to the package graph
+  by git references with `tag_pattern` (repos-001); every repo gets an
+  initial `0.0.1` tag in dependency order so the references resolve;
+  `aud_audio_core` references `aud_midi_standard` the same way as soon
+  as that repo exists; `gg do upgrade ocean` refreshes the workspace so
+  later tickets add existing repos with `gg do add`. The switch to
+  pub.dev versions is part of S22 once the packages are published.
+  Depends on nothing.
 - S0 Spikes, split into decision gates so that the mobile foundation
   waits for nothing else:
   - S0-mobile (M, gates M1): (a) a C++ sine reaches the device on iOS
@@ -209,14 +226,13 @@ roughly 22 to 32 engineer-weeks.
 - S1 (L) `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
   capabilities, allocator ownership, thread-affinity tags, state
   serialization, latency and tail reporting), buffer and event formats,
-  descriptors, Dart contracts, the typed command model with the OSC
-  adapter over it (osc-001), the UMP event model with per-note
-  controllers for MPE and MIDI 2.0, the node preset schema (JSON), the
-  timing contract (time-001: three time domains with validity, the
-  timestamp filter with its reset rules, transport segments and
-  capabilities, provider vtable), the notices file convention and its
-  check. Depends on S0 and on the first release of `aud_midi_standard`
-  (midi-001).
+  descriptors, Dart contracts, the typed command model with the OSC adapter
+  over it (osc-001), the UMP event model with per-note controllers for MPE and
+  MIDI 2.0, the node preset schema (JSON), the timing contract (time-001:
+  three time domains with validity, the timestamp filter with its reset rules,
+  transport segments and capabilities, provider vtable), the notices file
+  convention and its check. Depends on S00, S0 and on the first release of
+  `aud_midi_standard` (midi-001).
 - S2 (XL) `aud_audio_graph`: engine with typed ports, persistent node
   instances and immutable programs, graph transactions with revision
   acknowledgements, fades and retirement (graph-003), the realtime
@@ -557,6 +573,8 @@ effort follow the class of the ticket (process-002):
 - Delivery order: sampler first, reverb and delay second, AUv3 third,
   the backing player with time stretching fourth, all on iOS and
   Android; the steps are regrouped by milestone (release-003).
+- Repos: all created up front in S00 and wired by git references with
+  `tag_pattern` (R35, repos-001).
 - Model and effort per ticket class recorded (process-002).
 - Backing tracks: a multitrack backing player with loops and tempo
   changes without pitch change is required (R34); planned as

@@ -21,7 +21,9 @@ All packages share the major version and are released together per gg ticket;
 the umbrella pins exact versions of the family (caret ranges would admit later
 minors), and the C ABI version checked at registration is the real
 compatibility gate (abi-001). Each repo gets the `dna_audanika` layer and is
-planned in `aud_audio_pm`.
+planned in `aud_audio_pm`. All repos are created up front and wired to each
+other by git references with `tag_pattern` until the packages are on pub.dev
+(repos-001).
 
 ## Why
 
