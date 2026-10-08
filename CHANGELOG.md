@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 - 2026-10-08
 
 ### Changed
 
@@ -17,12 +17,6 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
-
-Add the S2 plan with the review decisions, the steps and the findings
-Register tickets 19 and 20 (S2b, split off) in doc/issues.md
-Decide scope-002: no backward compatibility with the existing app
-Drop the aud_midi bridge fallback from S8, S29b and release-002
-Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 ## 0.1.0 - 2026-10-08
 
