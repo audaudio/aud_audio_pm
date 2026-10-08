@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Mark ticket 17 as done and S0-mobile as next
+
 ## 0.0.2 - 2026-10-08
 
 ### Changed
