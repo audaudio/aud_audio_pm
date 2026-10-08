@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Plan the core contracts (ticket 18)
+
+- Add the plan file of ticket 18 and its row in doc/issues.md
+- Mark S1 as in progress in the plan of ticket 17
+- Update the open work of the decisions S1 settled
+
 ## 0.0.4 - 2026-10-08
 
 ### Changed

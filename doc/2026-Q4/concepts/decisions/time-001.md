@@ -4,9 +4,10 @@
 - Date: 2026-10-08
 - Canonical source: topics/ableton-link.md ("What the engine must
   provide for Link"), topics/audio-io-platforms.md
-- Open work: define the segment struct, the capability flags and the
-  conversion functions in the core ticket; measure timestamp quality
-  per backend in the spike
+- Open work: measure timestamp quality per backend on the reference
+  devices. The segment struct, the capability flags, the conversions and
+  the filter are defined (ticket 18: `aud_abi.h`, `aud_transport.h`,
+  `aud_time_filter.h`)
 
 ## Decision
 

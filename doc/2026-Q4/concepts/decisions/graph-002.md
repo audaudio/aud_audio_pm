@@ -5,8 +5,8 @@
 - Canonical source: Gabriel Gatzsche's answer at the plan review on
   2026-10-08; decisions/graph-001.md (the block model and the rejected
   fixed quantum)
-- Open work: choose the default minimum sub-range (16 frames proposed)
-  and the adapter API in the core ticket
+- Open work: none; the minimum sub-range is 16 frames and the adapter
+  API is `aud_fixed_block_adapter.hpp` (ticket 18)
 
 ## Decision
 
