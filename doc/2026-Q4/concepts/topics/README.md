@@ -22,3 +22,5 @@ tried and what holds.
   AudioKit family, TAAE2, Pd, Max, Ardour, JUCE, SuperCollider
 - [review-2026-10-08-engine-contracts.md](review-2026-10-08-engine-contracts.md)
   — the external review of the engine contracts and the responses
+- [review-2026-10-08-plan-scope.md](review-2026-10-08-plan-scope.md) —
+  the external review of scope and sequence and the responses

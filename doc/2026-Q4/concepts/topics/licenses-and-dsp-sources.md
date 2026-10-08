@@ -58,7 +58,8 @@ what every copy obliges us to.
 | Airwindows | MIT | read-only | copy |
 | chowdsp_wdf | BSD-3-Clause | active | copy |
 | chowdsp_utils | per module: Common BSD, DSP/GUI GPLv3 | active | copy Common only, verify each module header |
-| Signalsmith DSP | MIT | active | copy |
+| Signalsmith DSP, Signalsmith Stretch | MIT | active | copy; Stretch is the time-stretch core of aud_dsp_stretch |
+| Rubber Band, SoundTouch, élastique | GPL or commercial; LGPL; commercial | active | never (license-002) — Signalsmith Stretch instead |
 | pffft | FFTPACK BSD-like, LicenseRef-FFTPACK | active | copy (SIMD incl. WASM-SIMD) |
 | kissfft | BSD-3-Clause | active | copy |
 | muFFT | MIT core; bench/test GPLv2+ | active | copy core only |

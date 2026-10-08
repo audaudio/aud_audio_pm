@@ -23,6 +23,13 @@ Ableton (link-devs@ableton.com), and on iOS must accept Ableton's Link
 SDK license with its UI and entitlement duties. Audanika's own apps
 obtain that license before they ship with the package.
 
+## Consequences
+
+- Fetching at build time changes who accepts the license, not the
+  license: CI of `aud_audio_link` runs tests and publishes no binaries,
+  and example and cookbook apps ship without Link unless Audanika holds
+  a license.
+
 ## Why
 
 - Bundling Link's sources would make the published package a GPL work

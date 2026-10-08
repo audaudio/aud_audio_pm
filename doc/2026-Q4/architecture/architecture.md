@@ -15,7 +15,8 @@ Apps, plugin shells, docs cookbook
             ▲
             └─ aud_dsp_*     DSP packages: C++ nodes + Dart descriptors
 Integration: aud_audio_midi, aud_audio_osc, aud_audio_sequencer,
-             aud_audio_link, aud_audio_web, aud_audio_file
+             aud_audio_link, aud_audio_web, aud_audio_file,
+             aud_audio_backing
 UI:          aud_audio_ui_graph_edit, aud_audio_ui_piano_roll,
              aud_audio_ui_controls, aud_audio_ui_keyboard,
              aud_audio_ui_waveform
@@ -65,7 +66,8 @@ when the page is cross-origin isolated, `MessagePort` only otherwise.
 Worker sharing the module's heap takes the role of the control thread —
 compiling, loading, freeing — and publishes prepared plans to the worklet;
 without shared memory it transfers them by message with reduced timing
-guarantees (web-002).
+guarantees (web-002). The capabilities of the native, the isolated and the
+non-isolated web environment are stated as a contract (web-003).
 
 ## Graph model
 
@@ -167,9 +169,10 @@ time; the web links all nodes statically into the app's module. Content:
 filters, delays, dynamics, modulation, reverbs, taps), `aud_dsp_stk` (physical
 models), `aud_dsp_guitar_amp` (amp and cabinet), `aud_dsp_synth` (a polyphonic
 subtractive synthesizer after DunneAudioKit's Synth), `aud_dsp_analysis` (taps
-and meters), `aud_dsp_spatial` (ambisonics and binaural rendering),
-`aud_dsp_mi` (Mutable Instruments ports); provenance per dsp-001 and
-scope-001.
+and meters), `aud_dsp_spatial` (ambisonics and binaural rendering), `aud_dsp_mi`
+(Mutable Instruments ports), `aud_dsp_stretch` (time stretch and pitch
+shift on Signalsmith Stretch, the core of the backing player
+`aud_audio_backing`, backing-001); provenance per dsp-001 and scope-001.
 
 ## Audio IO
 
@@ -190,12 +193,16 @@ latency queried through platform APIs.
 
 ## Plugin shells
 
-A plugin shell contains the C++ engine and a serialized graph, exposes
-graph parameters and event inlets as plugin parameters and MIDI, and
-maps buses. Order: VST3 (MIT since SDK 3.8), CLAP (MIT), AUv3 (out of
-process, 360 MB budget). Dart never runs on the host's render thread; a
-Flutter UI runs in a separate process or is replaced by a native view
-(plugin-001).
+A plugin shell contains the C++ engine behind its headless host API: the
+engine loads the graph document, presets and assets without Dart and renders
+into host-supplied buffers, which is the first-class renderer interface that
+`aud_audio_io` uses as well (plugin-002). The shell exposes graph parameters
+with stable ids and automation gestures, event inlets as MIDI, buses from the
+document, latency and tail from the compiler, and offline rendering through
+the virtual timeline; it needs neither the IO package nor the parallel
+scheduler. Order: VST3 (MIT since SDK 3.8), CLAP (MIT), AUv3 (out of process,
+360 MB budget). Dart never runs on the host's render thread; a Flutter UI runs
+in a separate process or is replaced by a native view (plugin-001).
 
 ## Cross-cutting
 
@@ -207,8 +214,12 @@ Flutter UI runs in a separate process or is replaced by a native view
   budgets, bounded polyphony, cancellable loads (lifecycle-001).
 - Presets: JSON node presets and one graph document that the editor,
   the presets and the plugin shells share; SFZ for the sampler.
+- Naming: every public class carries the prefix `Aud` in Dart and C++,
+  C symbols the prefix `aud_`; this document omits the prefix for
+  brevity (naming-001).
 - Versioning: all packages share the major version and release together
-  per gg ticket; the umbrella pins caret ranges of the same minor.
+  per gg ticket; the umbrella pins exact versions and the ABI version
+  is the compatibility gate (abi-001).
 - Testing: offline rendering with a fake IO backend, golden-file renders
   that must match for any thread count, latency and xrun measurements
   on real devices, a debug watchdog for unsafe calls on the audio

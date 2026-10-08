@@ -9,19 +9,25 @@
 ## Decision
 
 The engine has explicit states — created, prepared, running, suspended,
-stopped, disposed — and every transition is acknowledged through the
-event ring. A route change, a sample-rate or buffer-size change and an
-interruption follow one sequence: stop the callbacks safely, reprepare
-all node instances for the new rate and block size, reset the timing
-filter and the transport snapshot, restart, acknowledge. Shutdown
-reverses start-up: stop IO, drain the queues, close running notes,
-dispose instances, free memory. Resources have budgets and policies: a
-sample cache budget in bytes per engine with least-recently-used
-eviction; streaming nodes output silence and raise a diagnostic on
-underflow, never block; instrument nodes bound their polyphony and
-steal voices; asset loads have ids and can be cancelled; loaded assets
-are reference-counted and shared between nodes and engine instances in
-one process.
+stopped, disposed — and every transition is acknowledged through the event
+ring. Phone calls and audio-focus changes, backgrounding, Bluetooth and route
+changes, permission denial, stream disconnects (an AAudio stream disconnects
+when a headset changes and must be reopened), stream loss and new sample rates
+all follow one sequence: stop the callbacks safely, reprepare all node
+instances for the new rate and block size, reset the timing filter and the
+transport snapshot, restart, acknowledge. What survives a recovery: the
+transport position, the graph and the node state, and pending events whose
+time has not passed; active notes are closed with note-offs, and the clock
+mapping is reset and converges again. Duplex streams on different clocks are
+reclocked: the input is resampled to the output clock by a drift-tracking
+resampler and the drift is reported as a diagnostic. Shutdown reverses
+start-up: stop IO, drain the queues, close running notes, dispose instances,
+free memory. Resources have budgets and policies: a sample cache budget in
+bytes per engine with least-recently-used eviction; streaming nodes output
+silence and raise a diagnostic on underflow, never block; instrument nodes
+bound their polyphony and steal voices; asset loads have ids and can be
+cancelled; loaded assets are reference-counted and shared between nodes and
+engine instances in one process.
 
 ## Why
 

@@ -110,6 +110,9 @@ and plans can link to them as R1 … R28.
   `aud_dsp_synth`; the sampler stays sfizz.
 - R32 Plan the further suggestions of R28 as packages and steps
   (scope-001).
+- R33 `Aud` is the prefix of all classes (naming-001).
+- R34 A multitrack backing player with loop capability and tempo changes
+  without pitch change (backing-001).
 
 ## Readings and name corrections
 

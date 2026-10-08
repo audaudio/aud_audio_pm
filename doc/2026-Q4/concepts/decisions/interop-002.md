@@ -9,25 +9,29 @@
 
 ## Decision
 
-Commands are separated by class, each with its own queue, owner and
-overflow rule. Graph transactions go to the control thread, never to a
-realtime queue, so compiling and loading cannot delay live events.
-Parameter changes and timestamped events travel in fixed-capacity,
-lock-free single-producer single-consumer queues from the Dart proxy
-(one producer per queue; several isolates share one proxy) to the audio
-thread. Parameter changes coalesce: the latest value per parameter wins.
-Events are never dropped silently: a full queue rejects the enqueue and
-Dart receives an error. The audio thread processes at most a fixed
-budget of events per block and carries the rest over in order. Late
-events — timestamp already passed — play at the start of the block
-with a diagnostic (a per-engine policy may drop them instead). Delivered
-note-ons are always closed: the engine tracks running notes per node
-and emits the matching note-offs on overflow, reset, stop and
-retirement. Meter, analysis and diagnostic data flow through lossy ring
-buffers that overwrite the oldest entry. The audio thread never calls
-into Dart: it signals a semaphore, and a dedicated notification thread
-invokes `NativeCallable.listener`, whose execution is neither
-allocation-free nor bounded.
+Commands are separated by class, each with its own queue, owner and overflow
+rule. Graph transactions go to the control thread, never to a realtime queue,
+so compiling and loading cannot delay live events. Parameter changes and
+timestamped events travel in fixed-capacity, lock-free single-producer
+single-consumer queues from the Dart proxy (one producer per queue; several
+isolates share one proxy) to the audio thread. Parameter changes coalesce: the
+latest value per parameter wins. Events are never dropped silently: a full
+queue rejects the enqueue and Dart receives an error. The audio thread
+processes at most a fixed budget of events per block and carries the rest over
+in order. Late events — timestamp already passed — play at the start of the
+block with a diagnostic (a per-engine policy may drop them instead). Events
+with identical timestamps keep their enqueue order, except that for the same
+node and pitch a note-off precedes a note-on so that notes retrigger.
+Scheduled events may be enqueued up to a lookahead (default ten seconds) and
+wait in a bounded time-ordered scheduler on the audio side; they carry ids and
+can be cancelled by id or per node before they fire. No string parsing or
+pattern matching happens on the audio thread (osc-001). Delivered note-ons are
+always closed: the engine tracks running notes per node and emits the matching
+note-offs on overflow, reset, stop and retirement. Meter, analysis and
+diagnostic data flow through lossy ring buffers that overwrite the oldest
+entry. The audio thread never calls into Dart: it signals a semaphore, and a
+dedicated notification thread invokes `NativeCallable.listener`, whose
+execution is neither allocation-free nor bounded.
 
 ## Why
 

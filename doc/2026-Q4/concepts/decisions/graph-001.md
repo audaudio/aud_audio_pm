@@ -20,14 +20,15 @@ control thread. Direct cycles are rejected at compile time; feedback runs only
 through an explicit feedback node pair whose delay is defined in samples (at
 least the prepared maximum block, so the compiler can order the reader before
 the writer) and therefore does not change with the device buffer or with
-event-driven sub-ranges. Latency compensation follows two policies: scheduled
-events (sequencer, automation) are pre-scheduled by the path latency the
-compiler reports; live events (MIDI input, UI) are delivered as early as
-possible and their path latency is reported, never hidden; where one node
-feeds paths of different latency the compiler delays the shorter paths so
-mixes align, and a path may be marked low-latency to opt out of that
-alignment. Taps and meters publish into ring buffers read off the audio
-thread.
+event-driven sub-ranges; a one-sample feedback loop belongs inside a node
+(filters, physical models), never across nodes. Latency compensation follows
+two policies: scheduled events (sequencer, automation) are pre-scheduled by
+the path latency the compiler reports; live events (MIDI input, UI) are
+delivered as early as possible and their path latency is reported, never
+hidden; where one node feeds paths of different latency the compiler delays
+the shorter paths so mixes align, and a path may be marked low-latency to opt
+out of that alignment. Taps and meters publish into ring buffers read off the
+audio thread.
 
 ## Block model: variable blocks, sample-accurate events (graph-002)
 

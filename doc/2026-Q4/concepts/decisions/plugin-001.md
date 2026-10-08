@@ -9,15 +9,16 @@
 
 ## Decision
 
-The plugin shells wrap the C++ engine with a serialized graph and
-expose graph parameters, event inlets and buses as plugin parameters,
-MIDI and buses. Order: `aud_audio_vst3` (SDK 3.8+, MIT; Windows, Linux,
-macOS), then `aud_audio_clap` (MIT, same engine core, thread-pool
-extension), then `aud_audio_auv3` (AUv3 on iOS and
-macOS, out of process, 360 MB budget shared by all instances). Dart
-never runs on the host's render thread: the plugin's logic lives in C++,
-and a Flutter UI, if any, runs as a separate process (as flutter_vst3
-does) or as a native view that talks to the engine. LV2 only on
+The plugin shells wrap the C++ engine through the headless host of plugin-002
+— host-supplied buffers, graph document, presets and assets loaded without
+Dart — independent of `aud_audio_io` and of the parallel scheduler, and expose
+graph parameters, event inlets and buses as plugin parameters, MIDI and buses.
+Order: `aud_audio_vst3` (SDK 3.8+, MIT; Windows, Linux, macOS), then
+`aud_audio_clap` (MIT, same engine core, thread-pool extension), then
+`aud_audio_auv3` (AUv3 on iOS and macOS, out of process, 360 MB budget shared
+by all instances). Dart never runs on the host's render thread: the plugin's
+logic lives in C++, and a Flutter UI, if any, runs as a separate process (as
+flutter_vst3 does) or as a native view that talks to the engine. LV2 only on
 request.
 
 ## Why
