@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.2 - 2026-10-08
+
+### Changed
+
+- Create the repos of the aud_audio family
+
 ## 0.0.1 - 2026-10-08
 
 ### Added

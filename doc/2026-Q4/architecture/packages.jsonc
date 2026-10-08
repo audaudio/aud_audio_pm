@@ -1,0 +1,481 @@
+// @license
+// Copyright (c) Audanika. All Rights Reserved.
+//
+// Use of this source code is governed by terms that can be
+// found in the LICENSE file in the root of this package.
+
+{
+  "_comment": "Package manifest of the aud_audio family: the machine-readable package graph of ticket 17. Read by scripts/create-family-repos.js. Templates: dart = dart create -t package; ffi = flutter create --template=package_ffi; flutter = flutter create -t package; app = flutter create; docs = copy of rljson.github.io.",
+  "organization": "audaudio",
+  "version": "0.0.1",
+  "external": {
+    "aud_midi_standard": {
+      "git": "https://github.com/audmidi/aud_midi_standard.git",
+      "version": "^0.1.0"
+    },
+    "aud_midi": {
+      "git": "https://github.com/audmidi/aud_midi.git",
+      "version": "^0.1.0",
+      "deferred": "added when audmidi/aud_midi has a tag"
+    }
+  },
+  "packages": [
+    {
+      "name": "aud_audio_core",
+      "template": "ffi",
+      "description": "Core of the Audanika Audio Engine: the C ABI, buffer and event formats, node contracts, timing contract and OSC message model",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_midi_standard"
+      ]
+    },
+    {
+      "name": "aud_audio_graph",
+      "template": "ffi",
+      "description": "Audio graph engine of the Audanika Audio Engine: C++ render programs, scheduler, transport, headless host; Dart graph API",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_audio_io",
+      "template": "ffi",
+      "description": "Audio device IO of the Audanika Audio Engine: enumeration, hot-plug, duplex multi-channel streams with timestamps; Oboe on Android, miniaudio elsewhere",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_audio_web",
+      "template": "dart",
+      "description": "Web build of the Audanika Audio Engine: Emscripten toolchain, AudioWorklet host, Wasm Worker control runtime",
+      "platforms": [
+        "web"
+      ],
+      "deps": [
+        "aud_audio_graph",
+        "aud_audio_io"
+      ]
+    },
+    {
+      "name": "aud_audio",
+      "template": "dart",
+      "description": "The Audanika Audio Engine: a Flutter audio graph defined in Dart and rendered in C++ on iOS, Android, macOS, Windows, Linux and Web",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core",
+        "aud_audio_graph",
+        "aud_audio_io",
+        "aud_audio_web"
+      ]
+    },
+    {
+      "name": "aud_audio_midi",
+      "template": "dart",
+      "description": "MIDI bridge of the Audanika Audio Engine: aud_midi ports as event inlets and outlets of the graph",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_audio_osc",
+      "template": "dart",
+      "description": "OSC adapter of the Audanika Audio Engine: address router, replies and notifications, UDP and WebSocket server",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_audio_sequencer",
+      "template": "ffi",
+      "description": "Sequencer of the Audanika Audio Engine: render-thread sequencer with tracks, clips, loops and transport",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_audio_link",
+      "template": "ffi",
+      "description": "Ableton Link transport provider of the Audanika Audio Engine; fetches Link and LinkKit at build time, app publishers license Link themselves",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_dsp_sampler",
+      "template": "ffi",
+      "description": "SFZ sampler node of the Audanika Audio Engine on the sfizz fork",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_effects",
+      "template": "ffi",
+      "description": "Effects of the Audanika Audio Engine: reverbs, delays, oscillators, filters, dynamics, modulation, distortion",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_analysis",
+      "template": "ffi",
+      "description": "Analysis nodes of the Audanika Audio Engine: amplitude, FFT and pitch taps, meters, scope and spectrum buffers",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_stk",
+      "template": "ffi",
+      "description": "Physical models of the Synthesis ToolKit as nodes of the Audanika Audio Engine",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_guitar_amp",
+      "template": "ffi",
+      "description": "Guitar amp and cabinet simulation and the DynaRage compressor as nodes of the Audanika Audio Engine",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_synth",
+      "template": "ffi",
+      "description": "Polyphonic subtractive synthesizer of the Audanika Audio Engine, ported from DunneAudioKit's Synth",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_spatial",
+      "template": "ffi",
+      "description": "Spatial audio nodes of the Audanika Audio Engine: ambisonics, binaural rendering, panners",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_mi",
+      "template": "ffi",
+      "description": "Mutable Instruments STM32 DSP ports as nodes of the Audanika Audio Engine: macro oscillator, modal resonator, granular processor",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_dsp_stretch",
+      "template": "ffi",
+      "description": "Time stretch and pitch shift node of the Audanika Audio Engine on Signalsmith Stretch",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ]
+    },
+    {
+      "name": "aud_audio_file",
+      "template": "ffi",
+      "description": "Audio files for the Audanika Audio Engine: decoders, disk-streaming player, recorder, offline bounce",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_audio_backing",
+      "template": "dart",
+      "description": "Multitrack backing player of the Audanika Audio Engine: transport-driven loops with tempo changes without pitch change",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_file",
+        "aud_dsp_stretch"
+      ]
+    },
+    {
+      "name": "aud_audio_ui_graph_edit",
+      "template": "flutter",
+      "description": "Node graph editor widget of the Audanika Audio Engine, modeled on AudioKit Flow",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio"
+      ]
+    },
+    {
+      "name": "aud_audio_ui_piano_roll",
+      "template": "flutter",
+      "description": "Piano roll widget of the Audanika Audio Engine, modeled on AudioKit PianoRoll",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio_sequencer"
+      ]
+    },
+    {
+      "name": "aud_audio_ui_controls",
+      "template": "flutter",
+      "description": "Knobs, sliders, wheels, ribbon, joystick and XY pad of the Audanika Audio Engine, modeled on AudioKit Controls",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio"
+      ]
+    },
+    {
+      "name": "aud_audio_ui_keyboard",
+      "template": "flutter",
+      "description": "Multi-touch musical keyboard widget of the Audanika Audio Engine, modeled on AudioKit Keyboard",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio"
+      ]
+    },
+    {
+      "name": "aud_audio_ui_waveform",
+      "template": "flutter",
+      "description": "Waveform view of the Audanika Audio Engine, modeled on AudioKit Waveform",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux",
+        "web"
+      ],
+      "deps": [
+        "aud_audio",
+        "aud_audio_file"
+      ]
+    },
+    {
+      "name": "aud_audio_bench",
+      "template": "app",
+      "description": "Benchmark app of the Audanika Audio Engine: latency, CPU and xrun numbers per device",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "deps": [
+        "aud_audio"
+      ]
+    },
+    {
+      "name": "aud_audio_vst3",
+      "template": "ffi",
+      "description": "VST3 shell of the Audanika Audio Engine over its headless host",
+      "platforms": [
+        "macos",
+        "windows",
+        "linux"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_audio_clap",
+      "template": "ffi",
+      "description": "CLAP shell of the Audanika Audio Engine over its headless host",
+      "platforms": [
+        "macos",
+        "windows",
+        "linux"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "aud_audio_auv3",
+      "template": "ffi",
+      "description": "Audio Unit v3 extension of the Audanika Audio Engine over its headless host",
+      "platforms": [
+        "ios",
+        "macos"
+      ],
+      "deps": [
+        "aud_audio_graph"
+      ]
+    },
+    {
+      "name": "audaudio.github.io",
+      "template": "docs",
+      "description": "Documentation site of the Audanika Audio Engine, built with Astro and Starlight",
+      "platforms": [],
+      "deps": []
+    }
+  ]
+}
