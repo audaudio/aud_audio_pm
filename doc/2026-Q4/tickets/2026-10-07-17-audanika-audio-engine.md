@@ -1,5 +1,8 @@
 # 17: Audanika Audio Engine
 
+Status: done 2026-10-08. The plan is reviewed and published; the
+implementation steps S00 to S31 run as their own tickets.
+
 ## Goal
 
 Give Audanika an audio engine that runs on every platform Flutter
@@ -202,7 +205,7 @@ roughly 22 to 32 engineer-weeks.
   Depends on nothing.
 - S0 Spikes, split into decision gates so that the mobile foundation
   waits for nothing else:
-  - S0-mobile (M, gates M1): (a) a C++ sine reaches the device on iOS
+  - S0-mobile ⏳ next (M, gates M1): (a) a C++ sine reaches the device on iOS
     and Android through a `package_ffi` hook build, controlled from
     Dart, with measured callback period and command latency; (d) the
     sfizz fork builds for iOS and Android (clang-19 fix) and a legacy
