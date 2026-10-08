@@ -41,23 +41,31 @@ plugin shells). See `img/package-graph.mmd` and decision family-001.
   render program block by block; no allocation, no locks, no I/O
   (sched-001).
 
-Dart and C++ exchange data through `dart:ffi`: a lock-free command
-queue (graph edits, parameter changes, events with timestamps), ring
-buffers for events and meters back to Dart (`asTypedList` views),
-`NativeCallable.listener` for wake-ups. Every DSP package compiles its
+Dart and C++ exchange data through `dart:ffi`: graph transactions go
+to the control thread; parameter changes and timestamped events travel
+in fixed-capacity lock-free queues with defined overflow and late-event
+policies (interop-002); events and meters come back through ring
+buffers (`asTypedList` views); a notification thread, woken by the
+audio thread through a semaphore, invokes `NativeCallable.listener`.
+Node instances are persistent and keep their state across program
+swaps; every edit is a transaction with a revision the engine
+acknowledges (graph-003). Every DSP package compiles its
 C++ with a build hook and registers its node types through the C ABI of
 `aud_audio_core` at engine start.
 
 ## Runtime on the web
 
-`img/runtime-web.mmd`. The engine and every DSP node of the app are
-linked by Emscripten into one WebAssembly module that runs inside an
-`AudioWorkletGlobalScope`. Dart runs on the main thread and uses the
-same API; the transport below it is `dart:js_interop`: commands over a
-`MessagePort`, audio and event data through `SharedArrayBuffer` ring
-buffers when the page is cross-origin isolated, `MessagePort` only
-otherwise. `aud_audio_web` owns the Emscripten build and the JS glue
-(web-001).
+`img/runtime-web.mmd`. The engine and every DSP node of the app are linked
+by Emscripten into one WebAssembly module that runs inside an
+`AudioWorkletGlobalScope`. Dart runs on the main thread and uses the same
+API; the transport below it is `dart:js_interop`: commands over a
+`MessagePort`, audio and event data through `SharedArrayBuffer` ring buffers
+when the page is cross-origin isolated, `MessagePort` only otherwise.
+`aud_audio_web` owns the Emscripten build and the JS glue (web-001). A Wasm
+Worker sharing the module's heap takes the role of the control thread —
+compiling, loading, freeing — and publishes prepared plans to the worklet;
+without shared memory it transfers them by message with reduced timing
+guarantees (web-002).
 
 ## Graph model
 
@@ -71,20 +79,24 @@ otherwise. `aud_audio_web` owns the Emscripten build and the JS glue
 - Blocks are variable, as the device or host delivers them, up to a
   prepared maximum; events split a block into sub-ranges at their
   sample offsets. (graph-002)
-- Direct cycles are rejected; feedback runs through a one-block delay
-  node pair. (graph-001)
-- The program runs in parallel: jobs with atomic input counters, work
+- Direct cycles are rejected; feedback runs through a feedback node
+  pair with a delay defined in samples; latency compensation
+  pre-schedules sequenced events and reports, never hides, the latency
+  of live input. (graph-001)
+- Rendering is serial by default; when the program's cost justifies it,
+  coarse jobs run in parallel with atomic input counters and work
   stealing between real-time workers joined to the platform's audio
-  workgroup or priority class, fixed summation order for deterministic
-  output. (sched-001)
+  workgroup or priority class, with a fixed summation order for
+  deterministic output; plugins use the host's pool. (sched-001)
 
 ## Events and addressing
 
-Every graph, node, inlet, outlet and parameter has an OSC 1.1 address.
-One message model — address, typed arguments, timetag — serves the Dart
-API, the command queue, the sequencer and the optional network server in
-`aud_audio_osc`. Timetags map to sample positions: now, absolute host
-time, or beat time through the transport. The engine replies with
+Every graph, node, inlet, outlet and parameter has an OSC 1.1 address
+at the Dart API and on the network (`aud_audio_osc`). Inside the engine
+commands are typed and numeric; the Dart-side router resolves addresses
+to handles before a command enters a realtime queue, and OSC timetags
+are converted into the engine's time domains — now, host time, or beat
+time through the transport — at the adapter. The engine replies with
 `/done` and `/fail` and notifies about node lifecycle and meters.
 (osc-001)
 
@@ -96,34 +108,35 @@ to the nodes and to the note expressions of the plugin shells.
 ## Time, transport and sequencing
 
 The engine's reference clock is the platform's monotonic host time in
-microseconds (`mach_absolute_time`, `CLOCK_MONOTONIC`, the Windows
-performance counter, `performance.now` on the web) — the clock Ableton
-Link and the plugin hosts measure against. Every stream of
-`aud_audio_io` delivers with each callback the sample position of the
-block, the host time at which its first frame reaches the output (for
-input: was captured), and the current output and input latency. A
-least-squares filter in `aud_audio_core` — our own code, not Link's
-`HostTimeFilter` — smooths the jitter of the callback times into a
-stable sample-to-host-time mapping. From these the callback thread
-computes the output time of every block once, before the render program
-runs (time-001).
+microseconds (`mach_absolute_time`, `CLOCK_MONOTONIC`, the Windows performance
+counter, `performance.now` on the web) — the clock Ableton Link and the plugin
+hosts measure against. Every stream of `aud_audio_io` delivers with each
+callback the sample position of the block, the host time at which its first
+frame reaches the output (for input: was captured), and the current output and
+input latency. A least-squares filter in `aud_audio_core` — our own code, not
+Link's `HostTimeFilter` — smooths the jitter of the callback times into a
+stable sample-to-host-time mapping. From these the callback thread computes
+the output time of every block once, before the render program runs. Sample
+time, musical time and host time stay distinct domains; host time carries a
+validity flag and an accuracy estimate, because devices estimate and hosts
+provide it only optionally (time-001).
 
-`Transport` is a provider registered through the C ABI, like a node
-type, so the engine never links against Link. At the start of each
-block the callback thread captures a snapshot from the provider — the
-linear beat-to-time mapping (tempo, beat origin, time origin), the
-start/stop state and the quantum — and shares it read-only with the
-sequencer stage and all jobs. Conversions between beat, phase, host time
-and sample position are engine functions over the snapshot; no job
-calls the provider. Commits go to the provider only from the callback
-thread (realtime path, Link's audio session state) or from the control
-thread (app path, Link's app session state); provider callbacks from
-foreign threads — peers joined, a peer changed the tempo, start/stop —
-land in the event ring buffer and reach Dart asynchronously. Three
-providers: the internal clock (default, deterministic under the offline
-renderer), `aud_audio_link` with Ableton Link on desktop and Android and
-LinkKit on iOS (link-001), and the host transport that a plugin shell
-feeds from the VST3, CLAP or AUv3 process context. The web uses the
+`Transport` is a provider registered through the C ABI, like a node type, so
+the engine never links against Link. At the start of each block the callback
+thread captures a snapshot from the provider — a list of transport segments
+with position, tempo, tempo increment, time signature and flags for playing,
+looping and seeks, plus the quantum — and shares it read-only with the
+sequencer stage and all jobs; providers declare their capabilities.
+Conversions between beat, phase, host time and sample position are engine
+functions over the snapshot; no job calls the provider. Commits go to the
+provider only from the callback thread (realtime path, Link's audio session
+state) or from the control thread (app path, Link's app session state);
+provider callbacks from foreign threads — peers joined, a peer changed the
+tempo, start/stop — land in the event ring buffer and reach Dart
+asynchronously. Three providers: the internal clock (default, deterministic
+under the offline renderer), `aud_audio_link` with Ableton Link on desktop and
+Android and LinkKit on iOS (link-001), and the host transport that a plugin
+shell feeds from the VST3, CLAP or AUv3 process context. The web uses the
 internal clock.
 
 The sequencer runs on the callback thread before the graph. It derives
@@ -140,10 +153,12 @@ scheduled early by the path latency the compiler reports. The Dart model
 
 ## DSP packages
 
-A DSP package is a Dart package with a C or C++ node implementation; signal
-processing happens only there, Dart holds the descriptor, the parameters, the
-presets and the API. The C ABI of `aud_audio_core` — a vtable with create,
-destroy, prepare, process, set parameter, handle event and describe — is the
+A DSP package is a Dart package with a C or C++ node implementation;
+signal processing happens only there, Dart holds the descriptor, the
+parameters, the presets and the API. The C ABI of `aud_audio_core` — a
+versioned contract with sized structs, capability negotiation,
+allocator ownership, thread-affinity tags, state serialization and
+latency and tail reporting around the node vtable (abi-001) — is the
 contract, and the same ABI carries transport providers (time-001); a
 descriptor (ports, parameters with ranges and units, presets) generates the
 Dart node class. Native platforms build through hooks and register at run
@@ -187,6 +202,9 @@ Flutter UI runs in a separate process or is replaced by a native view
 - Licenses: the packages are MIT; permissive sources only, no LGPL in
   any form, notices in every package, GPL-dual SDKs isolated
   (license-001, license-002).
+- Lifecycle: explicit engine states, one sequence for route, rate and
+  block-size changes and interruptions, acknowledged transitions, cache
+  budgets, bounded polyphony, cancellable loads (lifecycle-001).
 - Presets: JSON node presets and one graph document that the editor,
   the presets and the plugin shells share; SFZ for the sampler.
 - Versioning: all packages share the major version and release together

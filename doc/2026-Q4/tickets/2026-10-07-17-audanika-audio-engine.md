@@ -35,9 +35,13 @@ are listed as R1 to R28 in
   message model serves API, command queue, sequencer and network; blocks
   are variable with sample-accurate events (graph-001, graph-002,
   osc-001).
-- **Parallel by construction.** The render program is a DAG executed by
-  work-stealing real-time workers with deterministic summation
-  (sched-001).
+- **Serial first, parallel where measured.** The render program is a
+  DAG; rendering starts single-threaded and switches to coarse
+  work-stealing jobs with deterministic summation when the program's
+  cost justifies it (sched-001). Node instances keep their state across
+  graph transactions, which the engine acknowledges by revision
+  (graph-003); queues have capacities and overflow rules
+  (interop-002).
 - **DSP packages are Dart packages with C or C++ nodes.** Signal
   processing happens only in C or C++, compiled by build hooks per
   platform and linked into one WebAssembly module on the web; Dart holds
@@ -162,20 +166,31 @@ starts.
 
 ### Phase 1: foundation
 
-- S1 `aud_audio_core`: C ABI, buffer and event formats, descriptors,
-  Dart contracts, the OSC message model, the UMP event model with
-  per-note controllers for MPE and MIDI 2.0, the node preset schema
-  (JSON), the timing contract (time-001: timestamp filter, transport
-  snapshot and conversions, provider vtable), the notices file
-  convention and its check. Depends on S0 and on the first release of
-  `aud_midi_standard` (midi-001).
-- S2 `aud_audio_graph`: engine with typed ports, program compiler,
-  single-threaded scheduler, parameter ramps, sub-block events, feedback
-  nodes, latency alignment, taps; the graph document (JSON) that the
-  editor, the presets and the plugin shells share; xrun and diagnostics
-  counters as events; a debug watchdog for locks and allocations on the
-  audio thread; Dart graph API; offline renderer and fake IO;
-  golden-file tests. Depends on S1.
+- S1 `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
+  capabilities, allocator ownership, thread-affinity tags, state
+  serialization, latency and tail reporting), buffer and event formats,
+  descriptors, Dart contracts, the typed command model with the OSC
+  adapter over it (osc-001), the UMP event model with per-note
+  controllers for MPE and MIDI 2.0, the node preset schema (JSON), the
+  timing contract (time-001: three time domains with validity, the
+  timestamp filter with its reset rules, transport segments and
+  capabilities, provider vtable), the notices file convention and its
+  check. Depends on S0 and on the first release of `aud_midi_standard`
+  (midi-001).
+- S2 `aud_audio_graph`: engine with typed ports, persistent node
+  instances and immutable programs, graph transactions with revision
+  acknowledgements, fades and retirement (graph-003), the realtime
+  queues with their capacities and policies and the notification thread
+  (interop-002), the engine lifecycle with the route-change sequence
+  and resource budgets (lifecycle-001), program compiler, serial
+  scheduler, parameter ramps, sub-block events, feedback nodes with
+  delays in samples, latency alignment with the live and scheduled
+  policies, taps; the graph document (JSON) that the editor, the presets
+  and the plugin shells share; xrun and diagnostics counters as events;
+  a debug watchdog for locks and allocations on the audio thread; Dart
+  graph API; offline renderer with a virtual timeline and fake IO;
+  golden-file tests and stress tests (queue overflow, late events, graph
+  swaps under load, route changes). Depends on S1.
 - S3 `aud_audio_io`: device model, enumeration, hot-plug, duplex
   streams with presentation timestamps and latency per direction —
   mobile first (release-001): the Oboe backend for Android (io-002,
@@ -189,12 +204,15 @@ starts.
   Android, the desktop platforms as S3b lands), first `0.x` release of
   core, graph, io and umbrella with iOS and Android platform tags.
   Depends on S2, S3.
-- S5 `aud_audio_web`: Emscripten build, worklet processor, JS glue,
-  shared-memory ring buffers with fallback, web example; the same
-  example app runs in Chrome, Firefox and Safari. Depends on S4.
-- S6 Parallel scheduler in `aud_audio_graph`: work-stealing workers,
-  platform priorities, deterministic summation, benchmark and jitter
-  measurements. Depends on S4.
+- S5 `aud_audio_web`: Emscripten build, worklet processor, the Wasm
+  Worker control runtime (web-002), JS glue, shared-memory ring buffers
+  with the message fallback and its reduced guarantees, web example; the
+  same example app runs in Chrome, Firefox and Safari. Depends on S4.
+- S6 Parallel scheduler in `aud_audio_graph`, opt-in: the cost model
+  that switches it on, coarse jobs, work-stealing workers, platform
+  priorities, deterministic summation, the late-worker guard, host pools
+  in plugins; benchmark and jitter measurements decide the defaults.
+  Depends on S4.
 - S7 `aud_audio_osc`: address router, pattern matching, replies and
   notifications, UDP and WebSocket server, service discovery and remote
   sessions; remote control of a running engine from another device,
@@ -317,6 +335,11 @@ starts.
 
 - Every package: unit tests, `dart analyze`, format, the DNA test, and
   golden-file offline renders that must match for any thread count.
+- Engine contracts: stress tests prove the queue policies (overflow,
+  late events, note-off recovery), click-free graph transactions under
+  load (a click detector on the golden renders), the route-change
+  sequence, and the acknowledgement of revisions and lifecycle
+  transitions.
 - Platform proof per step: mobile first — iOS and Android gate the
   first releases (emulators in CI, real devices before a release);
   desktop and web join the gates as their tickets land; latency and
@@ -342,6 +365,11 @@ starts.
 3. Faust: is the LGPL Faust compiler acceptable as a development-time
    tool whose generated code (from STK-4.3 and MIT functions only) is
    checked in under MIT? Nothing of the compiler is shipped (S28).
+4. Tempo-flexible backing tracks: is a multitrack loop player with
+   time-stretching in scope? If yes, a package `aud_dsp_stretch` on
+   Signalsmith Stretch (MIT) and a transport-synced multitrack player
+   in `aud_audio_file` would become step S30 (raised by the external
+   review of 2026-10-08).
 
 ## Answered at plan review
 
@@ -386,6 +414,11 @@ starts.
   organization Projects board; 17 stays the exception (process-001).
 - Further suggestions (R28): all planned — six new packages in phase 7,
   the cross-cutting ones folded into existing steps (scope-001).
+- External review of the engine contracts: ten of eleven points
+  accepted into graph-003, interop-002, abi-001, lifecycle-001, web-002
+  and amendments of sched-001, time-001, osc-001, graph-001,
+  family-001 and license-001; point 11 was already covered by link-002
+  (topics/review-2026-10-08-engine-contracts.md).
 
 ## Suggestions taken into the plan (R28)
 

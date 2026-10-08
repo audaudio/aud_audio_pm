@@ -4,15 +4,20 @@
 | --- | --- | --- | --- | --- |
 | [family-001](family-001.md) | proposed | 2026-10-07 | One repo per package, the aud_audio family, shared major version; the AUv3 shell is aud_audio_auv3 | none |
 | [interop-001](interop-001.md) | proposed | 2026-10-07 | Dart never runs on the audio thread; FFI command queue, ring buffers, build hooks, C ABI | Measure queue and event latency in the spike |
+| [interop-002](interop-002.md) | proposed | 2026-10-08 | Real-time contract: queue classes, capacities, overflow and late-event policies, note-off recovery, notification thread for Dart wake-ups | Capacities and per-block budget |
 | [web-001](web-001.md) | proposed | 2026-10-07 | One Wasm module per AudioContext in an AudioWorklet, Dart on the main thread | Prebuilt per-package Wasm vs. generated build |
+| [web-002](web-002.md) | proposed | 2026-10-08 | Web control runtime as a Wasm Worker; reduced guarantees without shared memory | Measure the fallback latency |
 | [io-001](io-001.md) | proposed | 2026-10-07 | miniaudio device layer on macOS, iOS, Windows, Linux plus native escape hatches; own web host; ASIO separate; timestamps per backend | Spike duplex and hot-plug; timestamp shim |
 | [io-002](io-002.md) | accepted | 2026-10-08 | Oboe is the Android backend: AAudio, latency tuner, channel masks, MMAP, timestamps | Oboe in the Android build hook; timestamp mapping |
-| [time-001](time-001.md) | proposed | 2026-10-08 | Host time is the reference clock; streams deliver presentation timestamps and latency; transport as a per-block snapshot behind the C ABI | Snapshot struct and conversions; timestamp quality per backend |
+| [time-001](time-001.md) | proposed | 2026-10-08 | Three time domains with validity; streams deliver timestamps and latency; transport as per-block segments with provider capabilities behind the C ABI | Segment struct, capabilities, conversions; timestamp quality |
 | [graph-001](graph-001.md) | proposed | 2026-10-07 | Typed ports, compiled render programs swapped at block start, feedback through a delay node | Port and buffer formats |
 | [graph-002](graph-002.md) | accepted | 2026-10-08 | Variable blocks with sample-accurate events; fixed-block adapter for nodes that need constant frame counts | Minimum sub-range and adapter API |
-| [sched-001](sched-001.md) | proposed | 2026-10-07 | Work-stealing parallel rendering with real-time workers, deterministic summation | Measure speed-up; job granularity |
+| [graph-003](graph-003.md) | proposed | 2026-10-08 | Persistent node instances, immutable programs, transactions with revision acknowledgements, fades and retirement | Fade defaults; tail retirement rule |
+| [abi-001](abi-001.md) | proposed | 2026-10-08 | Versioned C ABI with capabilities, allocator ownership, thread affinity, state, latency and tail reporting | Header in the core ticket; shared vs static engine |
+| [lifecycle-001](lifecycle-001.md) | proposed | 2026-10-08 | Engine states, route-change sequence, shutdown order, cache budgets, polyphony bounds, cancellable loads | Default budgets; interruptions per platform |
+| [sched-001](sched-001.md) | proposed | 2026-10-07 | Serial rendering as the baseline; opt-in coarse work-stealing parallelism with deterministic summation; host pools in plugins | Cost model for switching on |
 | [seq-001](seq-001.md) | proposed | 2026-10-07 | Sequencer on the render thread over the transport snapshot; quantized launches; events pre-scheduled by path latency | Tempo map; clip launching semantics |
-| [osc-001](osc-001.md) | proposed | 2026-10-07 | Every node, inlet, outlet and parameter has an OSC 1.1 address | Fix grammar and reply vocabulary |
+| [osc-001](osc-001.md) | proposed | 2026-10-07 | Every node, inlet, outlet and parameter has an OSC 1.1 address; OSC is an adapter over typed numeric engine commands | Grammar, replies, timetag conversion |
 | [license-001](license-001.md) | proposed | 2026-10-07 | Permissive sources only, no LGPL in any form, notices in every package, dual-licensed SDKs isolated | Notices check in the DNA layer |
 | [license-002](license-002.md) | accepted | 2026-10-07 | All aud_audio packages are MIT; LGPL is neither copied nor linked | none |
 | [dsp-001](dsp-001.md) | proposed | 2026-10-07 | DSP code only with clear provenance; Dunne's Chorus, Flanger, StereoDelay, TransientShaper and Synth by name; Csound-derived modules re-implemented, Devoloop after audit | Ask AudioKit maintainers; list re-implementations; license of the Apple-sample filter |

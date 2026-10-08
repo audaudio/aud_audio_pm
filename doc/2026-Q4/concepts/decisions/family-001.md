@@ -10,18 +10,18 @@
 ## Decision
 
 The Audanika Audio Engine is a family of Dart packages in the GitHub
-organization `audaudio`, one repo per package, like the `aud_midi`
-family: `aud_audio_core` (C ABI and contracts), `aud_audio_graph`
-(engine), `aud_audio_io` (devices), `aud_audio` (umbrella the apps
-depend on), `aud_audio_web` (web build), `aud_audio_midi`,
-`aud_audio_osc`, `aud_audio_sequencer`, `aud_audio_link`, the DSP
-packages `aud_dsp_*`, the UI packages `aud_audio_ui_*`, the plugin
-shells `aud_audio_vst3`, `aud_audio_clap` and
-`aud_audio_auv3`, and the docs repo
-`audaudio.github.io`. All packages share the major version and are
-released together per gg ticket; the umbrella pins caret ranges of the
-same minor. Each repo gets the `dna_audanika` layer and is planned in
-`aud_audio_pm`.
+organization `audaudio`, one repo per package, like the `aud_midi` family:
+`aud_audio_core` (C ABI and contracts), `aud_audio_graph` (engine),
+`aud_audio_io` (devices), `aud_audio` (umbrella the apps depend on),
+`aud_audio_web` (web build), `aud_audio_midi`, `aud_audio_osc`,
+`aud_audio_sequencer`, `aud_audio_link`, the DSP packages `aud_dsp_*`, the UI
+packages `aud_audio_ui_*`, the plugin shells `aud_audio_vst3`,
+`aud_audio_clap` and `aud_audio_auv3`, and the docs repo `audaudio.github.io`.
+All packages share the major version and are released together per gg ticket;
+the umbrella pins exact versions of the family (caret ranges would admit later
+minors), and the C ABI version checked at registration is the real
+compatibility gate (abi-001). Each repo gets the `dna_audanika` layer and is
+planned in `aud_audio_pm`.
 
 ## Why
 

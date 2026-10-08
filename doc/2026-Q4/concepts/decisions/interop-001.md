@@ -10,16 +10,17 @@
 
 The C++ engine owns the real-time thread and every worker thread. Dart
 configures and controls it through `dart:ffi`: commands (graph edits,
-parameter changes, events) go into a lock-free single-producer queue in
-native memory and are applied by the engine at block boundaries; data
-back to Dart (events, meters, analysis frames) travels through
-`Pointer`-backed ring buffers viewed with `asTypedList`, signalled with
-`NativeCallable.listener` or polled per frame. No `NativeCallable` is
-ever invoked synchronously from the audio thread, no Dart object is
-touched there, no allocation or lock happens there. Every DSP package
-ships its C++ through a build hook (`package_ffi` template, `hooks`,
-`native_toolchain_c`) and registers its node types through the C ABI of
-`aud_audio_core`; link hooks with `@RecordUse` strip unused nodes.
+parameter changes, events) go into a lock-free single-producer queue in native
+memory and are applied by the engine at block boundaries; data back to Dart
+(events, meters, analysis frames) travels through `Pointer`-backed ring
+buffers viewed with `asTypedList`, polled per frame or signalled by a
+notification thread that the audio thread wakes through a semaphore and that
+invokes `NativeCallable.listener` (interop-002). No `NativeCallable` is ever
+invoked from the audio thread, no Dart object is touched there, no allocation
+or lock happens there. Every DSP package ships its C++ through a build hook
+(`package_ffi` template, `hooks`, `native_toolchain_c`) and registers its node
+types through the C ABI of `aud_audio_core`; link hooks with `@RecordUse`
+strip unused nodes.
 
 ## Why
 

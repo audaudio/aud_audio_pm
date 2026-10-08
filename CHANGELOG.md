@@ -10,6 +10,7 @@
 ### Changed
 
 - First architecture iteration
+- Harden the engine contracts after the external review
 
 ## 0.0.0 - 2026-10-07
 

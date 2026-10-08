@@ -5,8 +5,9 @@ flowchart TB
     Pkgs[Dart DSP packages<br/>node descriptors, params, presets]
   end
   subgraph Native[C++ — real-time domain]
-    Cmd[Command queue<br/>lock-free, single producer]
-    Engine[Graph engine<br/>schedule, buffers, event lists]
+    Ctl[Control thread<br/>compiles programs, loads assets, frees]
+    Cmd[Realtime queues<br/>parameters, events; fixed capacity]
+    Engine[Graph engine<br/>persistent nodes, immutable programs]
     Workers[Worker pool<br/>real-time threads]
     Nodes[Node instances<br/>C ABI vtables from DSP packages]
     Out[Event and meter ring buffers]
@@ -16,9 +17,13 @@ flowchart TB
   end
   App --> API
   Pkgs --> API
+  API -->|dart:ffi, transactions| Ctl
   API -->|dart:ffi| Cmd
+  Ctl -->|publish program| Engine
   Cmd --> Engine
   Engine --> Workers --> Nodes
   Device -->|one block per callback| Engine
   Engine --> Out
-  Out -->|NativeCallable.listener, polling| API
+  Out -->|semaphore| Notify[Notification thread]
+  Notify -->|NativeCallable.listener| API
+  Out -->|polling| API

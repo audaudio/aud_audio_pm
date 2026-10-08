@@ -20,3 +20,5 @@ tried and what holds.
 - [docs-site.md](docs-site.md) — GitHub Pages, generators, dartdoc
 - [graph-engines-and-audiokit.md](graph-engines-and-audiokit.md) — the
   AudioKit family, TAAE2, Pd, Max, Ardour, JUCE, SuperCollider
+- [review-2026-10-08-engine-contracts.md](review-2026-10-08-engine-contracts.md)
+  — the external review of the engine contracts and the responses

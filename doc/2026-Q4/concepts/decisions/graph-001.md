@@ -7,19 +7,27 @@
 
 ## Decision
 
-A graph is a directed acyclic graph of nodes with typed ports: audio
-ports carry a bus of N non-interleaved float channels, event ports carry
-time-stamped events (MIDI 1.0 and UMP messages, OSC-typed control
-messages) with sample offsets inside the block, and parameters are
-addressable values with ramps. Dart edits the graph model; every edit
-compiles the graph on the control thread into a render program — a
-topologically sorted list of jobs with preallocated, reused buffers,
-summed fan-in and delay lines that align inputs of different latency —
-and publishes it atomically. The audio thread adopts the newest program
-at block start and the old one is freed on the control thread. Direct
-cycles are rejected at compile time; feedback runs only through an
-explicit one-block delay node pair. Taps and meters publish into ring
-buffers read off the audio thread.
+A graph is a directed acyclic graph of nodes with typed ports: audio ports
+carry a bus of N non-interleaved float channels, event ports carry
+time-stamped events (MIDI 1.0 and UMP messages, OSC-typed control messages)
+with sample offsets inside the block, and parameters are addressable values
+with ramps. Dart edits the graph model; every edit compiles the graph on the
+control thread into a render program — a topologically sorted list of jobs
+with preallocated, reused buffers, summed fan-in and delay lines that align
+inputs of different latency — and publishes it atomically. The audio thread
+adopts the newest program at block start and the old one is freed on the
+control thread. Direct cycles are rejected at compile time; feedback runs only
+through an explicit feedback node pair whose delay is defined in samples (at
+least the prepared maximum block, so the compiler can order the reader before
+the writer) and therefore does not change with the device buffer or with
+event-driven sub-ranges. Latency compensation follows two policies: scheduled
+events (sequencer, automation) are pre-scheduled by the path latency the
+compiler reports; live events (MIDI input, UI) are delivered as early as
+possible and their path latency is reported, never hidden; where one node
+feeds paths of different latency the compiler delays the shorter paths so
+mixes align, and a path may be marked low-latency to opt out of that
+alignment. Taps and meters publish into ring buffers read off the audio
+thread.
 
 ## Block model: variable blocks, sample-accurate events (graph-002)
 

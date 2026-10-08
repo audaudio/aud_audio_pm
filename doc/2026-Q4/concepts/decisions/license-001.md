@@ -14,10 +14,13 @@ platform; where a candidate is LGPL, a permissive alternative is used or the
 algorithm is re-implemented from the published literature (license-002). GPL,
 AGPL and non-commercial licenses are models only. Dual-licensed SDKs (Ableton
 Link, ASIO) live in separate packages with their own license terms. Every
-package ships `THIRD_PARTY_NOTICES.md` with copyright, SPDX id, license text and
-origin of each copied file set, keeps original headers, registers native notices
-with `LicenseRegistry.addLicense`, carries required trademark lines, and a CI
-check fails when a copied directory has no notice entry.
+package ships `THIRD_PARTY_NOTICES.md` with copyright, SPDX id, license text
+and origin of each copied file set, keeps original headers, registers native
+notices with `LicenseRegistry.addLicense`, carries required trademark lines,
+records for every dual-licensed dependency which license was chosen and keeps
+the license of our wrapper apart from the license of the fetched or bundled
+implementation, and a CI check fails when a copied directory has no notice
+entry.
 
 ## Why
 
