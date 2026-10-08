@@ -1,0 +1,29 @@
+flowchart TB
+  subgraph DartSide[Dart — app isolate, never on the audio thread]
+    App[App code, Flutter UI]
+    API[aud_audio Dart API<br/>Engine, Graph, Node, Param, Route]
+    Pkgs[Dart DSP packages<br/>node descriptors, params, presets]
+  end
+  subgraph Native[C++ — real-time domain]
+    Ctl[Control thread<br/>compiles programs, loads assets, frees]
+    Cmd[Realtime queues<br/>parameters, events; fixed capacity]
+    Engine[Graph engine<br/>persistent nodes, immutable programs]
+    Workers[Worker pool<br/>real-time threads]
+    Nodes[Node instances<br/>C ABI vtables from DSP packages]
+    Out[Event and meter ring buffers]
+  end
+  subgraph IO[aud_audio_io]
+    Device[Device render callback<br/>CoreAudio, AAudio/Oboe, WASAPI, ALSA/PipeWire]
+  end
+  App --> API
+  Pkgs --> API
+  API -->|dart:ffi, transactions| Ctl
+  API -->|dart:ffi| Cmd
+  Ctl -->|publish program| Engine
+  Cmd --> Engine
+  Engine --> Workers --> Nodes
+  Device -->|one block per callback| Engine
+  Engine --> Out
+  Out -->|semaphore| Notify[Notification thread]
+  Notify -->|NativeCallable.listener| API
+  Out -->|polling| API

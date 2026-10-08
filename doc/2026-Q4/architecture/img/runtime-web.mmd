@@ -1,0 +1,15 @@
+flowchart TB
+  subgraph Main[Browser main thread]
+    DartWeb[Dart, compiled with dart2wasm or dart2js<br/>the same aud_audio API]
+    Glue[JS glue<br/>MessagePort, SharedArrayBuffer ring buffers]
+  end
+  subgraph Worker[Wasm Worker — control runtime]
+    Ctl[Compiles graphs, loads assets, frees<br/>shares the module heap when isolated]
+  end
+  subgraph Worklet[AudioWorkletGlobalScope — render thread]
+    Wasm[aud_audio engine and DSP packages<br/>one WebAssembly module built by Emscripten]
+  end
+  WebAudio[Web Audio<br/>AudioContext destination, getUserMedia input]
+  DartWeb --> Glue -->|commands, events| Wasm
+  Glue -->|transactions| Ctl -->|prepared plans| Wasm
+  WebAudio <-->|render quantum| Wasm

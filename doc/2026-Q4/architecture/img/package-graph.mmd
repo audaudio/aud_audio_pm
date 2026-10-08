@@ -1,0 +1,31 @@
+flowchart BT
+  core[aud_audio_core<br/>C ABI, buffers, events, node contracts]
+  graphpkg[aud_audio_graph<br/>C++ graph engine, Dart graph API] --> core
+  io[aud_audio_io<br/>multi-channel device IO] --> core
+  web[aud_audio_web<br/>Emscripten build, AudioWorklet glue] --> graphpkg & io
+  umbrella[aud_audio<br/>Engine = graph + io + node registry] --> graphpkg & io
+  dsp_effects[aud_dsp_effects] --> core
+  dsp_sampler[aud_dsp_sampler<br/>sfizz] --> core
+  dsp_stk[aud_dsp_stk] --> core
+  dsp_amp[aud_dsp_guitar_amp] --> core
+  dsp_synth[aud_dsp_synth] --> core
+  dsp_analysis[aud_dsp_analysis] --> core
+  dsp_spatial[aud_dsp_spatial] --> core
+  dsp_mi[aud_dsp_mi] --> core
+  file[aud_audio_file<br/>decoders, player, recorder, bounce] --> graphpkg
+  dsp_stretch[aud_dsp_stretch<br/>Signalsmith Stretch] --> core
+  backing[aud_audio_backing<br/>multitrack loops, tempo without pitch change] --> file & dsp_stretch
+  midi[aud_audio_midi<br/>aud_midi ports into the graph] --> graphpkg
+  osc[aud_audio_osc<br/>address router, UDP server] --> graphpkg
+  seq[aud_audio_sequencer<br/>transport, tracks, clips] --> graphpkg
+  linkpkg[aud_audio_link<br/>Ableton Link, own license] --> seq
+  ui_graph[aud_audio_ui_graph_edit] --> umbrella
+  ui_roll[aud_audio_ui_piano_roll] --> seq
+  ui_controls[aud_audio_ui_controls] --> umbrella
+  ui_keyboard[aud_audio_ui_keyboard] --> umbrella
+  ui_waveform[aud_audio_ui_waveform] --> umbrella & file
+  bench[aud_audio_bench] --> umbrella
+  vst3[aud_audio_vst3] --> graphpkg
+  auv3[aud_audio_auv3] --> umbrella
+  docs[audaudio.github.io] -.-> umbrella
+  app[App] --> umbrella & dsp_effects & dsp_sampler & midi
