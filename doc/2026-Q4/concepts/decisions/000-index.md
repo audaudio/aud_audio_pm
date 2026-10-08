@@ -31,7 +31,8 @@
 | [ui-001](ui-001.md) | proposed | 2026-10-07 | UI packages are Flutter widgets over Dart models ported from Flow and PianoRoll | Canvas approach |
 | [ui-002](ui-002.md) | accepted | 2026-10-08 | aud_audio_ui_controls after AudioKit Controls, aud_audio_ui_keyboard after AudioKit Keyboard | Music-theory dependency for labels and scales; shared theming |
 | [release-001](release-001.md) | accepted | 2026-10-08 | Mobile first: the first releases cover iOS and Android; desktop and web follow in their own tickets | When macOS joins |
-| [release-002](release-002.md) | proposed | 2026-10-08 | Milestone M1: Audanika plays its instruments on iOS and Android; everything else conditional | Owners and capacity; reference devices |
+| [release-002](release-002.md) | proposed | 2026-10-08 | Milestone M1: the sampler plays Audanika's instruments on iOS and Android; everything else conditional | Owners and capacity; reference devices |
+| [release-003](release-003.md) | accepted | 2026-10-08 | Delivery order: sampler, reverb and delay, AUv3, then the backing player with time stretching; iOS and Android | none |
 | [naming-001](naming-001.md) | accepted | 2026-10-08 | Aud is the prefix of all classes in Dart and C++; aud_ for C symbols | none |
 | [process-002](process-002.md) | accepted | 2026-10-08 | Claude model and effort per ticket class: Fable 5.1 max for the real-time core, high as default, Opus 5.5 for Dart ports, Sonnet 5.5 for mechanical work | Revisit with new models |
 | [backing-001](backing-001.md) | proposed | 2026-10-08 | aud_dsp_stretch (Signalsmith Stretch) and aud_audio_backing: transport-driven multitrack loops with pitch-preserving tempo changes | Song schema; stem groups; transitions |

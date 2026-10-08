@@ -12,6 +12,7 @@
 - First architecture iteration
 - Harden the engine contracts after the external review
 - Bound the first release and resequence the plan
+- Order the plan by Audanika's priorities
 
 ## 0.0.0 - 2026-10-07
 

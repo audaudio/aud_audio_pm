@@ -14,13 +14,21 @@ it serves the quarter goal
 are listed as R1 to R28 in
 [requirements.md](../concepts/topics/requirements.md).
 
-## First release
+## Delivery order
 
-Milestone M1 (release-002): the Audanika app plays its real instruments
-reliably on iOS and Android through the new engine. In scope: S0-mobile,
-S1, S2, S3 for iOS and Android, S4, S8, S9, the nodes of S10a the
-legacy presets need, a minimal S22 and S24, and the early integration
-S29a. Everything else is conditional on M1 shipping.
+Four milestones, all on iOS and Android (release-003):
+
+- M1, the sampler: the Audanika app plays its instruments through
+  `aud_dsp_sampler` on the new engine — S0-mobile, S1, S2, S3, S4, S8
+  (minimal bridge), S9, a minimal S22 and S24, S29a (release-002).
+- M2, reverb and delay: the first effects ticket S10a and the app
+  migration S29b.
+- M3, AUv3 on iOS: `aud_audio_auv3` (S20) over the headless host, so
+  the instruments run inside AUv3 hosts.
+- M4, the backing player with time stretching: `aud_audio_file` (S23),
+  `aud_dsp_stretch` (S30), `aud_audio_backing` (S31).
+
+Everything else follows M4 and is planned, not promised.
 
 ## Affected repos
 
@@ -73,11 +81,12 @@ S29a. Everything else is conditional on M1 shipping.
 - **Sequencer on the render thread**, synchronized through a `Transport`
   that Ableton Link implements in a separately licensed package, with
   quantized launches and start/stop sync (seq-001, link-001).
-- **Extensions** (scope-001, backing-001): file decoding, streaming and
-  recording, analysis taps, spatial audio, Mutable Instruments ports, a
-  waveform view, a benchmark app, the multitrack backing player with
-  pitch-preserving tempo changes, and the migration of the Audanika app
-  onto the engine.
+- **Backing player** (backing-001, milestone M4): a multitrack player
+  with loops and pitch-preserving tempo changes on `aud_dsp_stretch` and
+  `aud_audio_file`.
+- **Extensions** (scope-001): analysis taps, spatial audio, Mutable
+  Instruments ports, a waveform view, a benchmark app, recording and
+  offline bounce.
 - **Plugin shells** VST3, CLAP, AUv3 with the engine inside and Dart out
   of process (plugin-001); **UI packages** as Flutter widgets over models
   ported from Flow and PianoRoll (ui-001) plus controls and keyboard
@@ -127,27 +136,27 @@ The target picture is in
 ```mermaid
 flowchart BT
   core[aud_audio_core]
-  graph[aud_audio_graph] --> core
+  graphpkg[aud_audio_graph] --> core
   io[aud_audio_io] --> core
-  web[aud_audio_web] --> graph & io
-  umbrella[aud_audio] --> graph & io & web
-      dsp[aud_dsp_* packages] --> core
-    file[aud_audio_file] --> graph
+  web[aud_audio_web] --> graphpkg & io
+  umbrella[aud_audio] --> graphpkg & io & web
+  dsp["aud_dsp_* packages"] --> core
+  file[aud_audio_file] --> graphpkg
   stretch[aud_dsp_stretch] --> core
   backing[aud_audio_backing] --> file & stretch
-  midi[aud_audio_midi] --> graph
-  osc[aud_audio_osc] --> graph
-  seq[aud_audio_sequencer] --> graph
-  link[aud_audio_link] --> graph
+  midi[aud_audio_midi] --> graphpkg
+  osc[aud_audio_osc] --> graphpkg
+  seq[aud_audio_sequencer] --> graphpkg
+  linkpkg[aud_audio_link] --> graphpkg
   uig[aud_audio_ui_graph_edit] --> umbrella
-    uip[aud_audio_ui_piano_roll] --> seq
+  uip[aud_audio_ui_piano_roll] --> seq
   uic[aud_audio_ui_controls] --> umbrella
-    uik[aud_audio_ui_keyboard] --> umbrella
+  uik[aud_audio_ui_keyboard] --> umbrella
   uiw[aud_audio_ui_waveform] --> umbrella & file
   bench[aud_audio_bench] --> umbrella
-    vst3[aud_audio_vst3] --> graph
-  clap[aud_audio_clap] --> graph
-  auv3[aud_audio_auv3] --> graph
+  vst3[aud_audio_vst3] --> graphpkg
+  clap[aud_audio_clap] --> graphpkg
+  auv3[aud_audio_auv3] --> graphpkg
   app[App] --> umbrella & dsp & midi & seq
 ```
 
@@ -158,17 +167,21 @@ depend on `aud_audio` plus the DSP packages they use.
 
 ## Steps (each a later gg ticket)
 
-The steps are grouped in phases. A step names the steps it depends on;
-steps without a dependency inside a phase run in parallel. Sizes are
-rough estimates for one experienced engineer — S up to one week, M two
-to three weeks, L four to six weeks, XL more — made without knowing the
-team; they are re-estimated when owners are named (open question 5).
-M1 adds up to roughly 25 to 35 engineer-weeks. Every step
-becomes a GitHub issue in `aud_audio_pm` whose number is its ticket ID
-(process-001) and gets its own plan file in `tickets/` before it
-starts.
+The steps are ordered by delivery (release-003): milestone M1 is the
+sampler on iOS and Android, M2 adds reverb and delay, M3 the AUv3
+extension on iOS, M4 the backing player with time stretching;
+everything else follows M4. Step numbers
+are stable labels and no longer read in sequence. A step names the
+steps it depends on; steps without a dependency inside a milestone run
+in parallel. Every step becomes a GitHub issue in `aud_audio_pm` whose
+number is its ticket ID (process-001) and gets its own plan file in
+`tickets/` before it starts. Sizes are rough estimates for one
+experienced engineer — S up to one week, M two to three weeks, L four
+to six weeks, XL more — made without knowing the team; they are
+re-estimated when owners are named (open question 5). M1 adds up to
+roughly 22 to 32 engineer-weeks.
 
-### Phase 0: spikes (one ticket, binding before the core grows)
+### Milestone M1: the sampler on iOS and Android
 
 - S0 Spikes, split into decision gates so that the mobile foundation
   waits for nothing else:
@@ -193,9 +206,6 @@ starts.
     session with LinkHut on a second machine and a loopback recording of
     both clicks measures the alignment error per platform, with native
     timestamps and the miniaudio shim.
-
-### Phase 1: foundation
-
 - S1 (L) `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
   capabilities, allocator ownership, thread-affinity tags, state
   serialization, latency and tail reporting), buffer and event formats,
@@ -237,6 +247,79 @@ starts.
   filter → output on iOS and Android, the desktop platforms as S3b
   lands), first `0.x` release of core, graph, io and umbrella with iOS
   and Android platform tags. Depends on S2, S3.
+- S8 (M) `aud_audio_midi`: `aud_midi` input and output ports as event
+  inlets and outlets, MIDI 1.0 and UMP mapping, keyboard-to-synth demo.
+  Depends on S4 and on the `aud_midi` family; for M1 a minimal bridge
+  maps the app's existing MIDI event stream into the graph if `aud_midi`
+  is not ready (release-002).
+- S22 (M) Tooling: starts small with S1 — analyze, format, tests and
+  the notices check on every repo — and grows into the CI matrix (macOS,
+  Windows, Linux runners, Android emulator, headless Chrome), Clang's
+  RealtimeSanitizer and the watchdog in CI, a supply-chain repo like
+  `aud_sc`. Depends on S1 (minimal), S4 (matrix).
+- S24 (M) `aud_audio_bench`: starts small with S4 — callback time,
+  xruns and command-to-sound latency on the reference devices — and
+  grows into loopback latency measurement, CPU per node type and memory
+  per device; results as JSON published on the docs site; its numbers
+  gate the parallel scheduler's default (sched-001). Depends on S4
+  (minimal), S22 (publishing).
+- S9 (L) `aud_dsp_sampler`: sfizz node, loaders, presets, the message API
+  on routes, the legacy presets of the Audanika app playing through it.
+  Depends on S4, S0d.
+- S29a (M, M1) Early app integration: an integration branch of `aud_app`
+  plays one legacy preset through `aud_audio` and `aud_dsp_sampler` from
+  the app's MIDI stream on iOS and Android as soon as S4 and S9 exist,
+  and feeds its findings back into the contracts. The code repo lives in
+  `audanika-private`; the plan file lives here. Depends on S4, S9.
+
+### Milestone M2: reverb and delay in the Audanika app
+
+- S10a (M, M2) `aud_dsp_effects`, first ticket — reverb and delay: a
+  Freeverb-based reverb (public domain) and a plate reverb re-implemented
+  from the literature (dsp-001), DunneAudioKit's StereoDelay (MIT) and a
+  tempo-synced delay, with the parameters the legacy presets use.
+  Depends on S4.
+- S29b (L, M2) App migration: `aud_app` replaces the legacy
+  `audio_engine` with `aud_audio`, `aud_audio_midi` (the minimal bridge
+  until `aud_midi` is ready) and `aud_dsp_sampler` with the reverb and
+  delay of S10a; the legacy presets move to SFZ and JSON; the instrument
+  reference suite passes on the reference devices (release-001,
+  release-002). Depends on S29a, S10a.
+
+### Milestone M3: AUv3 on iOS
+
+- S20 (L, M3) `aud_audio_auv3`: the AUv3 extension over the headless
+  host (plugin-002) with its host app on iOS: the sampler with its
+  presets and assets loaded without Dart, stable parameter ids, state
+  restoration, memory measurement with the sampler loaded; the UI per
+  open question 1 — a parameters-only unit with the host's generic view
+  until decided. Depends on S4, S9; not on S6.
+
+### Milestone M4: the backing player with time stretching
+
+- S23 (L) `aud_audio_file`: decoders (dr_libs for WAV, FLAC and MP3,
+  WavPack, stb_vorbis or libvorbis, libopus), libFLAC encoding, platform
+  decoders for AAC and ALAC later, a disk-streaming player node with a
+  read-ahead worker and ring buffer, a recorder node, offline bounce of
+  a graph to a file. Depends on S4.
+- S30 (M) `aud_dsp_stretch`: the time-stretch and pitch-shift node on
+  Signalsmith Stretch (MIT), continuous ratio and semitone shift,
+  phase-coherent instances through a shared block configuration,
+  latency reporting, golden renders against a pitch tracker. Depends on
+  S4.
+- S31 (L) `aud_audio_backing`: the song document, stem streaming through
+  `aud_audio_file`, per-stem or per-group stretching, the
+  transport-driven read position, loop regions with crossfades,
+  quantized start, stop and song switching with the next song
+  preloaded, per-stem gain, mute and solo, the Dart API
+  (`AudBackingPlayer`, `AudSong`, `AudStem`, `AudLoopRegion`),
+  acceptance tests of the verification section. Depends on S23, S30.
+
+### After M4: platforms and engine
+
+- S3b to S3d (M each): the desktop IO backends described in S3 —
+  miniaudio on macOS, Windows and Linux; AUHAL with workgroups and
+  aggregate devices; IAudioClient3. Gated by S0-desktop.
 - S5 (L) `aud_audio_web`: Emscripten build, worklet processor, the Wasm
   Worker control runtime (web-002), JS glue, shared-memory ring buffers
   with the message fallback and its reduced guarantees, web example; the
@@ -250,24 +333,15 @@ starts.
   notifications, UDP and WebSocket server, service discovery and remote
   sessions; remote control of a running engine from another device,
   shown with the example app. Depends on S4.
-- S8 (M) `aud_audio_midi`: `aud_midi` input and output ports as event
-  inlets and outlets, MIDI 1.0 and UMP mapping, keyboard-to-synth demo.
-  Depends on S4 and on the `aud_midi` family; for M1 a minimal bridge
-  maps the app's existing MIDI event stream into the graph if `aud_midi`
-  is not ready (release-002).
 
-### Phase 2: DSP content
+### After M4: DSP content
 
-- S9 (L) `aud_dsp_sampler`: sfizz node, loaders, presets, the message API
-  on routes, the legacy presets of the Audanika app playing through it.
-  Depends on S4, S0d.
-- S10 `aud_dsp_effects`, in two tickets: S10a (M) oscillators, filters,
-  delays (StereoDelay) and dynamics (compressor, TransientShaper) — the nodes
-  the legacy presets need come first (M1); S10b (M) modulation (Chorus,
-  Flanger), distortion and reverbs. S10c (M) `aud_dsp_analysis` as its
-  own package: amplitude, FFT and pitch taps,
-  meters, scope and spectrum buffers, pitch tracking from the literature
-  (YIN, McLeod). Depends on S4; provenance per dsp-001.
+- S10b (M) `aud_dsp_effects`, second ticket: oscillators, filters,
+  dynamics (compressor, TransientShaper), modulation (Chorus, Flanger),
+  distortion; provenance per dsp-001. Depends on S10a.
+- S10c (M) `aud_dsp_analysis` as its own package: amplitude, FFT and
+  pitch taps, meters, scope and spectrum buffers, pitch tracking from
+  the literature (YIN, McLeod). Depends on S4.
 - S11 (M) `aud_dsp_stk`: STK instruments as nodes. Depends on S4.
 - S12 (M) `aud_dsp_guitar_amp`: Rhino and DynaRage after the provenance
   question is settled. Depends on S4.
@@ -279,7 +353,7 @@ starts.
   adapted from an Apple code sample is re-implemented unless its license
   is confirmed. Depends on S4.
 
-### Phase 3: sequencing and sync
+### After M4: sequencing and sync
 
 - S14 (L) `aud_audio_sequencer`: render-thread sequencer, Dart model,
   loop and transport semantics, MIDI file import. Depends on S4 and the
@@ -291,7 +365,7 @@ starts.
   LinkKit with the license notice for app publishers (link-002). Depends
   on S14.
 
-### Phase 4: UI
+### After M4: UI
 
 - S16 (L) `aud_audio_ui_graph_edit`: patch model, canvas, wiring, node
   palette from the registry, adapter to `Graph`, a remote mode that
@@ -309,8 +383,12 @@ starts.
   `KeyboardKey`, `MidiMonitorKeyboard`, `NoteBinding` into event inlets
   and the sequencer, the music-theory choice of ui-002, golden tests,
   cookbook page with the sampler. Depends on S4, S9.
+- S27 (M) `aud_audio_ui_waveform`: waveform view with peaks computed in an
+  isolate, a multi-resolution cache, zoom and selection, rendering with
+  CustomPainter or fragment shaders, model after AudioKit Waveform.
+  Depends on S4, S23.
 
-### Phase 5: plugin shells
+### After M4: plugin shells
 
 - S18 (L) `aud_audio_vst3`: shell over the headless host (plugin-002)
   with the graph document, stable parameter ids and automation
@@ -322,11 +400,7 @@ starts.
 - S19 (M) `aud_audio_clap`: shell reusing S18's mapping, note
   expressions from the per-note controllers, the thread-pool extension
   with its single-threaded fallback. Depends on S18.
-- S20 (L) `aud_audio_auv3`: AUv3 extension over the headless host with
-  host app, memory measurement with the sampler loaded, native view.
-  Depends on S4, not on S6.
-
-### Phase 6: documentation and tooling (starts with S4)
+### After M4: documentation, tooling and extensions
 
 - S21 (M) `audaudio.github.io`: create the repo from rljson.github.io
   (Astro 7, Starlight 0.42, pnpm, DNA layers, quick check), Audanika
@@ -334,25 +408,6 @@ starts.
   the offline renderer, the `sync-packages` script, `dart doc` over a
   synthetic umbrella into `/api/` in the deploy workflow, the ecosystem
   page; grows with every step. Depends on S4.
-- S22 (M) Tooling: starts small with S1 — analyze, format, tests and
-  the notices check on every repo — and grows into the CI matrix (macOS,
-  Windows, Linux runners, Android emulator, headless Chrome), Clang's
-  RealtimeSanitizer and the watchdog in CI, a supply-chain repo like
-  `aud_sc`. Depends on S1 (minimal), S4 (matrix).
-
-### Phase 7: extensions (R28, scope-001)
-
-- S23 (L) `aud_audio_file`: decoders (dr_libs for WAV, FLAC and MP3,
-  WavPack, stb_vorbis or libvorbis, libopus), libFLAC encoding, platform
-  decoders for AAC and ALAC later, a disk-streaming player node with a
-  read-ahead worker and ring buffer, a recorder node, offline bounce of
-  a graph to a file. Depends on S4.
-- S24 (M) `aud_audio_bench`: starts small with S4 — callback time,
-  xruns and command-to-sound latency on the reference devices — and
-  grows into loopback latency measurement, CPU per node type and memory
-  per device; results as JSON published on the docs site; its numbers
-  gate the parallel scheduler's default (sched-001). Depends on S4
-  (minimal), S22 (publishing).
 - S25 (L) `aud_dsp_spatial`: ambisonics encoding and decoding up to third
   order, binaural decoding with Resonance Audio's HRTF renderers
   (Apache-2.0, NOTICE), VBAP and stereo panners from the literature,
@@ -360,39 +415,11 @@ starts.
 - S26 (M) `aud_dsp_mi`: the Mutable Instruments STM32 ports — macro
   oscillator, modal resonator, granular processor — under neutral node
   names with MIT notices and the trademark rule. Depends on S4.
-- S27 (M) `aud_audio_ui_waveform`: waveform view with peaks computed in an
-  isolate, a multi-resolution cache, zoom and selection, rendering with
-  CustomPainter or fragment shaders, model after AudioKit Waveform.
-  Depends on S4, S23.
 - S28 (S) Faust pipeline for `aud_dsp_effects`: generate C++ from `.dsp`
   files that use only functions declared STK-4.3 or MIT, a license gate
   that reads every `declare license`, generated code checked in with
   notices; the LGPL compiler runs at development time only. Depends on
   S10a and on open question 3.
-- S29 Audanika app integration, in two steps: S29a (M, part of M1) an
-  early integration branch of `aud_app` plays one legacy preset through
-  `aud_audio` and `aud_dsp_sampler` from the app's MIDI stream on iOS
-  and Android, as soon as S4 and S9 exist, and feeds its findings back
-  into the contracts; S29b (L) the migration: `aud_app` replaces the
-  legacy `audio_engine` with `aud_audio`, `aud_audio_midi` and
-  `aud_dsp_sampler`, the legacy presets move to SFZ and JSON, and the
-  instrument reference suite passes on the reference devices
-  (release-001, release-002). The code repo lives in
-  `audanika-private`; the plan file lives here. Depends on S4, S9
-  (S29a); S8 (S29b).
-
-- S30 (M) `aud_dsp_stretch`: the time-stretch and pitch-shift node on
-  Signalsmith Stretch (MIT), continuous ratio and semitone shift,
-  phase-coherent instances through a shared block configuration,
-  latency reporting, golden renders against a pitch tracker. Depends on
-  S4.
-- S31 (L) `aud_audio_backing`: the song document, stem streaming through
-  `aud_audio_file`, per-stem or per-group stretching, the
-  transport-driven read position, loop regions with crossfades,
-  quantized start, stop and song switching with the next song
-  preloaded, per-stem gain, mute and solo, the Dart API
-  (`AudBackingPlayer`, `AudSong`, `AudStem`, `AudLoopRegion`),
-  acceptance tests of the verification section. Depends on S23, S30.
 
 ## Model and effort for the implementation
 
@@ -527,6 +554,9 @@ effort follow the class of the ticket (process-002):
   requirements and the team are open questions 4 to 6
   (topics/review-2026-10-08-plan-scope.md).
 - Naming: `Aud` is the prefix of all classes (R33, naming-001).
+- Delivery order: sampler first, reverb and delay second, AUv3 third,
+  the backing player with time stretching fourth, all on iOS and
+  Android; the steps are regrouped by milestone (release-003).
 - Model and effort per ticket class recorded (process-002).
 - Backing tracks: a multitrack backing player with loops and tempo
   changes without pitch change is required (R34); planned as

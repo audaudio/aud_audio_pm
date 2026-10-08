@@ -15,9 +15,9 @@ scope are the mobile spike gate S0-mobile, the core S1, the graph S2
 with its reference nodes, the IO S3 for iOS and Android, the umbrella
 S4, the MIDI bridge S8 (or, if the `aud_midi` family is not ready, a
 minimal bridge that maps the app's existing MIDI event stream into the
-graph), the sampler S9, the effects of S10a that the legacy presets
-need, a minimal CI (S22) and benchmark (S24), and the early app
-integration S29a. Everything else — desktop and web, the parallel
+graph), the sampler S9, a minimal CI (S22) and benchmark (S24), and the early
+app integration S29a; reverb and delay follow as milestone M2
+(release-003). Everything else — desktop and web, the parallel
 scheduler, sequencer, Link, the UI packages, plugin shells, the docs
 site beyond the package READMEs, the extensions of phase 7 — is
 conditional on M1 shipping and is planned, not promised. The milestone
