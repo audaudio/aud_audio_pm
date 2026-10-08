@@ -23,7 +23,7 @@ Four milestones, all on iOS and Android (release-003):
 
 - M1, the sampler: the Audanika app plays its instruments through
   `aud_dsp_sampler` on the new engine — S00 (all repos), S0-mobile, S1,
-  S2, S3, S4, S8 (minimal bridge), S9, a minimal S22 and S24, S29a
+  S2, S3, S4, S8, S9, a minimal S22 and S24, S29a
   (release-002).
 - M2, reverb and delay: the first effects ticket S10a and the app
   migration S29b.
@@ -236,8 +236,11 @@ roughly 22 to 32 engineer-weeks.
   transport segments and capabilities, provider vtable), the notices file
   convention and its check. Depends on S00, S0 and on the first release of
   `aud_midi_standard` (midi-001).
-- S2 (XL) `aud_audio_graph`: engine with typed ports, persistent node
-  instances and immutable programs, graph transactions with revision
+- S2 (XL, in progress: the engine, the Dart API and the document are
+  ticket 19, done 2026-10-08; the headless host, the stress tests and
+  the watchdog remain as S2b, ticket 20) `aud_audio_graph`: engine with
+  typed ports, persistent node instances and immutable programs, graph
+  transactions with revision
   acknowledgements, fades and retirement (graph-003), the realtime
   queues with their capacities and policies and the notification thread
   (interop-002), the engine lifecycle with the route-change sequence
@@ -268,9 +271,8 @@ roughly 22 to 32 engineer-weeks.
   and Android platform tags. Depends on S2, S3.
 - S8 (M) `aud_audio_midi`: `aud_midi` input and output ports as event
   inlets and outlets, MIDI 1.0 and UMP mapping, keyboard-to-synth demo.
-  Depends on S4 and on the `aud_midi` family; for M1 a minimal bridge
-  maps the app's existing MIDI event stream into the graph if `aud_midi`
-  is not ready (release-002).
+  Depends on S4 and on the `aud_midi` family, which is available; the
+  minimal bridge release-002 held in reserve is not needed (2026-10-08).
 - S22 (M) Tooling: starts small with S1 — analyze, format, tests and
   the notices check on every repo — and grows into the CI matrix (macOS,
   Windows, Linux runners, Android emulator, headless Chrome), Clang's
@@ -282,11 +284,12 @@ roughly 22 to 32 engineer-weeks.
   per device; results as JSON published on the docs site; its numbers
   gate the parallel scheduler's default (sched-001). Depends on S4
   (minimal), S22 (publishing).
-- S9 (L) `aud_dsp_sampler`: sfizz node, loaders, presets, the message API
-  on routes, the legacy presets of the Audanika app playing through it.
-  Depends on S4, S0d.
+- S9 (L) `aud_dsp_sampler`: sfizz node, loaders, SFZ presets as node
+  presets, the message API on routes. No backward compatibility with the
+  presets or the API of the existing Audanika app (scope-002). Depends on
+  S4, S0d.
 - S29a (M, M1) Early app integration: an integration branch of `aud_app`
-  plays one legacy preset through `aud_audio` and `aud_dsp_sampler` from
+  plays one SFZ instrument through `aud_audio` and `aud_dsp_sampler` from
   the app's MIDI stream on iOS and Android as soon as S4 and S9 exist,
   and feeds its findings back into the contracts. The code repo lives in
   `audanika-private`; the plan file lives here. Depends on S4, S9.
@@ -296,14 +299,14 @@ roughly 22 to 32 engineer-weeks.
 - S10a (M, M2) `aud_dsp_effects`, first ticket — reverb and delay: a
   Freeverb-based reverb (public domain) and a plate reverb re-implemented
   from the literature (dsp-001), DunneAudioKit's StereoDelay (MIT) and a
-  tempo-synced delay, with the parameters the legacy presets use.
-  Depends on S4.
+  tempo-synced delay. Depends on S4.
 - S29b (L, M2) App migration: `aud_app` replaces the legacy
-  `audio_engine` with `aud_audio`, `aud_audio_midi` (the minimal bridge
-  until `aud_midi` is ready) and `aud_dsp_sampler` with the reverb and
-  delay of S10a; the legacy presets move to SFZ and JSON; the instrument
-  reference suite passes on the reference devices (release-001,
-  release-002). Depends on S29a, S10a.
+  `audio_engine` with `aud_audio`, `aud_audio_midi` over the `aud_midi`
+  ports and `aud_dsp_sampler` with the reverb and
+  delay of S10a; the instruments are rebuilt as SFZ and graph documents,
+  the legacy presets are neither converted nor emulated (scope-002); the
+  instrument reference suite of the new instruments passes on the
+  reference devices (release-001, release-002). Depends on S29a, S10a.
 
 ### Milestone M3: AUv3 on iOS
 
@@ -466,7 +469,7 @@ effort follow the class of the ticket (process-002):
   transitions.
 - Budgets on the reference devices (open question 6; defaults below
   until named): 64 sampler voices at 48 kHz and 128-frame blocks with
-  the callback at most 50 % of the block budget; a legacy preset loads
+  the callback at most 50 % of the block budget; an instrument loads
   in at most two seconds within the sample cache budget; command-to-
   sound latency at most one block plus the output latency; zero xruns
   over ten minutes of playing with UI animation and under thermal load
@@ -479,10 +482,10 @@ effort follow the class of the ticket (process-002):
   desktop and web join the gates as their tickets land; latency and
   xrun numbers are recorded in the benchmark pages.
 - The instrument reference suite replaces "no audible difference": per
-  legacy preset, golden renders of envelopes at several velocities,
-  velocity response, sustain pedal, modulation and voice stealing,
-  compared within tolerance, plus a listening check on the reference
-  devices.
+  instrument of the new app (scope-002), golden renders of envelopes at
+  several velocities, velocity response, sustain pedal, modulation and
+  voice stealing, compared within tolerance, plus a listening check on
+  the reference devices.
 - Provenance: the notices check passes in every repo; no file without
   a license entry.
 - Link alignment: on the two reference devices and a Mac running

@@ -4,7 +4,10 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 10)
-- Open work: default budgets; the interruption behaviour per platform
+- Open work: default budgets and asset loads (with the sampler); the
+  interruption behaviour per platform (S3). The states, the handshake
+  with the audio thread and the reprepare sequence are implemented in
+  ticket 19
 
 ## Decision
 

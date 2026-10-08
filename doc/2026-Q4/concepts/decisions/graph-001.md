@@ -3,7 +3,9 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/graph-engines-and-audiokit.md (R6, R7, R9)
-- Open work: fix the port and buffer formats in the core ticket
+- Open work: none. The port and buffer formats are in the core
+  (ticket 18); the compiler, the feedback split into a reader and a
+  writer and the latency alignment are in `aud_audio_graph` (ticket 19)
 
 ## Decision
 
