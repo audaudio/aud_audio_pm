@@ -1,12 +1,11 @@
 # process-001: Ticket IDs are the issue numbers of aud_audio_pm
 
-- Status: accepted
+- Status: superseded by [process-003](process-003.md) on 2026-10-08
 - Date: 2026-10-08
 - Canonical source: Gabriel Gatzsche's decision at the plan review on
   2026-10-08
-- Open work: create the organization-level GitHub Projects board for
-  the status of the tickets; open the issue of each implementation step
-  when it starts
+- Open work: none — the numbering moved into `doc/issues.md` of this
+  repo (process-003)
 
 ## Decision
 

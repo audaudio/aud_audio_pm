@@ -4,6 +4,7 @@ Project management repository of the Audanika Audio Engine `aud_audio`: plans, d
 
 Current quarter: [2026-Q4](doc/2026-Q4).
 
+- [Issues](doc/issues.md) — the ticket numbers
 - [Tickets](doc/2026-Q4/tickets)
 - [Decisions](doc/2026-Q4/concepts/decisions/000-index.md)
 - [Architecture](doc/2026-Q4/architecture/architecture.md)

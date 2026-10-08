@@ -5,6 +5,7 @@
 ### Changed
 
 - Plan and record the mobile spike (ticket 5)
+- Number the tickets in the project management repo
 
 ## 0.0.3 - 2026-10-08
 
