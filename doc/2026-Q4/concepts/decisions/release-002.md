@@ -5,7 +5,9 @@
 - Canonical source: topics/review-2026-10-08-plan-scope.md (point 1);
   decisions/release-001.md
 - Open work: owners and capacity per step (open question 5); the
-  reference devices for the budgets (open question 6)
+  reference devices for the budgets (open question 6). The minimal MIDI
+  bridge held in reserve below is void: the `aud_midi` family is
+  available, S8 builds on its ports (2026-10-08, ticket 19)
 
 ## Decision
 

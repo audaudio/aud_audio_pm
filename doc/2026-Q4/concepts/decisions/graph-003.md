@@ -1,11 +1,12 @@
 # graph-003: Graph transactions preserve node state
 
-- Status: proposed
+- Status: accepted
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
-  (point 1); decisions/graph-001.md
-- Open work: fade length defaults; the exact retirement rule for nodes
-  with long tails
+  (point 1); decisions/graph-001.md; the review of ticket 19
+- Open work: none. Fades of 5 ms and a tail limit of 10 s were decided at
+  the review of ticket 19 and implemented there: a retired node renders
+  its tail, at most 10 s, with its incoming connections faded out
 
 ## Decision
 

@@ -4,8 +4,10 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 2); decisions/interop-001.md
-- Open work: default capacities and the per-block event budget, to be
-  measured in the spike and the core ticket
+- Open work: the defaults chosen in ticket 19 — queues of 1024 parameter
+  changes and 4096 events, a budget of 1024 entries per block, a
+  scheduler of 4096 events with a lookahead of 10 s, note trackers of 256
+  notes — are measured again in S24
 
 ## Decision
 
