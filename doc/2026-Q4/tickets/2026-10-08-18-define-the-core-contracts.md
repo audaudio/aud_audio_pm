@@ -83,8 +83,10 @@ README rules the DNA layers carry.
 7. Done: 110 tests at full coverage of the Dart sources; `dart analyze`,
    `dart format` and the DNA test clean; README and `index.jsonc`.
 8. Done: the open work of abi-001, time-001, osc-001, graph-002 and
-   license-001 updated; S1 is marked in progress in the plan of ticket 17
-   until the publish.
+   license-001 updated; S1 is marked done in the plan of ticket 17.
+9. Done: review-light with four fixes (inlet port of OSC events, nominal
+   rate on a backwards host clock, frame checks of the adapter wrapper,
+   slug validation of the Pages check); pull requests green.
 
 ## Findings
 

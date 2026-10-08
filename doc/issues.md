@@ -12,7 +12,7 @@ Next number: 19
 | 2 | S00: Create the repos of the aud_audio family | done | [2026-10-08-2-create-the-repos.md](2026-Q4/tickets/2026-10-08-2-create-the-repos.md) |
 | 5 | S0-mobile: Spike the mobile foundation on iOS and Android | in review | [2026-10-08-5-spike-the-mobile-foundation.md](2026-Q4/tickets/2026-10-08-5-spike-the-mobile-foundation.md) |
 | 17 | Audanika Audio Engine: concept, decisions and ticket plan | done | [2026-10-07-17-audanika-audio-engine.md](2026-Q4/tickets/2026-10-07-17-audanika-audio-engine.md) |
-| 18 | S1: Define the core contracts of aud_audio_core | in progress | [2026-10-08-18-define-the-core-contracts.md](2026-Q4/tickets/2026-10-08-18-define-the-core-contracts.md) |
+| 18 | S1: Define the core contracts of aud_audio_core | done | [2026-10-08-18-define-the-core-contracts.md](2026-Q4/tickets/2026-10-08-18-define-the-core-contracts.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the
