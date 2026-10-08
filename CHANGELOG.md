@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0 - 2026-10-08
+
+### Changed
+
+- Plan the core contracts of aud_audio_core (ticket 18, step S1)
+- Update the open work of abi-001, time-001, osc-001, graph-002 and
+license-001
+- Mark S1 as done in the plan of ticket 17
+
 ## 0.0.4 - 2026-10-08
 
 ### Changed

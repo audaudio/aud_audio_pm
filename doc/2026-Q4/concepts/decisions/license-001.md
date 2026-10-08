@@ -3,7 +3,8 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/licenses-and-dsp-sources.md (R26, R27)
-- Open work: add the notices check to the DNA layer
+- Open work: add the notices check to the DNA layer; the check exists as
+  `aud_audio_core/scripts/check-notices.js` with its guide (ticket 18)
 
 ## Decision
 

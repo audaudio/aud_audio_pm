@@ -226,7 +226,7 @@ roughly 22 to 32 engineer-weeks.
     session with LinkHut on a second machine and a loopback recording of
     both clicks measures the alignment error per platform, with native
     timestamps and the miniaudio shim.
-- S1 (L) `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
+- S1 (L, done 2026-10-08, ticket 18) `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
   capabilities, allocator ownership, thread-affinity tags, state
   serialization, latency and tail reporting), buffer and event formats,
   descriptors, Dart contracts, the typed command model with the OSC adapter
