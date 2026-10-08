@@ -214,7 +214,8 @@ in a separate process or is replaced by a native view (plugin-001).
   budgets, bounded polyphony, cancellable loads (lifecycle-001).
 - Presets: JSON node presets and one graph document that the editor,
   the presets and the plugin shells share; SFZ for the sampler.
-- Repos and dependencies: all repos exist from the start; the pubspecs
+- Repos and dependencies: all repos exist from the start (manifest:
+  [packages.jsonc](packages.jsonc), created by ticket 2); the pubspecs
   reference each other by git references with `tag_pattern` according
   to the package graph until the packages are on pub.dev (repos-001).
 - Naming: every public class carries the prefix `Aud` in Dart and C++,

@@ -185,7 +185,7 @@ roughly 22 to 32 engineer-weeks.
 
 ### Milestone M1: the sampler on iOS and Android
 
-- S00 (M) Create the repos: every package of the family gets its repo
+- S00 (M, done 2026-10-08, ticket 2) Create the repos: every package of the family gets its repo
   in the `audaudio` organization before any implementation — created
   from the matching template (`dart create -t package`,
   `flutter create --template=package_ffi` for C and C++ through hooks,
