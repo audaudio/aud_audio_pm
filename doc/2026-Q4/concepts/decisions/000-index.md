@@ -40,3 +40,4 @@
 | [process-001](process-001.md) | accepted | 2026-10-08 | Ticket IDs are the GitHub issue numbers of aud_audio_pm; status on an organization Projects board | Create the board; open issues per step |
 | [scope-001](scope-001.md) | accepted | 2026-10-08 | The R28 suggestions become six packages (analysis, file, spatial, mi, waveform, bench), cross-cutting additions and the app migration | Faust compiler as a tool; HRTF data license |
 | [docs-001](docs-001.md) | accepted | 2026-10-08 | audaudio.github.io on Astro and Starlight after rljson.github.io: tested Dart snippets, one dartdoc run under /api, sync from the packages | Brand assets; API docs in the workflow; German locale |
+| [build-001](build-001.md) | proposed | 2026-10-08 | Third-party C and C++ is vendored as the linker's subset with SOURCES and INCLUDES manifests and compiled by the hook; the core is included, never linked | Build-time fetch where a license asks; per-file flags; shared hook helper |

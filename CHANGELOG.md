@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Plan and record the mobile spike (ticket 5)
+
 ## 0.0.3 - 2026-10-08
 
 ### Changed
