@@ -5,11 +5,11 @@
 ### Changed
 
 - Plan and record ticket 21 (S3 audio IO)
-
-Register ticket 21 in doc/issues.md and the tickets index
-Write the plan with the decisions of its review, the implementation, the measurements and the findings
-Mark S3 built in the plan of ticket 17
-Update the open work of io-001, io-002, time-001 and lifecycle-001
+- Register ticket 21 in doc/issues.md and the tickets index
+- Write the plan with the decisions of its review, the implementation, the measurements and the findings
+- Mark S3 built in the plan of ticket 17
+- Update the open work of io-001, io-002, time-001 and lifecycle-001
+- Mark ticket 21 in review and format its changelog entry
 
 ## 0.3.0 - 2026-10-09
 

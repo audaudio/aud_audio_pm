@@ -416,7 +416,11 @@ the reference devices.
   files carry the landmark comments of the code guide. Kept: the
   integration test of the example prints its measurements, which are its
   purpose on a device; `routeOf` maps Android's device types by number,
-  and a test checks every number against Android's constants.
+  and a test checks every number against Android's constants. A second pass
+  after `gg do review` found no blocker; left as they are: some Dart
+  classes put their static members before their fields, and
+  `AudIoSession.inject` and `AudIoStream.open` take positional
+  parameters.
 - **The latency probe on a real device**: its first click - 1 ms of a
   constant level - came back below every threshold through the iPad's
   speaker and microphone. The click is now a 5 ms burst of 2 kHz at 0.8
