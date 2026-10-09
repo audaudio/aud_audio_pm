@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.6.0 - 2026-10-09
 
 ### Changed
 
@@ -39,7 +39,6 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
-
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -57,7 +56,6 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
-
 
 ## 0.1.0 - 2026-10-08
 
