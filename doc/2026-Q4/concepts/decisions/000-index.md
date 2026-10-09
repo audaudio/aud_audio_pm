@@ -27,7 +27,7 @@
 | [midi-001](midi-001.md) | accepted | 2026-10-08 | MIDI types come from aud_midi_standard; no interim event types in the core | Align S1 with the release of aud_midi_standard |
 | [link-001](link-001.md) | proposed | 2026-10-07 | Ableton Link as a transport provider in its own package; LinkKit on iOS; multicast lock on Android | Research Link Audio |
 | [link-002](link-002.md) | accepted | 2026-10-08 | No Audanika Link license; the package fetches Link and LinkKit at build time and tells app publishers to obtain their own | Notice wording; pinned tag and release |
-| [plugin-001](plugin-001.md) | proposed | 2026-10-07 | VST3, then CLAP, then AUv3; engine in the plugin through the headless host, Dart out of process | Plugin UI technology; AUv3 memory measurement |
+| [plugin-001](plugin-001.md) | proposed | 2026-10-07 | VST3, then CLAP, then AUv3; engine in the plugin through the headless host, Dart out of process | Plugin UI technology: spike S0-plugin-ui (ticket 23) for macOS and iOS, S18 for Windows; AUv3 memory with the sampler in S20 |
 | [plugin-002](plugin-002.md) | proposed | 2026-10-08 | Headless engine host with host-supplied buffers; stable parameter ids, state, buses, latency, offline rendering; shells need neither IO nor the parallel scheduler | Plugin shells S18 to S20; host done in ticket 20 |
 | [ui-001](ui-001.md) | proposed | 2026-10-07 | UI packages are Flutter widgets over Dart models ported from Flow and PianoRoll | Canvas approach |
 | [ui-002](ui-002.md) | accepted | 2026-10-08 | aud_audio_ui_controls after AudioKit Controls, aud_audio_ui_keyboard after AudioKit Keyboard | Music-theory dependency for labels and scales; shared theming |

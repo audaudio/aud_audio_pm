@@ -1,6 +1,6 @@
 name: aud_audio_pm
 description: "Project management repo of the Audanika Audio Engine aud_audio: plans, decisions, blog posts"
-version: 0.5.0
+version: 0.6.0
 homepage: https://github.com/audaudio/aud_audio_pm
 repository: https://github.com/audaudio/aud_audio_pm
 publish_to: none
