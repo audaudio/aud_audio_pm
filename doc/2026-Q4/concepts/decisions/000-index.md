@@ -5,7 +5,7 @@
 | [repos-001](repos-001.md) | accepted | 2026-10-08 | All repos created up front (S00), wired by git references with tag_pattern per the package graph, initial tags, ocean refreshed | Initial version; switch to pub.dev |
 | [family-001](family-001.md) | proposed | 2026-10-07 | One repo per package, the aud_audio family, shared major version; the AUv3 shell is aud_audio_auv3 | none |
 | [interop-001](interop-001.md) | proposed | 2026-10-07 | Dart never runs on the audio thread; FFI command queue, ring buffers, build hooks, C ABI | Measure queue and event latency in the spike |
-| [interop-002](interop-002.md) | proposed | 2026-10-08 | Real-time contract: queue classes, capacities, overflow and late-event policies, note-off recovery, notification thread for Dart wake-ups | Defaults of ticket 19; measured in S24 |
+| [interop-002](interop-002.md) | proposed | 2026-10-08 | Real-time contract: queue classes, capacities, overflow and late-event policies, note-off recovery, notification thread for Dart wake-ups | Defaults of ticket 19 measured in S24; policies stress-tested in ticket 20 |
 | [web-001](web-001.md) | proposed | 2026-10-07 | One Wasm module per AudioContext in an AudioWorklet, Dart on the main thread | Prebuilt per-package Wasm vs. generated build |
 | [web-002](web-002.md) | proposed | 2026-10-08 | Web control runtime as a Wasm Worker; reduced guarantees without shared memory | Measure the fallback latency |
 | [web-003](web-003.md) | proposed | 2026-10-08 | Web capability contract per environment; the non-isolated path is a distinct implementation | Memory ceilings; when the fallback ships |
@@ -16,7 +16,7 @@
 | [graph-002](graph-002.md) | accepted | 2026-10-08 | Variable blocks with sample-accurate events; fixed-block adapter for nodes that need constant frame counts | Minimum sub-range and adapter API |
 | [graph-003](graph-003.md) | accepted | 2026-10-08 | Persistent node instances, immutable programs, transactions with revision acknowledgements, fades and retirement | none; fades 5 ms, tail limit 10 s (ticket 19) |
 | [abi-001](abi-001.md) | proposed | 2026-10-08 | Versioned C ABI with capabilities, allocator ownership, thread affinity, state, latency and tail reporting | Header in the core ticket; shared vs static engine |
-| [lifecycle-001](lifecycle-001.md) | proposed | 2026-10-08 | Engine states, route-change sequence, shutdown order, cache budgets, polyphony bounds, cancellable loads | Default budgets; interruptions per platform (S3) |
+| [lifecycle-001](lifecycle-001.md) | proposed | 2026-10-08 | Engine states, route-change sequence, shutdown order, cache budgets, polyphony bounds, cancellable loads | Default budgets, asset loads with the sampler (S9); interruptions per platform (S3) |
 | [sched-001](sched-001.md) | proposed | 2026-10-07 | Serial rendering as the baseline; opt-in coarse work-stealing parallelism, off until benchmarks prove it; host pools in plugins | Cost model for switching on |
 | [seq-001](seq-001.md) | proposed | 2026-10-07 | Sequencer on the render thread over the transport snapshot; quantized launches; events pre-scheduled by path latency | Tempo map; clip launching semantics |
 | [osc-001](osc-001.md) | proposed | 2026-10-07 | Every node, inlet, outlet and parameter has an OSC 1.1 address; OSC is an adapter over typed numeric engine commands | Grammar, replies, timetag conversion |
@@ -28,7 +28,7 @@
 | [link-001](link-001.md) | proposed | 2026-10-07 | Ableton Link as a transport provider in its own package; LinkKit on iOS; multicast lock on Android | Research Link Audio |
 | [link-002](link-002.md) | accepted | 2026-10-08 | No Audanika Link license; the package fetches Link and LinkKit at build time and tells app publishers to obtain their own | Notice wording; pinned tag and release |
 | [plugin-001](plugin-001.md) | proposed | 2026-10-07 | VST3, then CLAP, then AUv3; engine in the plugin through the headless host, Dart out of process | Plugin UI technology; AUv3 memory measurement |
-| [plugin-002](plugin-002.md) | proposed | 2026-10-08 | Headless engine host with host-supplied buffers; stable parameter ids, state, buses, latency, offline rendering; shells need neither IO nor the parallel scheduler | Parameter ids and state format in ticket 20 |
+| [plugin-002](plugin-002.md) | proposed | 2026-10-08 | Headless engine host with host-supplied buffers; stable parameter ids, state, buses, latency, offline rendering; shells need neither IO nor the parallel scheduler | Plugin shells S18 to S20; host done in ticket 20 |
 | [ui-001](ui-001.md) | proposed | 2026-10-07 | UI packages are Flutter widgets over Dart models ported from Flow and PianoRoll | Canvas approach |
 | [ui-002](ui-002.md) | accepted | 2026-10-08 | aud_audio_ui_controls after AudioKit Controls, aud_audio_ui_keyboard after AudioKit Keyboard | Music-theory dependency for labels and scales; shared theming |
 | [release-001](release-001.md) | accepted | 2026-10-08 | Mobile first: the first releases cover iOS and Android; desktop and web follow in their own tickets | When macOS joins |

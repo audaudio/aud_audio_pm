@@ -7,7 +7,12 @@
 - Open work: the defaults chosen in ticket 19 — queues of 1024 parameter
   changes and 4096 events, a budget of 1024 entries per block, a
   scheduler of 4096 events with a lookahead of 10 s, note trackers of 256
-  notes — are measured again in S24
+  notes — are measured again in S24. Ticket 20 proved the policies with
+  stress tests, reserves a place of the scheduler at the enqueue (a full
+  scheduler refuses there), budgets scheduled events per block and drops
+  a note on that a full tracker cannot hold. It narrowed the retrigger
+  exception to sounding notes: a note on and its own note off at the
+  same time keep their order, swapped they hung the note
 
 ## Decision
 

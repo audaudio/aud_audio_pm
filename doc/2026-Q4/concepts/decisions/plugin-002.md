@@ -4,9 +4,14 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-plan-scope.md (point 8);
   decisions/plugin-001.md
-- Open work: the parameter-id derivation and the state format in ticket
-  20; the render function `aud_graph_render` with host buses exists
-  since ticket 19
+- Open work: the plugin shells (S18 to S20) - automation gestures, bus
+  negotiation, closing the notes of the host's event output. The headless
+  host `aud_host_*` of `aud_audio_graph` exists since ticket 20: graph
+  documents with presets, state blobs and an asset table, the whole state
+  saved as a document, parameter ids as FNV-1a over `<node id>/<parameter
+  id>` with the top bit cleared, latency and tail, the graph's events per
+  block and a freewheel flag; the render function `aud_graph_render`
+  exists since ticket 19
 
 ## Decision
 
