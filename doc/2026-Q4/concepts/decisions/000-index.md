@@ -4,7 +4,7 @@
 | --- | --- | --- | --- | --- |
 | [repos-001](repos-001.md) | accepted | 2026-10-08 | All repos created up front (S00), wired by git references with tag_pattern per the package graph, initial tags, ocean refreshed | Initial version; switch to pub.dev |
 | [family-001](family-001.md) | proposed | 2026-10-07 | One repo per package, the aud_audio family, shared major version; the AUv3 shell is aud_audio_auv3 | none |
-| [interop-001](interop-001.md) | proposed | 2026-10-07 | Dart never runs on the audio thread; FFI command queue, ring buffers, build hooks, C ABI | Measure queue and event latency in the spike |
+| [interop-001](interop-001.md) | proposed | 2026-10-07 | Dart never runs on the audio thread; FFI command queue, ring buffers, build hooks, C ABI | Command to sound on the reference devices; `@RecordUse` with S9 |
 | [interop-002](interop-002.md) | proposed | 2026-10-08 | Real-time contract: queue classes, capacities, overflow and late-event policies, note-off recovery, notification thread for Dart wake-ups | Defaults of ticket 19 measured in S24; policies stress-tested in ticket 20 |
 | [web-001](web-001.md) | proposed | 2026-10-07 | One Wasm module per AudioContext in an AudioWorklet, Dart on the main thread | Prebuilt per-package Wasm vs. generated build |
 | [web-002](web-002.md) | proposed | 2026-10-08 | Web control runtime as a Wasm Worker; reduced guarantees without shared memory | Measure the fallback latency |
@@ -31,7 +31,7 @@
 | [plugin-002](plugin-002.md) | proposed | 2026-10-08 | Headless engine host with host-supplied buffers; stable parameter ids, state, buses, latency, offline rendering; shells need neither IO nor the parallel scheduler | Plugin shells S18 to S20; host done in ticket 20 |
 | [ui-001](ui-001.md) | proposed | 2026-10-07 | UI packages are Flutter widgets over Dart models ported from Flow and PianoRoll | Canvas approach |
 | [ui-002](ui-002.md) | accepted | 2026-10-08 | aud_audio_ui_controls after AudioKit Controls, aud_audio_ui_keyboard after AudioKit Keyboard | Music-theory dependency for labels and scales; shared theming |
-| [release-001](release-001.md) | accepted | 2026-10-08 | Mobile first: the first releases cover iOS and Android; desktop and web follow in their own tickets | When macOS joins |
+| [release-001](release-001.md) | accepted | 2026-10-08 | Mobile first: the first releases cover iOS and Android; desktop and web follow in their own tickets | When macOS joins; platform tags of core, graph and io |
 | [release-002](release-002.md) | proposed | 2026-10-08 | Milestone M1: the sampler plays Audanika's instruments on iOS and Android; everything else conditional | Owners and capacity; reference devices |
 | [release-003](release-003.md) | accepted | 2026-10-08 | Delivery order: sampler, reverb and delay, AUv3, then the backing player with time stretching; iOS and Android | none |
 | [naming-001](naming-001.md) | accepted | 2026-10-08 | Aud is the prefix of all classes in Dart and C++; aud_ for C symbols | none |

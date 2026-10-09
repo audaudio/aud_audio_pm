@@ -4,7 +4,9 @@
 - Date: 2026-10-07
 - Canonical source: topics/dart-interop-and-web.md
 - Open work: measure command-queue and event latency in the spike
-  ticket
+  ticket; ticket 22 measures command to sound in `AudEngine` (iOS
+  simulator, Android emulator, iPad), the reference devices are open;
+  link hooks with `@RecordUse` come with S9 (decision 5 of ticket 22)
 
 ## Decision
 
