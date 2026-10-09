@@ -1,7 +1,7 @@
 # 23: S0-plugin-ui — Plan the spike for a Flutter UI in plugin shells
 
-Status: planned 2026-10-09. Plan only: the spike itself is a later ticket
-with its own number from `doc/issues.md`.
+Status: done 2026-10-09. The plan is reviewed; the spike itself is a
+later ticket with its own number from `doc/issues.md`.
 
 ## Goal
 
@@ -178,7 +178,8 @@ This ticket:
 2. Done: the ticket registered in `doc/issues.md`.
 3. Done: this plan; the research in `topics/plugin-formats.md`.
 4. Done: the plan review (decisions below).
-5. Commit, push and review; the user runs `gg do publish`.
+5. Done: committed, pushed and in review (aud_audio_pm#11); the user
+   runs `gg do publish`.
 
 The spike, roughly:
 
@@ -197,7 +198,7 @@ The spike, roughly:
 7. Flutter in process (B) with a renamed framework.
 8. iOS: Flutter in the AUv3 extension with the ballast.
 9. The record plugin-003; the updates of S17a to S20, ticket 17 and
-   plugin-001; the blog post.
+   plugin-001.
 
 ## Questions of the plan review
 

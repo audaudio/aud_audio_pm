@@ -5,6 +5,7 @@
 ### Changed
 
 - Plan the spike for a Flutter UI in plugin shells (ticket 23)
+- Record the review of ticket 23 in its plan
 
 ## 0.5.0 - 2026-10-09
 
