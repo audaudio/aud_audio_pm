@@ -1,14 +1,17 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 - 2026-10-09
 
 ### Changed
 
 - Plan and record the headless host (ticket 20)
 
 - Write the plan of ticket 20 with its decisions, steps and findings
+
 - Mark S2 done in the plan of ticket 17
+
 - Update the open work of plugin-002, interop-002 and lifecycle-001
+
 - Link the plan from doc/issues.md and the tickets index
 
 ## 0.2.0 - 2026-10-08
@@ -28,7 +31,6 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
-
 
 ## 0.1.0 - 2026-10-08
 
