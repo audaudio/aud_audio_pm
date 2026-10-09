@@ -5,7 +5,9 @@
 - Canonical source: Gabriel Gatzsche's answer at the plan review on
   2026-10-08
 - Open work: decide when macOS joins (it shares the Apple code path with
-  iOS and is the development platform, so it may come almost for free)
+  iOS and is the development platform, so it may come almost for free).
+  Ticket 22 gave the umbrella the platform tags iOS and Android; core,
+  graph and io get theirs with S22 or their next change
 
 ## Decision
 

@@ -266,7 +266,9 @@ roughly 22 to 32 engineer-weeks.
   (miniaudio on macOS, Windows and Linux), S3c (AUHAL, workgroups,
   aggregate devices) and S3d (IAudioClient3), each with native
   timestamps. Depends on S1.
-- S4 (M) `aud_audio` umbrella: `Engine`, node registry, conditional
+- S4 (M, built 2026-10-09 in ticket 22 for iOS and Android: `AudEngine`,
+  the registry, the split of core, graph and io into neutral and ffi
+  parts; the Pixel numbers are open) `aud_audio` umbrella: `Engine`, node registry, conditional
   imports, example app on the reference nodes of S2 (oscillator →
   filter → output on iOS and Android, the desktop platforms as S3b
   lands), first `0.x` release of core, graph, io and umbrella with iOS

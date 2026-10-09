@@ -16,7 +16,11 @@
   behaviour per platform - interruptions, the audio focus, disconnects,
   route and rate changes, the reset of the media services - with a stream
   that recovers on its own and holds the renderer until the client
-  acknowledges a new format
+  acknowledges a new format; ticket 22 put the sequence into `AudEngine`
+  of `aud_audio` - one sequence for format and route changes,
+  interruptions, lost devices and recovery, prepared only while the stream
+  holds the graph - and measured it on an iPad; the numbers of the
+  reference devices are open
 
 ## Decision
 
