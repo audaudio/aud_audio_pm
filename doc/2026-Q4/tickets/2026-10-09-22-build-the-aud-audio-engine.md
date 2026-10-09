@@ -275,7 +275,9 @@ Gabriel Gatzsche decided:
   the engine calls it with `graph.hostApi` at `prepare` and keeps an
   `AudPackageRegistration` per package. The graph refuses a descriptor of
   another ABI major with `AUD_ERROR_ABI_MAJOR`. `test_packages/aud_test_nodes`
-  is a `package_ffi` package with a build hook of its own: `aud.test.invert`
+  is C++ built apart from the engine into a library of its own
+  (`node scripts/test-native.js --library`), which the tests load with
+  `DynamicLibrary.open`: `aud.test.invert`
   and a second register function that claims the next ABI major.
 - **Numbers**: render time from the graph stats, callbacks, xruns and late
   callbacks from the IO counters; command to sound is the host time of an
@@ -369,3 +371,8 @@ oscillator -> filter -> output, 50 measurements of command to sound.
   connected over Wi-Fi, and `flutter drive --publish-port` did not find
   the built bundle; the device runs used the iPad by cable.
 - **`@RecordUse`** stays with S9 (decision 5).
+- **No local references at publish**: `gg do publish` refuses a
+  `path:` dependency in a package manifest. The test package was first a
+  `package_ffi` package in the umbrella's dev dependencies by path; it is
+  now built by the native test script into a library that the Dart tests
+  open, a package built apart from the engine in the strictest sense.

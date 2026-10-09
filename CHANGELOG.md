@@ -5,6 +5,7 @@
 ### Changed
 
 - Plan and record the aud_audio engine (ticket 22, S4)
+- Load the test package as a library of its own
 
 ## 0.4.0 - 2026-10-09
 
