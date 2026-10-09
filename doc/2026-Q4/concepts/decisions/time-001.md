@@ -7,7 +7,10 @@
 - Open work: measure timestamp quality per backend on the reference
   devices. The segment struct, the capability flags, the conversions and
   the filter are defined (ticket 18: `aud_abi.h`, `aud_transport.h`,
-  `aud_time_filter.h`)
+  `aud_time_filter.h`); the streams of ticket 21 deliver the
+  `AudStreamTime` with source, accuracy and latency per direction, move
+  the sample position across a gap so that the filter resets, and the
+  latency probe of their example measures the round trip
 
 ## Decision
 

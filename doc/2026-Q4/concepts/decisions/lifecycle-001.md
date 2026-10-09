@@ -5,13 +5,18 @@
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 10)
 - Open work: default budgets, the sample cache, cancellable and
-  reference-counted asset loads (with the sampler, S9); the interruption
-  behaviour per platform (S3). The states, the handshake with the audio
+  reference-counted asset loads (with the sampler, S9); the recovery
+  numbers on the reference devices; the drift-tracking resampler for
+  duplex streams on two clocks. The states, the handshake with the audio
   thread and the reprepare sequence are implemented in ticket 19; ticket
   20 proved the route change under load - the transport keeps its
   position across a new sample rate and a stop, tracked notes get note
   offs with the first block after the restart, pending events survive -
-  and added asset references to graph documents
+  and added asset references to graph documents; ticket 21 built the
+  behaviour per platform - interruptions, the audio focus, disconnects,
+  route and rate changes, the reset of the media services - with a stream
+  that recovers on its own and holds the renderer until the client
+  acknowledges a new format
 
 ## Decision
 

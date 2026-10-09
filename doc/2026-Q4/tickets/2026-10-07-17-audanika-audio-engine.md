@@ -256,7 +256,9 @@ roughly 22 to 32 engineer-weeks.
   oscillator, gain, mixer, a simple filter — that tests, the example app
   and the benchmarks use before S10a exists; the headless host API with
   host-supplied buffers (plugin-002). Depends on S1.
-- S3 (L) `aud_audio_io`: device model, enumeration, hot-plug, duplex
+- S3 (L, built 2026-10-09 in ticket 21 for iOS and Android; the numbers
+  of the reference devices open) `aud_audio_io`: device model,
+  enumeration, hot-plug, duplex
   streams with presentation timestamps and latency per direction —
   mobile first (release-001): the Oboe backend for Android (io-002,
   compiled in the build hook with 16 KB page alignment) and the
