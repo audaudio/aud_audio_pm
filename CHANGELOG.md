@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Plan and record ticket 21 (S3 audio IO)
+
+Register ticket 21 in doc/issues.md and the tickets index
+Write the plan with the decisions of its review, the implementation, the measurements and the findings
+Mark S3 built in the plan of ticket 17
+Update the open work of io-001, io-002, time-001 and lifecycle-001
+
 ## 0.3.0 - 2026-10-09
 
 ### Changed
@@ -13,6 +24,7 @@
 - Update the open work of plugin-002, interop-002 and lifecycle-001
 
 - Link the plan from doc/issues.md and the tickets index
+
 
 ## 0.2.0 - 2026-10-08
 
@@ -31,6 +43,7 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
+
 
 ## 0.1.0 - 2026-10-08
 

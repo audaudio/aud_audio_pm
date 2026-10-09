@@ -17,3 +17,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-08-20-add-the-headless-host.md](2026-10-08-20-add-the-headless-host.md)
   — ticket 20: the headless host, the stress tests and the watchdog of
   `aud_audio_graph` (step S2b)
+- [2026-10-09-21-build-the-audio-io-for-ios-and-android.md](2026-10-09-21-build-the-audio-io-for-ios-and-android.md)
+  — ticket 21: the audio IO of `aud_audio_io` for iOS and Android (step
+  S3)
