@@ -4,8 +4,10 @@
 - Date: 2026-10-07
 - Canonical source: topics/plugin-formats.md (R23)
 - Open work: decide how the plugin UI is built (native, Flutter in a
-  separate process, or Flutter in process with renamed frameworks);
-  measure the AUv3 memory budget with the sampler loaded
+  separate process, or Flutter in process with renamed frameworks) —
+  the spike S0-plugin-ui of ticket 17 (planned in ticket 23) measures
+  the options on macOS and iOS, S18 on Windows and Linux; measure the
+  AUv3 memory budget with the sampler loaded (S20)
 
 ## Decision
 

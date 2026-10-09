@@ -70,6 +70,26 @@ what is known about Flutter inside a plugin.
   fixed Objective-C names. Flutter issue 104144 (framework name
   collisions in one DAW process) was closed "not planned".
 
+Added 2026-10-09 for the spike S0-plugin-ui (ticket 23):
+
+- `flutter_vst3` does not embed its editor: its view
+  (`native/src/plugin_view.cpp`) starts the Flutter UI app as an
+  external window when the host attaches the view, with a fixed size and
+  no IPC in the view. Its process split covers the Dart audio code.
+- macOS has no public API to show a view of another process inside a
+  host's view. What remains: render into IOSurfaces that the plugin's
+  view shows and forward the input, or keep a window of the other
+  process over the editor. AUv3 gets the remote view from the system.
+- Windows allows a parent and child window in two processes, but the
+  input queues of both threads are joined: a hung child can stall the
+  parent's UI thread (Raymond Chen, 2013).
+- Flutter 3.47 (August 2026): Impeller is the default renderer on the
+  desktop; the desktop multi-window API is still experimental (main
+  channel and a flag), so one engine serving several editor windows is
+  not yet a stable option.
+- `dart:io` supports Unix domain sockets on Windows since Dart 3.11, so
+  one socket transport serves macOS and Windows.
+
 ## What holds for aud_audio
 
 - Order of formats: VST3 first (MIT, three desktop platforms), CLAP
@@ -100,3 +120,9 @@ what is known about Flutter inside a plugin.
 - https://pub.dev/packages/flutter_vst3, https://github.com/MelbourneDeveloper/flutter_vst3
 - https://forum.juce.com/t/juce-flutter-an-experimental-juce-flutter-bridge/68390
 - https://github.com/flutter/flutter/issues/104144
+- Added 2026-10-09:
+  https://github.com/MelbourneDeveloper/flutter_vst3/blob/main/flutter_vst3/native/src/plugin_view.cpp,
+  https://devblogs.microsoft.com/oldnewthing/20130412-00/?p=4683,
+  https://flutter.dev/blog/whats-new-in-flutter-3-47,
+  https://flutter.dev/blog/desktop-windowing-apis,
+  https://dart.dev/changelog
