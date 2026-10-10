@@ -118,9 +118,11 @@ Flutter 3.47.5, VST3 SDK 3.8.1, REAPER and a test host:
   of a separate process (1.5 ms from input to the processor). But Dart runs
   on the DAW's main thread (platform and UI threads are merged), starting
   an engine there stalls the DAW's UI for up to 214 ms, the framework keeps
-  about 40 MB after the last editor closes, and closing one of two such
-  editors crashed REAPER once inside Flutter's compositor (a present after
-  the engine shut down).
+  about 40 MB after the last editor closes, and closing such an editor
+  crashed REAPER three times inside Flutter's compositor: a present that
+  `ResizeSynchronizer` scheduled for a later vsync ran after the engine
+  had shut down. Keeping the view controller and the engine for 200 ms
+  after the view closes avoided it in 100 cycles.
 - A probe that takes the input's time stamp in a global pointer route of
   Flutter gets the previous event's: the framework runs the global routes
   after the widgets. The spike's first B numbers (18 ms) were this

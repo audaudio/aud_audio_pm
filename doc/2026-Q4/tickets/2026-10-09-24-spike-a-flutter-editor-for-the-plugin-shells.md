@@ -1,8 +1,8 @@
 # 24: S0-plugin-ui — Spike a Flutter editor for the plugin shells on macOS and iOS
 
 Status: in progress since 2026-10-09; plan review, implementation,
-measurements in the test host, in REAPER and on the iPad, and the code
-review are done. Open: the embedding checklist by hand in REAPER and
+measurements in the test host, in REAPER and on the iPad, the code
+review and the reruns after its fixes are done. Open: the embedding checklist by hand in REAPER and
 Live, and the open and close cycles in Live (Gabriel Gatzsche).
 
 ## Goal
@@ -493,22 +493,39 @@ numbers are REAPER's unless marked "test host". Medians, then p99.
 | --- | --- | --- |
 | Memory, editor closed | 2 MB more at most | A 16 KB more than D (test host); in REAPER every variant 193–201 MB, within the run-to-run noise. Pass |
 | Memory, first editor | 150 MB at most | A and S 130 MB in the editor process, REAPER unchanged; F 116 MB; B 90 MB in REAPER (107 MB test host). Pass |
-| Memory, more editors | 50 MB per further editor | A 130 MB: fail. S 35 MB for the second, 32 MB each for four: pass. B 37–55 MB: borderline |
-| UI to audio | median 10 ms, p99 20 ms, C + 2 ms | C 1.39/2.72 ms; A 1.62/2.96; S 1.84/3.06; B 1.53/2.86 (test host, probe fixed); F not measured (its input bypasses the plugin). Pass |
-| Audio to UI | median 33 ms | C 1.3 ms; A 7.0 (p99 29); S 7.2 (p99 26); B 7.1 (test host). Pass |
-| Editor open | 500 ms cold, 150 ms warm | Cold: A 289–370 ms, S 272–377, F 217–272 (plugin side), B 89 (test host), C 20–22. Four at once: S 340/368, A 445/670 (the slowest of four processes misses). Warm: A 11/19, S 11/16 |
-| Editor close | 50 ms, no leftovers, 5 MB over 100 cycles | removed() 0.1–0.8 ms (B 3–8); no editor process left after quitting. REAPER over 100 cycles: C +3.2 MB, A +2.0, S +2.2 (pass); F +9.4, B +25 (fail) |
+| Memory, more editors | 50 MB per further editor | A 130 MB: fail. S 35 MB for the second, 26–32 MB each for four: pass. B 37–55 MB: borderline |
+| UI to audio | median 10 ms, p99 20 ms, C + 2 ms | C 1.39/2.72 ms; A 1.62/2.96; S 1.84/3.06; B 1.72/3.22 (probe fixed; test host 1.53/2.86); F not measured (its input bypasses the plugin). Pass |
+| Audio to UI | median 33 ms | C 1.3 ms; A 7.0 (p99 29); S 7.2 (p99 26); B 8.0 (p99 20). Pass |
+| Editor open | 500 ms cold, 150 ms warm | Cold: A 289–370 ms, S 272–377, F 217–272 (plugin side), B 53–116, C 12–22. Four at once: S 340/368, A 445/670 (the slowest of four processes misses), B 71/128. Warm: A 11/19, S 11/16 |
+| Editor close | 50 ms, no leftovers, 5 MB over 100 cycles | removed() 0.1–0.8 ms (B 3–8, 0.5 with the deferred shutdown); no editor process left after quitting. REAPER over 100 cycles: C +3.2 MB, A +2.0, S +2.2 (pass); F +9.4, B +8–25 (fail) |
 | Two instances | each drives its own | A and S with two and four instances. Pass |
-| Two Flutter plugins | both work, closing one leaves the other | A1 + A2 (graph 0.4.0 and 0.3.0, Flutter 3.47.5 and 3.44.9): pass, A2 draws on after A1 closes. B1 + B2: REAPER crashed when B1 closed, inside B1's Flutter (a present after the engine shut down) |
+| Two Flutter plugins | both work, closing one leaves the other | A1 + A2 (graph 0.4.0 and 0.3.0, Flutter 3.47.5 and 3.44.9): pass, A2 draws on after A1 closes. B1 + B2: REAPER crashed once when B1 closed, inside B1's Flutter (a present after the engine shut down), and passed in the rerun |
 | Hygiene | no collision | Without hygiene C2's view runs C1's Objective-C class (`implFlavor 1`); with it each build its own. Weak C++ symbols were not coalesced in REAPER |
 | Crash and hang | UI ≤ 100 ms, no xrun, reopening recovers | Killed editor: restarted at once (hello after 0.15 s), frames again within a second; suspended 10 s: UI thread ≤ 3 ms, audio unaffected; stalls of 66–118 ms only when windows open. Pass |
 | Audio thread | 0 violations, 0 xruns | RealtimeSanitizer, two animating editors, 10 min (test host): 0. Watchdog, two animating editors, 10 min in REAPER: 225,004 blocks each, 0 violations, 0 overloads, slowest block 168 µs of 2.67 ms. Pass |
-| CPU | idle 1 %, view 1 ms per frame | A meter animating at 30 Hz costs the editor process 6–8 % of a core (A, S, F) and the native view +6.4 % of REAPER; dragging 19 %. S with four editors 47 % before the fix of its meter phases. Idle with a silent output: see below |
+| CPU | idle 1 %, view 1 ms per frame | A meter animating at 30 Hz costs the editor process 6–8 % of a core (A, S, F) and the native view +6.4 % of REAPER; dragging 19 %. S with four editors 14 % (47 % before the fix of its meter phases). Idle, with a silent output: 0.1–0.2 % for the editor process (A, S, F), nothing measurable for B. Pass |
 | Embedding | checklist in REAPER and Live | open: by hand (Gabriel Gatzsche) |
 | iOS AUv3 | 360 MB, first frame 500 ms, never terminated | 1, 2, 4 instances for 10 min each: 184, 193, 214 MB median (max 258) with the 100 MB ballast; Flutter's share 69, 76, 93 MB; first frames 9–59 ms; never terminated. Pass |
 
-Reruns after the code review's fixes (B, the idle CPU with a silent output,
-A1 + A2, B1 + B2, the watchdog soak): see "Reruns" below.
+### Reruns
+
+After the code review's fixes, on 2026-10-10 in REAPER:
+
+| Run | Result |
+| --- | --- |
+| B, one to four editors | UI to audio 1.72/3.22 ms; audio to UI 8.0/20.3 ms; cold open 53–116 ms, four at once 71/128 ms; most opens stall REAPER's UI thread for 50 ms or more (85 ms median over 100 opens) while the engine starts |
+| Idle, silent output | The editor process 0.1–0.2 % of a core (A, S, F); REAPER with a B editor as without one |
+| Four editors | S: one process of 207 MB (max 245), 14 % of a core, open 345/377 ms. A: four processes of 459 MB (max 709), open 435/474 ms |
+| A and S again | UI to audio A 1.81/3.21 ms, S 1.77/3.24; audio to UI with automation A 7.41/21.08 ms, S 6.39/29.42 |
+| 100 cycles | A1: warm open 24.7/102.9 ms, REAPER +0–3 MB. B1: open 92/122 ms, removed() 0.5 ms, REAPER +8 MB, no crash once the plugin shuts the engine down 200 ms after the view (findings) |
+| A1 + A2 | Both draw, A2 on after A1 closed; first frames after 309 and 336 ms |
+| B1 + B2 | Both draw, B2 on after B1 closed (REAPER had crashed in this run before the fixes) |
+| Killed and suspended editor (A1) | The editor came back and reopened warm in 25 ms; REAPER's UI thread stalled at most 102 ms |
+| Watchdog soak | A1 with the watchdog, two editors and automation, 10 min: 225,013 and 225,012 blocks, 0 violations, 0 overloads, slowest block 27 µs of 2.67 ms; UI thread p99 8.5 ms; audio to UI 6.75/12.19 ms |
+
+One pair run drew nothing: the crash dialog of the run before stayed in
+front of REAPER for the whole run, so the plugin's views did not count as
+visible and both editors paused. Undisturbed, the pair passed.
 
 ### Code review
 
@@ -536,7 +553,12 @@ finder angles, one verifier per candidate (27: 18 confirmed, 8 plausible,
   handed back, a dropped last frame captured again, the receive right
   destroyed in the cancel handler.
 - S's meters come from one timer per editor process, hidden or unchanged
-  meters are not sent, and a view whose window cannot be seen pauses.
+  meters are not sent, and a view whose window cannot be seen pauses. The
+  reruns showed that the pause needs the timer to check every view's
+  visibility as well: the first place can report the view hidden (REAPER
+  orders its window in after attaching the view), and a later change does
+  not always reach the view as a notification, so the editor stayed
+  paused (automation and pair runs without a frame).
 - F's editor window is a non-activating panel and shows only once placed;
   its first frame is the editor's "shown".
 - The AUv3 editor follows host automation; its parameters come from the
@@ -581,7 +603,8 @@ and the socket, the frame copy on the GPU.
   `FlutterSurfaceManager`).
 - **Occlusion.** FlutterMacOS observes window and application occlusion
   (`windowDidChangeOcclusionState:`). The surface windows of A and S
-  render while transparent and ignoring the mouse; a locked screen or a
+  render while transparent and ignoring the mouse, even though macOS
+  reports them occluded; a locked screen or a
   sleeping display stops every editor's frames, so measurements need an
   unlocked screen. B's view stops with the DAW window it lives in.
 - **Activation.** An agent app (`LSUIElement`) that the plugin starts with
@@ -599,9 +622,16 @@ and the socket, the frame copy on the GPU.
   memcpy, 2.2 MB per frame at 2x) costs 6–8 % of a core for a meter at
   30 Hz. Handing Flutter's own surfaces to the plugin, or a GPU blit,
   removes most of it (S18).
-- **B in REAPER.** Starting an engine stalls REAPER's UI thread for up to
-  214 ms; REAPER grows 25 MB over 100 open and close cycles; closing one
-  of two B editors crashed REAPER once inside Flutter's compositor.
+- **B in REAPER.** Starting an engine stalls REAPER's UI thread (85 ms
+  median over 100 opens, up to 214 ms); REAPER grows 8–25 MB over 100
+  open and close cycles. Tearing an engine down crashed REAPER three
+  times inside Flutter's compositor: `ResizeSynchronizer` runs a present
+  it scheduled for a later vsync after the view is gone, and the present
+  reached the compositor of an engine already shut down. Once closing one
+  of two B editors, twice in the cycles after three and four opens (the
+  second without any input). With the view controller and the engine
+  kept for 200 ms after the view closes, 100 cycles ran without a crash
+  (one run).
 - **iPad ballast.** A ballast filled with a constant pattern is compressed
   (and the allocation may be elided): it must hold pseudo-random data,
   as samples would, to count in `phys_footprint`.

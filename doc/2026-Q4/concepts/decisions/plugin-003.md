@@ -56,11 +56,11 @@ budgets of ticket 23 (medians; REAPER unless marked):
 | Budget | A: process per editor | S: one editor process | B: in the DAW process | C: native view |
 | --- | --- | --- | --- | --- |
 | First editor ≤ 150 MB | 130 MB | 130 MB | 90 MB | — |
-| Each further editor ≤ 50 MB | 130 MB | 32–35 MB | 37–55 MB | — |
-| UI to audio ≤ 10 ms and ≤ C + 2 ms | 1.62 ms | 1.84 ms | 1.53 ms (test host) | 1.39 ms |
-| Audio to UI ≤ 33 ms | 7.0 ms | 7.2 ms | 7.1 ms (test host) | 1.3 ms |
-| Open cold ≤ 500 ms, warm ≤ 150 ms | 289–370 ms, 11 ms | 272–377 ms, 11 ms | 89 ms (test host) | 21 ms |
-| DAW growth over 100 cycles ≤ 5 MB | 2.0 MB | 2.2 MB | 25 MB | 3.2 MB |
+| Each further editor ≤ 50 MB | 130 MB | 26–35 MB | 37–55 MB | — |
+| UI to audio ≤ 10 ms and ≤ C + 2 ms | 1.62 ms | 1.84 ms | 1.72 ms | 1.39 ms |
+| Audio to UI ≤ 33 ms | 7.0 ms | 7.2 ms | 8.0 ms | 1.3 ms |
+| Open cold ≤ 500 ms, warm ≤ 150 ms | 289–370 ms, 11 ms | 272–377 ms, 11 ms | 53–116 ms | 12–22 ms |
+| DAW growth over 100 cycles ≤ 5 MB | 2.0 MB | 2.2 MB | 8–25 MB | 3.2 MB |
 
 - Out of process the editor costs the DAW nothing until it opens (16 KB
   for a closed editor), keeps Dart off every thread of the DAW, and a
@@ -75,9 +75,10 @@ budgets of ticket 23 (medians; REAPER unless marked):
   costs about what B measured per engine (37–55 MB).
 - In process (B) the latency is as good, but Dart runs on the DAW's main
   thread (platform and UI threads are merged in 3.47), starting an engine
-  stalls the DAW's UI thread for up to 214 ms, the DAW grows 25 MB over
-  100 open and close cycles, closing one of two B editors crashed REAPER
-  inside Flutter's compositor, and two builds coexist only through a
+  stalls the DAW's UI thread (85 ms in the median, up to 214 ms), the DAW
+  grows 8–25 MB over 100 open and close cycles, closing an editor crashed
+  REAPER three times inside Flutter's compositor until the plugin kept the
+  engine for 200 ms after the view, and two builds coexist only through a
   binary patch of Flutter's names.
 - The following window (F) needs no frame copy, but as a window of
   another process it fights the host over order, focus, minimizing and

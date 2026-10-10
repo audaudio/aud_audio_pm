@@ -16,6 +16,12 @@
 
 - Link plugin-001, ui-001 and ui-002; update the decisions index, ticket 17 and the plugin-formats topic
 
+- Add the reruns of the spike S0-plugin-ui (ticket 24)
+
+- Record the reruns in REAPER after the code review's fixes: B, idle CPU, four editors, pairs, cycles and the soak
+
+- Record B's teardown crash and its workaround; refresh plugin-003's numbers and the plugin-formats topic
+
 ## 0.6.0 - 2026-10-09
 
 ### Changed
