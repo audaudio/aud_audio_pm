@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add the spike S0-plugin-ui and plugin-003 (ticket 24)
+
+- Register ticket 24 and plan the spike of a Flutter editor for the plugin shells
+
+- Record the implementation, the results in REAPER, the test host and on the iPad, and the code review
+
+- Add plugin-003 (proposed): Flutter out of process on macOS, in the extension on iOS
+
+- Add ui-003 (proposed): the engine adapters of the UI packages in a binding package
+
+- Link plugin-001, ui-001 and ui-002; update the decisions index, ticket 17 and the plugin-formats topic
+
 ## 0.6.0 - 2026-10-09
 
 ### Changed
@@ -39,6 +55,7 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
+
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -56,6 +73,7 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
+
 
 ## 0.1.0 - 2026-10-08
 

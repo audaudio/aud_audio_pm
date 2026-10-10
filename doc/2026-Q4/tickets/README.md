@@ -26,3 +26,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-09-23-plan-the-spike-for-a-flutter-ui-in-plugin-shells.md](2026-10-09-23-plan-the-spike-for-a-flutter-ui-in-plugin-shells.md)
   — ticket 23: the plan of the spike S0-plugin-ui, a Flutter editor in the
   plugin shells
+- [2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md](2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md)
+  — ticket 24: the spike S0-plugin-ui, a Flutter editor in the plugin
+  shells on macOS and iOS
