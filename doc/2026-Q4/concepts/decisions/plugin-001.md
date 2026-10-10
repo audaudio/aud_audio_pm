@@ -3,11 +3,11 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/plugin-formats.md (R23)
-- Open work: decide how the plugin UI is built (native, Flutter in a
-  separate process, or Flutter in process with renamed frameworks) —
-  the spike S0-plugin-ui of ticket 17 (planned in ticket 23) measures
-  the options on macOS and iOS, S18 on Windows and Linux; measure the
-  AUv3 memory budget with the sampler loaded (S20)
+- Refined by: [plugin-003](plugin-003.md) — the editor on macOS and iOS,
+  after the spike S0-plugin-ui (ticket 24)
+- Open work: the plugin UI on Windows and Linux (S18, with the spike's
+  measurements); the AUv3 memory budget with the sampler loaded (S20);
+  macOS and iOS are settled by plugin-003
 
 ## Decision
 

@@ -226,8 +226,9 @@ roughly 22 to 32 engineer-weeks.
     session with LinkHut on a second machine and a loopback recording of
     both clicks measures the alignment error per platform, with native
     timestamps and the miniaudio shim.
-  - S0-plugin-ui (M, gates the UI of S18 to S20, answers open question
-    1, planned in ticket 23): (h) a Flutter UI for a plugin shell. A
+  - S0-plugin-ui (M, done 2026-10-09, ticket 24; gates the UI of S18 to
+    S20, answers open question 1, planned in ticket 23): (h) a Flutter UI
+    for a plugin shell. A
     minimal VST3 over the headless host opens a Flutter window in a
     separate process (as flutter_vst3 does), embeds it in the host's
     editor window on macOS (Windows follows in S18), and drives
@@ -242,7 +243,12 @@ roughly 22 to 32 engineer-weeks.
     AUv3 extension inside the 360 MB budget, with a ballast in place of
     the sampler; S20 repeats it with the sampler. Result: a decision
     record that settles plugin-001's open UI work for macOS and iOS.
-    Depends on S2b; not on S4.
+    Depends on S2b; not on S4. Result: plugin-003 (proposed) — on macOS
+    the editor is a Flutter app in a process of its own, shown through
+    shared IOSurfaces with forwarded input, one process per DAW process
+    and plugin build; on iOS Flutter runs in the AUv3 extension; Flutter
+    inside the DAW process is rejected. ui-003 (proposed) moves the
+    engine adapters of the UI packages into a binding package.
 - S1 (L, done 2026-10-08, ticket 18) `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
   capabilities, allocator ownership, thread-affinity tags, state
   serialization, latency and tail reporting), buffer and event formats,
@@ -335,9 +341,10 @@ roughly 22 to 32 engineer-weeks.
   host (plugin-002) with its host app on iOS: the sampler with its
   presets and assets loaded without Dart, stable parameter ids, state
   restoration, memory measurement with the sampler loaded (S0-plugin-ui
-  measured Flutter's share with a ballast); the UI per open question 1 —
-  a parameters-only unit with the host's generic view until S0-plugin-ui
-  decides it. Depends on S4, S9; not on S6.
+  measured Flutter's share with a ballast); the editor per plugin-003:
+  Flutter in the extension, the engines of all instances from one
+  `FlutterEngineGroup`, started when the view first appears, the
+  widgets writing the parameter tree. Depends on S4, S9; not on S6.
 
 ### Milestone M4: the backing player with time stretching
 
@@ -421,9 +428,11 @@ roughly 22 to 32 engineer-weeks.
   primitives with their geometries and the pointer-averaging gesture
   layer, the eight implementations of AudioKit Controls, `ControlsTheme`,
   `ParamBinding` with parameter gestures, golden tests, cookbook page.
-  Completes the slice S0-plugin-ui builds (`Control`, `ArcKnob`,
-  `ParamBinding` over an abstract parameter sink, the widgets free of
-  the umbrella). Depends on S4.
+  Completes the slice S0-plugin-ui built (`aud_audio_ui_controls` 0.1.0:
+  `Control`, `ArcKnob`, `ParamBinding` over an abstract parameter sink,
+  the widgets free of the umbrella) and creates the binding package
+  `aud_audio_ui_bindings` with the parameter sink over `AudEngine`
+  (ui-003). Depends on S4.
 - S17b (M) `aud_audio_ui_keyboard`: `Keyboard` with the five layouts,
   `KeyboardModel` with multi-touch, latching and external activation,
   `KeyboardKey`, `MidiMonitorKeyboard`, `NoteBinding` into event inlets
@@ -441,13 +450,15 @@ roughly 22 to 32 engineer-weeks.
   gestures, bus mapping, state restoration, latency and tail, offline
   rendering, note expressions from the per-note controllers (MPE,
   MIDI 2.0), the host transport as transport provider, validator run,
-  test in REAPER on Windows and Linux; the editor UI per S0-plugin-ui
-  on macOS, and on Windows and Linux decided here with the spike's
-  measurements; parameters only until it is decided. Depends on S4
-  (serial engine), not on S6.
-- S19 (M) `aud_audio_clap`: shell reusing S18's mapping, note
-  expressions from the per-note controllers, the thread-pool extension
-  with its single-threaded fallback. Depends on S18.
+  test in REAPER on Windows and Linux; the editor per plugin-003 on
+  macOS, growing from the spike's plugin and editor app (variant S), and
+  on Windows and Linux decided here with the spike's measurements and
+  scripts; parameters only until it is decided. Depends on S4 (serial
+  engine), not on S6.
+- S19 (M) `aud_audio_clap`: shell reusing S18's mapping and editor
+  (plugin-003), note expressions from the per-note controllers, the
+  thread-pool extension with its single-threaded fallback. Depends on
+  S18.
 ### After M4: documentation, tooling and extensions
 
 - S21 (M) `audaudio.github.io`: create the repo from rljson.github.io
@@ -530,9 +541,10 @@ effort follow the class of the ticket (process-002):
 ## Open questions
 
 1. Plugin UI in v1: native view, Flutter in a separate process, or no
-   UI (parameters only)? The spike S0-plugin-ui answers it for macOS and
-   iOS, S18 for Windows and Linux; until then the shells ship parameters
-   only.
+   UI (parameters only)? Answered for macOS and iOS by the spike
+   S0-plugin-ui (ticket 24): plugin-003 (proposed), a Flutter editor out
+   of process on macOS and in the extension on iOS. S18 answers it for
+   Windows and Linux; until then the shells ship parameters only there.
 2. Is `aud_audio_clap` wanted in the first round of plugin shells, or
    after VST3 and AUv3 ship?
 3. Faust: is the LGPL Faust compiler acceptable as a development-time

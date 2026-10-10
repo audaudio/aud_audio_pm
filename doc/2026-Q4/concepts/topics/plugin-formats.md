@@ -90,6 +90,58 @@ Added 2026-10-09 for the spike S0-plugin-ui (ticket 23):
 - `dart:io` supports Unix domain sockets on Windows since Dart 3.11, so
   one socket transport serves macOS and Windows.
 
+Added 2026-10-09 by the spike S0-plugin-ui (ticket 24), on macOS 27 with
+Flutter 3.47.5, VST3 SDK 3.8.1, REAPER and a test host:
+
+- FlutterMacOS.framework exports only its Objective-C API; the embedder C
+  API with a custom compositor is internal, and the stand-alone
+  FlutterEmbedder.framework exists for macOS only as a debug build for
+  x64. A release editor renders through `FlutterView` in a window; its
+  IOSurface-backed layers are the frames another process can be given.
+- Shared IOSurfaces work as the embedding across processes: the editor
+  copies each frame into a pool of three surfaces, sends them as Mach
+  ports (rendezvous through `bootstrap_check_in` and `bootstrap_look_up`
+  under a random name), and the plugin's view shows them as layer
+  contents and forwards the input over the socket. The editor's share of
+  a parameter change is about 0.35 ms.
+- One Flutter engine can drive several views on macOS, but turning it on
+  is private in 3.47 (`enableMultiView`, which the experimental windowing
+  API calls). Without it each editor needs an engine of its own.
+- An agent app (`LSUIElement`) that a plugin starts with `posix_spawn`
+  becomes the active app. The DAW turns inactive, and REAPER closes its
+  audio device while its transport stops. A helper app must start
+  background-only (`LSBackgroundOnly`) and become an accessory after
+  launch, which does not activate it.
+- Flutter in process works with a renamed copy of FlutterMacOS per plugin
+  build (byte-replaced names of the same length, re-signed): two plugins
+  with Flutter 3.47.5 and 3.44.9 run in one process, and the latency is that
+  of a separate process (1.5 ms from input to the processor). But Dart runs
+  on the DAW's main thread (platform and UI threads are merged), starting
+  an engine there stalls the DAW's UI for up to 214 ms, the framework keeps
+  about 40 MB after the last editor closes, and closing such an editor
+  crashed REAPER three times inside Flutter's compositor: a present that
+  `ResizeSynchronizer` scheduled for a later vsync ran after the engine
+  had shut down. Keeping the view controller and the engine for 200 ms
+  after the view closes avoided it in 100 cycles.
+- A probe that takes the input's time stamp in a global pointer route of
+  Flutter gets the previous event's: the framework runs the global routes
+  after the widgets. The spike's first B numbers (18 ms) were this
+  artifact; the stamp belongs into `PlatformDispatcher.onPointerDataPacket`.
+- Two plugin builds in one process collide without symbol hygiene: the
+  Objective-C runtime takes the class of whichever image loaded first.
+  Runtime-created classes with a random suffix, hidden visibility and an
+  exported-symbols list with the three VST3 entry points avoid it; the
+  VST3 SDK's own host did not coalesce weak C++ symbols across bundles.
+- RealtimeSanitizer cannot run inside a notarized DAW: its interceptors
+  need the runtime at process start, and a hardened runtime without
+  `allow-dyld-environment-variables` ignores `DYLD_INSERT_LIBRARIES`.
+  A test host carries it.
+- REAPER is scriptable for measurements: a ReaScript passed on the
+  command line, `-cfgfile` for a resource folder of its own, `-newinst`,
+  started through LaunchServices so that its windows are in front (an
+  occluded window stops Flutter's frames). An empty project stops playing
+  at once; a loop range keeps the transport running.
+
 ## What holds for aud_audio
 
 - Order of formats: VST3 first (MIT, three desktop platforms), CLAP
@@ -99,6 +151,8 @@ Added 2026-10-09 for the spike S0-plugin-ui (ticket 23):
   serialized graph; Dart runs out of process or not at all inside the
   host; a Flutter UI is a separate process or a native view — never
   Dart on the host's render thread. See decision plugin-001.
+- The editor on macOS and iOS: decision plugin-003, after the spike
+  S0-plugin-ui (ticket 24).
 
 ## Sources
 
