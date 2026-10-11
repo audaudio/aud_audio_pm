@@ -32,6 +32,13 @@
 
 - Mark proposed decisions as proposed and add the open work of plugin-002 from ticket 24
 
+
+### Changed
+
+- Mark ticket 24 as done
+
+- The embedding checklist in REAPER and Live and the cycles in Live stay open
+
 ## 0.6.0 - 2026-10-09
 
 ### Changed

@@ -1,10 +1,10 @@
 # 24: S0-plugin-ui — Spike a Flutter editor for the plugin shells on macOS and iOS
 
-Status: in review since 2026-10-10. Done: plan review, implementation,
-measurements in the test host, in REAPER and on the iPad, the code review and
-the reruns after its fixes, and the review of the pull requests. Open: the
-embedding checklist by hand in REAPER and Live, and the open and close cycles in
-Live (Gabriel Gatzsche).
+Status: done 2026-10-11. Done: plan review, implementation, measurements
+in the test host, in REAPER and on the iPad, the code review and the reruns
+after its fixes, and the review of the pull requests. Open: the embedding
+checklist by hand in REAPER and Live, and the open and close cycles in Live
+(Gabriel Gatzsche).
 
 ## Goal
 
