@@ -17,13 +17,27 @@
 - Add the review-light fixes of ticket 25 (S9)
 
 - Register ticket 25, write its plan and add the Faust audit topic
+
 - Ticket 25 in review: status, open work and open question 8 on the deviations in sampler-003 and lifecycle-002
+
 - license-003 refines license-001 and supersedes the Faust rule of license-002, dsp-001 and sampler-001 in part; the license topic, the sfizz topic, S28 and open question 3 of ticket 17 follow
+
 - Refines and supersedes links between sampler-001 to 003, build-001, lifecycle-001 and 002, osc-001 and 002; the S9 result and the tablet numbers for S24 in ticket 17
+
 - sampler-001 keeps the sampler numbers on the iPad Pro M5 and a Pixel open; index rows of sampler-001, sampler-003, lifecycle-001, lifecycle-002, license-002 and dsp-001
+
 - Plan: decision ids, affected repos, step 9, the Scala keys, readable measurements, the missing warm-up, abbreviations, line wrap
+
 - Shorter sentences in sampler-003, lifecycle-002 and osc-002; a node message holds at most 16 arguments
+
 - sfizz topic: load notifications, SFZ instruments as trusted input; audit topic: what the helpers compile to, the STK-4.3 notice of the fork
+
+- Add the review results and final numbers of ticket 25
+
+- Ticket 25 done: the review of the pull requests with 103 findings, 97 fixed, and the bugs it found
+- Measurements after the review: the iPhone and the Galaxy Tab S4 after the twenty-minute warm-up of ticket 17, the simulator and the emulator; the first runs for comparison
+- Open question 9: the license of Audanika code in the fork of sfizz
+- io-002: the late callbacks of the tablet in the final run
 
 ## 0.7.0 - 2026-10-11
 

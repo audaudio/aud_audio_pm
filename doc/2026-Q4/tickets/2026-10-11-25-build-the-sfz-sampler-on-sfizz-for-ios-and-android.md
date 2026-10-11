@@ -1,12 +1,11 @@
 # 25: S9 — Build the SFZ sampler on sfizz for iOS and Android
 
-Status: in review since 2026-10-11 (pull requests open, the publish
-follows). Done: plan review, implementation, `/code-review` with its fixes,
-measurements on the iOS simulator, the Android emulator, an iPhone 16 Pro
-Max and a Galaxy Tab S4. Open: the numbers on the iPad Pro M5 and a Pixel;
-the ten-minute xrun runs after the twenty-minute warm-up of ticket 17; the
-tablet misses the live budget at its peaks (S24); open question 8 (Gabriel
-Gatzsche).
+Status: done 2026-10-12. Done: plan review, implementation, `/code-review`
+and the review of the pull requests with their fixes, measurements on the
+iOS simulator, the Android emulator, an iPhone 16 Pro Max and a Galaxy Tab
+S4, the devices after the twenty-minute warm-up of ticket 17. Open: the
+numbers on the iPad Pro M5 and a Pixel; the tablet misses the live budget
+at its peaks (S24); open questions 8 and 9 (Gabriel Gatzsche).
 
 ## Goal
 
@@ -382,8 +381,8 @@ Gabriel Gatzsche decided:
 
 Questions 1 to 7 were decided at the plan review; deviations found while
 implementing are recorded under Findings. One question came from the
-implementation (8). Open work: the numbers on the iPad Pro M5 and a Pixel;
-the ten-minute xrun runs after the twenty-minute warm-up of ticket 17.
+implementation (8), one from the review of the pull requests (9). Open
+work: the numbers on the iPad Pro M5 and a Pixel.
 
 8. **The deviations in sampler-003 and lifecycle-002** (for Gabriel
    Gatzsche). Both decisions are accepted, but four of their rules come
@@ -391,6 +390,12 @@ the ten-minute xrun runs after the twenty-minute warm-up of ticket 17.
    the virtual path that starts no load, the capacity rule on the heads
    alone (scope 4 said "after everything evictable is gone") and the trim
    on the calling thread. Confirm them, or set both decisions to proposed.
+9. **The license of Audanika's code in the fork** (for Gabriel Gatzsche).
+   `RbjFilters.hpp`, the one new file of the fork, is under the package's
+   MIT license; Audanika's changes in sfizz's files sit under their
+   BSD-2-Clause headers, and NOTICES.md says so. Should new files of the
+   fork take BSD-2-Clause too, so that the fork stays uniform and its
+   fixes can go upstream?
 
 ## Findings
 
@@ -475,43 +480,91 @@ the C ABI, 2026-10-11; nine findings, eight fixed with tests:
 - Skipped: the engine's numbers read the list of loads on every call; the
   example reads them every 200 ms.
 
+## Review of the pull requests
+
+The review-light skill on the seven pull requests, 2026-10-11 and
+2026-10-12: five reviewers (the node and its Dart API, the fork of sfizz,
+the graph, core with the umbrella, io and web, this repo) checked the
+guides, repeated code, clarity, performance, security, the translations and
+the README of every public API. They reported 103 findings, each checked
+against the code; the report lies in the ticket folder
+(`review-light-25.md`). At the request of Gabriel Gatzsche every finding
+that could be fixed was fixed, one commit per step, each native fix with a
+test under the sanitizers: 97 fixed, 4 skipped, 2 open (questions 8 and 9;
+instruments as trusted input in the sfizz topic). Four more came up while
+fixing and were fixed. The bugs among them:
+
+- A stream that finished while a trim ran could lose its file data under
+  the task (use after free); the task reads everything before it marks the
+  stream done.
+- A sample the memory cannot hold threw `std::bad_alloc` on a worker and
+  ended the process; now the load drops its regions and names it as
+  missing. A region with a missing sample and a keyswitch stayed in the
+  keyswitch lists after it was freed (inherited from sfizz).
+- Message slots leaked through the fixed-block wrapper of a node; a cache
+  budget of `UINT64_MAX` trimmed everything; the bounds checks of messages
+  could wrap on 32-bit Android; the loads of a removed node were never
+  cancelled, so `wait_loads` could hang.
+- A reload for the polyphony or the tuning could cancel a newer load and
+  rebuild the old instrument; volume ramps and controllers sent before the
+  first instrument were lost; an unbounded release time overflowed the
+  tail.
+- sfizz's `ScopedFTZ` left flush-to-zero on for the whole audio thread on
+  ARM; the RBJ filters diverged at sample rates under 40 kHz.
+- The engine counted a load that a newer load replaced as failed; a
+  refused cache budget leaked the engine's session.
+
+Skipped: the native tests stay grouped by topic and keep their fixture, as
+in the graph; a native test harness shared by the family and the lint set
+of the Dart code guide for every repo need tickets of their own.
+
 ## Measurements
 
 The test instrument (`AudSfzTestInstrument`: five looped saw waves of one
 second, 16-bit mono at 48 kHz) and `integration_test/sampler_test.dart` of
-the example of `aud_audio`, 2026-10-11. The physical iPad Pro M5 was not
-reachable; the user chose the iPhone instead and connected a Galaxy Tab S4.
-The live test plays the instrument "Mellow" (4-pole low-pass), the offline
-test the test instrument (2-pole low-pass) at the live sample quality.
+the example of `aud_audio`, 2026-10-12, with the code after the review of
+the pull requests. The devices played the auto-play for the twenty minutes
+of warm-up of ticket 17 before the ten measured minutes; the simulator and
+the emulator for five seconds. The physical iPad Pro M5 was not reachable;
+the user chose the iPhone instead and connected a Galaxy Tab S4. The live
+test plays the instrument "Mellow" (4-pole low-pass), the offline test the
+test instrument (2-pole low-pass) at the live sample quality.
 
 | | iOS simulator (iPhone 17 Pro, M-series Mac) | Android emulator (API 36) | iPhone 16 Pro Max (iOS 26.7.1) | Galaxy Tab S4 (Snapdragon 835, Android 10) |
 | --- | --- | --- | --- | --- |
-| Load of the test instrument (budget 2 s) | 15 ms | 34 ms | 24 ms | 149 ms |
-| 64 voices offline, 128-frame blocks (budget 1.33 ms) | 98 µs mean, 132 µs max | 124 µs mean, 1.78 ms max | 113 µs mean, 139 µs max | 854 µs mean, 971 µs max |
-| 64 voices live, steady (budget half a block) | block 256: 36 % mean, 48 % max | block 1920: 5 % mean, 13 % max | block 256: 18 % mean, 27 % max | block 384: 45 % mean, 58 % max |
-| Command to sound (budget a block plus the output latency) | 17.8 ms mean, 19.7 ms max; budget 16.1 ms | 118 ms mean, 128 ms max; budget 148.5 ms | 23.5 ms mean, 26.0 ms max; budget 26.0 ms | 33.7 ms mean, 35.7 ms max; budget 40.0 ms |
-| Auto-play with an animated UI (budget 0 xruns over 10 min; without the 20-minute warm-up of ticket 17) | 5 s: 0 xruns | 5 s: 0 xruns, 151 late callbacks | 10 min: 0 xruns, 5 late callbacks of 113,005 | 10 min: 0 xruns, 4858 late callbacks, render max 8.75 ms |
+| Load of the test instrument (budget 2 s) | 17 ms | 27 ms | 23 ms | 126 ms |
+| 64 voices offline, 128-frame blocks (budget 1.33 ms) | 98 µs mean, 134 µs max | 129 µs mean, 1.85 ms max | 113 µs mean, 139 µs max | 852 µs mean, 974 µs max |
+| 64 voices live, steady (budget half a block) | block 256: 43 % mean, 49 % max | block 1920: 5 % mean, 13 % max | block 256: 20 % mean, 28 % max | block 384: 44 % mean, 57 % max |
+| Command to sound (budget a block plus the output latency) | 17.2 ms mean, 19.9 ms max; budget 16.1 ms | 115 ms mean, 126 ms max; budget 146.6 ms | 23.6 ms mean, 25.0 ms max; budget 26.0 ms | 33.1 ms mean, 36.2 ms max; budget 39.4 ms |
+| Auto-play with an animated UI (budget 0 xruns over 10 min after a 20-minute warm-up) | 5 s: 0 xruns | 5 s: 0 xruns, 92 late callbacks | warm-up 0 xruns, 4 late callbacks; 10 min: 0 xruns, 0 late callbacks, render max 0.67 ms | warm-up 0 xruns, 9060 late callbacks; 10 min: 0 xruns, 4489 late callbacks, render max 4.91 ms |
 
-- On the simulator, the emulator and the iPhone the live maximum
-  includes the block in which the 64 notes start; the tablet's run split
-  them: that block took 78 % of the 8 ms.
-- The emulator's offline maximum (1.78 ms) is above the 1.33 ms budget;
-  the offline check takes the mean, and the emulator runs at its host's
-  speed.
-- The tablet misses the live budget at its peaks: 45 % of the block on
-  average, 58 % at most in steady state, and in the ten minutes one block
-  took 8.75 ms, longer than its 8 ms, without an xrun (the buffer had a
-  burst in reserve). Offline it renders 64 voices in 32 % of a 128-frame
-  block. The new RBJ filters are not the cause: they run as fast as the
-  Faust originals or faster (4-pole stereo 1.7 against 2.1 ns per frame
-  on the Mac). The reference devices of ticket 17 are not named yet; the
-  tablet's numbers go to S24 with the question of the scheduling on big
-  and little cores.
+- The live maximum includes the block in which the 64 notes start on the
+  simulator, the emulator and the iPhone; on the tablet that block took
+  94 % of the 8 ms (78 % in the first run).
+- The tablet misses the live budget at its peaks: 44 % of the block on
+  average, 57 % at most in steady state. Over the thirty minutes no block
+  took longer than its 8 ms (render max 4.91 ms in the measured part); the
+  engine counted one xrun before the warm-up, in the phase of the loads and
+  the 64-note bursts. Its battery warmed from 20.8 to 24.0 °C. Offline it
+  renders 64 voices in 32 % of a 128-frame block. The new RBJ filters are
+  not the cause: they run as fast as the Faust originals or faster (4-pole
+  stereo 1.7 against 2.1 ns per frame on the Mac). The reference devices of
+  ticket 17 are not named yet; the tablet's numbers go to S24 with the
+  question of the scheduling on big and little cores.
+- The first runs of 2026-10-11, before the review and without the warm-up,
+  measured the same within a few percent: the iPhone 24 ms, 18 % / 27 %
+  live, 23.5 / 26.0 ms command to sound, ten minutes without an xrun and 5
+  late callbacks; the tablet 149 ms, 45 % / 58 % live, 33.7 / 35.7 ms, ten
+  minutes without an xrun, 4858 late callbacks, a render maximum of 8.75 ms
+  and two xruns before the measured part.
+- The emulator's offline maximum (1.85 ms, 1.78 ms in the first run) is
+  above the 1.33 ms budget; the offline check takes the mean, and the
+  emulator runs at its host's speed.
 - The live numbers of the simulator are the simulator's: its audio thread
-  shares the host's cores. Its command to sound lies 1.7 ms above a block
-  plus the output latency; the oscillator page of the same run measured
-  19.9 ms, so the margin belongs to the engine's command path, not to the
-  sampler.
+  shares the host's cores. Its command to sound lies 1.1 ms (mean) above a
+  block plus the output latency; in the first run the oscillator page
+  measured the same margin, so it belongs to the engine's command path on
+  the simulator, not to the sampler.
 - The link hook: the release APK of the example of `aud_dsp_sampler`
   (arm64) is 16,046,006 bytes without a call to `AudDspSampler` and
   18,520,095 bytes with one; `libaud_dsp_sampler.so` is 2,469,312 bytes.

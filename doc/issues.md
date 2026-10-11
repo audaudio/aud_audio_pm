@@ -19,7 +19,7 @@ Next number: 26
 | 22 | S4: Build the aud_audio engine for iOS and Android | done | [2026-10-09-22-build-the-aud-audio-engine.md](2026-Q4/tickets/2026-10-09-22-build-the-aud-audio-engine.md) |
 | 23 | S0-plugin-ui: Plan the spike for a Flutter UI in plugin shells | done | [2026-10-09-23-plan-the-spike-for-a-flutter-ui-in-plugin-shells.md](2026-Q4/tickets/2026-10-09-23-plan-the-spike-for-a-flutter-ui-in-plugin-shells.md) |
 | 24 | S0-plugin-ui: Spike a Flutter editor for the plugin shells on macOS and iOS | done | [2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md](2026-Q4/tickets/2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md) |
-| 25 | S9: Build the SFZ sampler on sfizz for iOS and Android | in review | [2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md](2026-Q4/tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md) |
+| 25 | S9: Build the SFZ sampler on sfizz for iOS and Android | done | [2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md](2026-Q4/tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the
