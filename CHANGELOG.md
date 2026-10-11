@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.7.0 - 2026-10-11
+
+### Added
+
+- Add the spike S0-plugin-ui and plugin-003 (ticket 24)
+
+- Register ticket 24 and plan the spike of a Flutter editor for the plugin shells
+
+- Record the implementation, the results in REAPER, the test host and on the iPad, and the code review
+
+- Add plugin-003 (proposed): Flutter out of process on macOS, in the extension on iOS
+
+- Add ui-003 (proposed): the engine adapters of the UI packages in a binding package
+
+- Link plugin-001, ui-001 and ui-002; update the decisions index, ticket 17 and the plugin-formats topic
+
+- Add the reruns of the spike S0-plugin-ui (ticket 24)
+
+- Record the reruns in REAPER after the code review's fixes: B, idle CPU, four editors, pairs, cycles and the soak
+
+- Record B's teardown crash and its workaround; refresh plugin-003's numbers and the plugin-formats topic
+
+- Add plugin-004 and the review of the pull requests
+
+- Split the symbol hygiene of every plugin binary into plugin-004 (proposed)
+
+- Correct the CPU and latency claims, the numbers of the reruns and the status of ticket 24
+
+- Add the open questions, the review of the pull requests and the items deferred to S18 and S17a
+
+- Mark proposed decisions as proposed and add the open work of plugin-002 from ticket 24
+
+
+### Changed
+
+- Mark ticket 24 as done
+
+- The embedding checklist in REAPER and Live and the cycles in Live stay open
+
 ## 0.6.0 - 2026-10-09
 
 ### Changed

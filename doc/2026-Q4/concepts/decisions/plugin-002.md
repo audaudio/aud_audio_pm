@@ -5,13 +5,15 @@
 - Canonical source: topics/review-2026-10-08-plan-scope.md (point 8);
   decisions/plugin-001.md
 - Open work: the plugin shells (S18 to S20) - automation gestures, bus
-  negotiation, closing the notes of the host's event output. The headless
-  host `aud_host_*` of `aud_audio_graph` exists since ticket 20: graph
-  documents with presets, state blobs and an asset table, the whole state
-  saved as a document, parameter ids as FNV-1a over `<node id>/<parameter
-  id>` with the top bit cleared, latency and tail, the graph's events per
-  block and a freewheel flag; the render function `aud_graph_render`
-  exists since ticket 19
+  negotiation, closing the notes of the host's event output; from ticket 24:
+  keep the latest value per parameter when the graph's queue is full, and a
+  realtime entry for parameter changes (sample-accurate automation), both S18.
+  The headless host `aud_host_*` of `aud_audio_graph` exists since ticket 20:
+  graph documents with presets, state blobs and an asset table, the whole
+  state saved as a document, parameter ids as FNV-1a over
+  `<node id>/<parameter id>` with the top bit cleared, latency and tail, the
+  graph's events per block and a freewheel flag; the render function
+  `aud_graph_render` exists since ticket 19
 
 ## Decision
 
