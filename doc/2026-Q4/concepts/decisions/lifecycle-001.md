@@ -4,8 +4,9 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 10)
-- Open work: default budgets, the sample cache, cancellable and
-  reference-counted asset loads (with the sampler, S9); the recovery
+- Open work: the default budgets, the sample cache and the cancellable,
+  reference-counted asset loads are built in ticket 25 and refined by
+  lifecycle-002 (one budget per process); the recovery
   numbers on the reference devices; the drift-tracking resampler for
   duplex streams on two clocks. The states, the handshake with the audio
   thread and the reprepare sequence are implemented in ticket 19; ticket

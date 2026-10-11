@@ -3,9 +3,9 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/sfizz.md (R19)
-- Open work: iOS and Android builds of the fork; the clang-19 fix;
-  audit sfizz's Faust-generated effect modules and keep only those from
-  STK-4.3 or MIT functions, drop or re-implement the rest (license-002)
+- Open work: none. The fork builds for iOS and Android (ticket 5); the
+  Faust audit, the node, its loaders and the message API are done in
+  ticket 25 (sampler-002, sampler-003, license-003)
 
 ## Decision
 

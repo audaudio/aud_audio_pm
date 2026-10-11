@@ -313,10 +313,11 @@ roughly 22 to 32 engineer-weeks.
   per device; results as JSON published on the docs site; its numbers
   gate the parallel scheduler's default (sched-001). Depends on S4
   (minimal), S22 (publishing).
-- S9 (L) `aud_dsp_sampler`: sfizz node, loaders, SFZ presets as node
-  presets, the message API on routes. No backward compatibility with the
-  presets or the API of the existing Audanika app (scope-002). Depends on
-  S4, S0d.
+- S9 (L, built 2026-10-11 in ticket 25 for iOS and Android; the numbers of
+  the reference devices are open) `aud_dsp_sampler`: sfizz node, loaders,
+  SFZ presets as node presets, the message API on routes. No backward
+  compatibility with the presets or the API of the existing Audanika app
+  (scope-002). Depends on S4, S0d.
 - S29a (M, M1) Early app integration: an integration branch of `aud_app`
   plays one SFZ instrument through `aud_audio` and `aud_dsp_sampler` from
   the app's MIDI stream on iOS and Android as soon as S4 and S9 exist,

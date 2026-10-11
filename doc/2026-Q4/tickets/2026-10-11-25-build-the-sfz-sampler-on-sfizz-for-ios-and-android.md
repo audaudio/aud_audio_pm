@@ -1,6 +1,8 @@
 # 25: S9 — Build the SFZ sampler on sfizz for iOS and Android
 
-Status: plan in review (2026-10-11).
+Status: implemented and reviewed 2026-10-11; measured on the iOS simulator,
+the Android emulator, an iPhone 16 Pro Max and a Galaxy Tab S4; the iPad
+Pro M5 stays open.
 
 ## Goal
 
@@ -92,10 +94,10 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
      to trim when the process exceeds the budget;
    - diagnostics a node reports from the audio thread (e.g. a streaming
      underflow) as `AUD_NOTIFY_DIAGNOSTIC` with the node.
-4. **Shared sample store** (`aud_dsp_sampler`, a patch of the fork's
-   `FilePool`, question 5): sample data lives in one store per process,
-   keyed by file and direction, shared and reference-counted by every
-   synth of every node and engine. Heads stay pinned while an instrument
+4. **Shared sample store** (`aud_dsp_sampler`, a rework of sfizz's
+   `FilePool` in the fork, question 5): sample data lives in one store
+   per process, keyed by file and direction, shared and reference-counted
+   by every synth of every node and engine. Heads stay pinned while an instrument
    uses them; streamed full data becomes evictable once no voice reads
    it. The store reports its bytes to the engine and evicts the least
    recently used data first when asked to trim. Streaming reads and
@@ -115,7 +117,7 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
    notification path. A node with messages answers below
    `/graph/<g>/node/<n>/msg/`: `/graph/1/node/2/msg/region0/ampeg_attack
    f 0.1` becomes sfizz's `/region0/ampeg_attack`; replies come back from
-   the same prefix. Where sfizz allocates while it replies, the patch
+   the same prefix. Where sfizz allocates while it replies, the fork
    removes the allocation or the message is refused and documented.
 6. **Presets and documents**: an SFZ instrument is a node preset of
    `aud.sampler.sfz` (`aud_node_preset.schema.json` of S1): `sfz_file`
@@ -265,7 +267,7 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
    controllers and per-note management have no counterpart.
    - (a) Poly pressure of MIDI 1.0 and 2.0 reaches sfizz; the others are
      ignored, documented and counted in a diagnostic.
-   - (b) The patch adds per-note pitch bend to sfizz's voices.
+   - (b) The fork adds per-note pitch bend to sfizz's voices.
    - Recommendation: (a); (b) with the note expressions of S18 and S19.
 7. **The Faust modules** (scope 8). Strictly read, license-002 keeps none
    of them, since nearly every module uses the trivial helpers.
@@ -286,6 +288,30 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
    - Recommendation: (b), recorded as a decision with the exact helper
      list.
 
+## Decisions of the plan review (2026-10-11)
+
+Gabriel Gatzsche decided:
+
+- 1 → (a) engine resources in `aud_audio_graph`, reached through ABI 0.4;
+  core joins the ticket, gg added io and web for their constraints.
+- 2 → one budget per process, default 256 MB, preload 8192 frames, two
+  worker threads.
+- 3 → (a) a standby synth with a 5 ms crossfade.
+- 4 → (a) message events with replies through the notification path.
+- 5 → neither (a) nor (b): `aud_dsp_sampler` is the audaudio fork of
+  sfizz. Its copy of sfizz (`src/third_party/sfizz`) is reworked in place
+  and its history is the fork's history; no patch files, and
+  `scripts/vendor-sfizz.js` is retired so that no new vendoring
+  overwrites the fork. sfizz's files keep their BSD-2-Clause headers,
+  `NOTICES.md` names the fork's origin (audanika/sfizz `824afdc`) and what
+  changed.
+- 6 → (a) poly pressure only; the other per-note messages are ignored,
+  documented and counted.
+- 7 → (b) the one-line helpers of the audit are exempt; the STK-4.3
+  modules stay with the STK-4.3 notice; the RBJ filters and EQs are
+  re-implemented from the RBJ cookbook; `fverb` and the metronome go;
+  cephes' Bessel function is replaced.
+
 ## Affected repos
 
 - `aud_audio_pm`: this plan, the row of ticket 25 in `doc/issues.md`, S9
@@ -302,9 +328,10 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
   the Dart API, native and Dart tests.
 - `aud_audio_io` 0.3.1 and `aud_audio_web` 0.0.5: constraints only; gg
   adds them as the repos between the umbrella and core and graph.
-- `aud_dsp_sampler` 0.2.0: the node, the fork patches with the store, the
-  Faust result, the Dart API, the link hook, goldens and native tests,
-  `NOTICES.md`, README and `index.jsonc`.
+- `aud_dsp_sampler` 0.2.0, the audaudio fork of sfizz: the node, the
+  reworked `FilePool` with the store, the Faust result, the Dart API, the
+  link hook, goldens and native tests, `NOTICES.md`, README and
+  `index.jsonc`; `scripts/vendor-sfizz.js` removed.
 - `aud_audio` 0.3.0: the engine's cache budget and numbers, the example
   with the sampler page and its integration tests, README and
   `index.jsonc`.
@@ -315,13 +342,15 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 1. Ticket 25 in `doc/issues.md`, this plan, the plan review; core, io and
    web added to the ticket.
-2. The consequences of the Faust audit (question 7); the vendor script
-   applies the patches; the STK-4.3 notice where code stays.
+2. The fork (question 5): the vendor script retired, `NOTICES.md`
+   updated; the consequences of the Faust audit (question 7) with the
+   STK-4.3 notice where code stays.
 3. Core 0.5.0: ABI 0.4 and the Dart parts, with tests.
 4. Graph 0.5.0: the resource manager, the message transport, the C API,
    the host; native tests under the three sanitizers and stress tests;
    the Dart API at 100 %.
-5. Sampler: the store patch, the node, the native tests with the engine.
+5. Sampler: the store in the fork, the node, the native tests with the
+   engine.
 6. Sampler: Dart API, presets, the test instrument, goldens, the link
    hook and its proof.
 7. io and web: constraints.
@@ -337,7 +366,127 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 ## Open questions
 
-Questions 1 to 7 above, to be decided at the plan review.
+None; questions 1 to 7 were decided at the plan review. Deviations found
+while implementing are recorded under Findings.
+
+## Findings
+
+Deviations from the plan and what the implementation found, 2026-10-11.
+
+- The virtual path starts no load (scope 1 said every key does): a text
+  and its path come together, so setting both loaded twice.
+- `tuning_frequency` and `stretch_tuning` load the instrument again like
+  the polyphony (scope 1 named them plain parameters): sfizz's tuning
+  tables allocate, although sfizz marks the calls RT. They are no
+  automation targets; notes that sound fade out.
+- Capacity (scope 4): a load fails with `AUD_ERROR_CAPACITY` when the
+  heads of its samples alone exceed the budget. "After everything
+  evictable is gone" would count the heads of every other instrument and
+  refuse a swap between two large instruments, whose heads are both
+  pinned for the 5 ms of the crossfade. The node reads the budget through
+  `AudHostApi.cache_budget`, which ABI 0.4 gained for it.
+- A load that ends well names what it could not use - missing samples,
+  effect types sfizz does not know (`fverb` passes the signal through) -
+  in its message; a parse error is the message of a failed load. sfizz
+  reports a text whose samples are all missing as loaded; the node fails
+  it.
+- The engine reads `get_tail` at every commit, so the sampler's tail
+  follows its instrument; a removed sampler plays its release out.
+- Presets apply their strings in the order of the node's string keys, in
+  the headless host and in Dart: JSON objects have no order, and the
+  text of a sampler depends on its virtual path.
+- The trims: a request while a trim ran was lost; a smaller budget trims
+  at once on the calling thread, since a process without a graph has no
+  worker.
+- sfizz on the audio thread (the topic [sfizz](../concepts/topics/sfizz.md)
+  lists them): the watchdog, RealtimeSanitizer and ThreadSanitizer found
+  allocations in the message dispatch, in four structural messages, in
+  string setters and in the tuning; races on the SIMD and sinc tables and
+  on the random generator once synths are built on workers; a voice that
+  ended at the head of a late stream; a race between the end of a stream
+  and the voice reading it; controllers that glided after a replay. All
+  fixed in the fork, with native tests.
+- The native tests compile sfizz with `NDEBUG` like the release build of
+  the hook (its debug messages write to stderr on the audio thread) and
+  keep its asserts (`SFIZZ_ENABLE_RELEASE_ASSERT`); UBSan's alignment
+  check is off for sfizz's files, whose SIMD code hands vector pointers
+  to unaligned floats to the unaligned-load intrinsics.
+- Messages with string or blob arguments are refused and reported, and
+  the fork dropped `/region&/add_filter`, `add_eq`, `add_eg` and
+  `eg&/add_point` (scope 5 allowed refusing).
+- The RBJ filters of `RbjFilters.hpp` match the Faust originals within
+  1.2e-6 in every scenario of their test (largest in the out-of-range
+  one); the comparison runs when `AUD_SFIZZ_PRISTINE` names a checkout of
+  the fork's origin.
+- Link hook (scope 7): Flutter's hooks runner caches a link by the
+  recordings of the build that ran it first; a release build with other
+  defines reused the answer "unused" and lost the library. The link hook
+  declares the recordings as a dependency, which fixes it.
+- `aud_dsp_sampler_register` takes a `const AudHostApi*`, an
+  `AudRegisterFunction`, so that `AudNativeNodePackage` takes it as is.
+- Android's libc++ counts file times in 128 bits; the store's key cast
+  them for `std::to_string`.
+
+## Code review
+
+`/code-review` at high effort on the realtime path, the asset loading and
+the C ABI, 2026-10-11; nine findings, eight fixed with tests:
+
+- Message slots leaked when a block was skipped (a program compiled for a
+  smaller block); a host could hand an `AUD_EVENT_MESSAGE` in through the
+  render request; a reply blob without bytes kept its size. Fixed in the
+  graph.
+- The tail stayed stale after a load until the next commit;
+  `aud_graph_wait_loads` (and so `aud_host_wait_loads`) reads the tails
+  again.
+- A sample deleted after the load made every voice post a failing stream
+  task each block; the store marks the file unreadable and the voice
+  plays its head.
+- The controller replay started regions that a controller triggers
+  (`on_locc`); a new synth restores the controllers without their
+  reactions (`Synth::restoreHdcc` of the fork).
+- A prepare during a crossfade underflowed the fade; a reload rebuilt
+  the source of a failed load instead of the instrument that plays.
+- Skipped: the engine's numbers read the list of loads on every call; the
+  example reads them every 200 ms.
+
+## Measurements
+
+The test instrument (`AudSfzTestInstrument`: five looped saw waves of one
+second, 16-bit mono at 48 kHz) and `integration_test/sampler_test.dart` of
+the example of `aud_audio`, 2026-10-11. The physical iPad Pro M5 was not
+reachable; the user chose the iPhone instead and connected a Galaxy Tab S4.
+The live test plays the instrument "Mellow" (4-pole low-pass), the offline
+test the test instrument (2-pole low-pass) at the live sample quality.
+
+| | iOS simulator (iPhone 17 Pro, M-series Mac) | Android emulator (API 36) | iPhone 16 Pro Max (iOS 26.7.1) | Galaxy Tab S4 (Snapdragon 835, Android 10) |
+| --- | --- | --- | --- | --- |
+| Load of the instrument (budget 2 s) | 15 ms | 34 ms | 24 ms | 149 ms |
+| 64 voices offline, 128-frame blocks (budget 1.33 ms) | 98 µs mean, 132 µs max | 124 µs mean, 1.78 ms max | 113 µs mean, 139 µs max | 854 µs mean, 971 µs max |
+| 64 voices live, steady (budget half a block) | block 256: 36 % mean, 48 % max | block 1920: 5 % mean, 13 % max | block 256: 18 % mean, 27 % max | block 384: 45 % mean, 58 % max |
+| Command to sound (budget a block plus the output latency) | 17.8 ms mean, 19.7 max of 16.1 | 118 ms mean, 128 max of 148.5 | 23.5 ms mean, 26.0 max of 26.0 | 33.7 ms mean, 35.7 max of 40.0 |
+| Auto-play with an animated UI (budget 0 xruns over 10 min) | 5 s: 0 xruns | 5 s: 0 xruns, 151 late | 10 min: 0 xruns, 5 late of 113,005 callbacks | 10 min: 0 xruns, 4858 late, render max 8.75 ms |
+
+- On the simulator, the emulator and the iPhone the live maximum
+  includes the block in which the 64 notes start; the tablet's run split
+  them: that block took 78 % of the 8 ms.
+- The tablet misses the live budget at its peaks: 45 % of the block on
+  average, 58 % at most in steady state, and in the ten minutes one block
+  took 8.75 ms, longer than its 8 ms, without an xrun (the buffer had a
+  burst in reserve). Offline it renders 64 voices in 32 % of a 128-frame
+  block. The new RBJ filters are not the cause: they run as fast as the
+  Faust originals or faster (4-pole stereo 1.7 against 2.1 ns per frame
+  on the Mac). The reference devices of ticket 17 are not named yet; the
+  tablet's numbers go to S24 with the question of the scheduling on big
+  and little cores.
+- The live numbers of the simulator are the simulator's: its audio thread
+  shares the host's cores. Its command to sound lies 1.7 ms above a block
+  plus the output latency; the oscillator page of the same run measured
+  19.9 ms, so the margin belongs to the engine's command path, not to the
+  sampler.
+- The link hook: the release APK of the example of `aud_dsp_sampler`
+  (arm64) is 16,046,006 bytes without a call to `AudDspSampler` and
+  18,520,095 bytes with one; `libaud_dsp_sampler.so` is 2,469,312 bytes.
 
 ## Rests on
 

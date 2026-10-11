@@ -6,7 +6,8 @@
 - Open work: measure command-queue and event latency in the spike
   ticket; ticket 22 measures command to sound in `AudEngine` (iOS
   simulator, Android emulator, iPad), the reference devices are open;
-  link hooks with `@RecordUse` come with S9 (decision 5 of ticket 22)
+  `aud_dsp_sampler` records its native entry points with `@RecordUse`
+  and drops its library in an app that does not use them (ticket 25)
 
 ## Decision
 

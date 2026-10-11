@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add the decisions and results of ticket 25 (S9)
+
+- Decisions sampler-002 (the fork in place), sampler-003 (standby synth and crossfade), license-003 (Faust helpers and STK-4.3), lifecycle-002 (resources of the process), osc-002 (node messages)
+- The open work of sampler-001, lifecycle-001, interop-001, osc-001, abi-001, build-001, license-001 and io-002
+- Findings, code review and measurements of ticket 25 on the simulators, an iPhone 16 Pro Max and a Galaxy Tab S4; S9 built in the plan of ticket 17
+- The sfizz topic: what the fork fixed; the Faust audit topic: what holds
+
 ## 0.7.0 - 2026-10-11
 
 ### Added
@@ -38,6 +49,7 @@
 - Mark ticket 24 as done
 
 - The embedding checklist in REAPER and Live and the cycles in Live stay open
+
 
 ## 0.6.0 - 2026-10-09
 
@@ -78,6 +90,7 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
+
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -95,6 +108,7 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
+
 
 ## 0.1.0 - 2026-10-08
 

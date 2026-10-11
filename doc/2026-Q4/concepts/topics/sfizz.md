@@ -49,9 +49,41 @@ Research for R19, sources fetched 2026-10-07.
   pairs), an event inlet for notes, CCs and pitch bend, parameters for
   the control-thread settings, the message API mapped onto node routes.
 - Loading (CT) runs on a worker thread the engine owns, never on the
-  audio thread; the node reports load progress as events.
-- Risk: the first iOS and Android builds and the maintenance of the
-  fork (the upstream is archived) are our own work; schedule a spike.
+  audio thread; the node reports load progress as events (since ticket
+  25: loads with ids and progress, sampler-003).
+- The first iOS and Android builds came with the spike of ticket 5; the
+  fork is the package itself since ticket 25 (sampler-002).
+
+## What ticket 25 found in the fork
+
+The fork of `aud_dsp_sampler` (sampler-002) runs under the engine's
+watchdog, RealtimeSanitizer and ThreadSanitizer since ticket 25. What they
+and the review of the code found in sfizz, all fixed in the fork:
+
+- Allocations on the audio thread: every message built a `std::vector` of
+  path indices; the messages `/region&/add_filter`, `add_eq`, `add_eg`
+  and `eg&/add_point` grew regions and voices; setters with string
+  arguments copy and parse strings; a CC modulation set by a message was
+  inserted into a sorted vector; the tuning frequency and the stretch
+  tuning rebuild their tables (sfizz marks both RT); without `NDEBUG`
+  its debug messages write to `std::cerr`.
+- Data races once synths are built on workers while others render: every
+  synth reset the process-wide SIMD dispatch table and the windowed-sinc
+  tables, and the global random generator of each file was shared
+  without synchronisation.
+- Indexing: a message path index one past the end was read (`<=`), and
+  `/cc512/...` passed the CC check; the windowed sinc formed its sample
+  pointer with an unsigned offset that wrapped (UBSan).
+- Streaming: a voice ended at the head when its stream had not delivered
+  yet, without a report; reading whether a file is complete after its
+  data could end a voice at the frames a block got.
+- A controller replayed into a new synth glides from its default, since
+  the smoothers keep the value of the load.
+- Loads: `loadSfzString` succeeds when every sample is missing, a parse
+  error goes to `std::cerr` only, an unknown effect type is dropped
+  silently.
+- Android's libc++ counts file times in 128 bits, which `std::to_string`
+  does not take.
 
 ## Sources
 

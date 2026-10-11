@@ -75,7 +75,13 @@ survives in the generated C++.
 
 ## What holds for aud_dsp_sampler
 
-Decided at the plan review of ticket 25 (question 7 of its plan).
+Decided at the plan review of ticket 25 (question 7 of its plan) and
+recorded as license-003: the one-line helpers are exempt, the STK-4.3
+modules stay with the STK-4.3 notice, the RBJ filters and equalizer bands
+are re-implemented from the Audio EQ Cookbook (`RbjFilters.hpp` of the
+fork; within 1.2e-6 of the Faust originals), `fverb` and the metronome
+are gone - `<effect> type=fverb` passes the signal through and a load
+names it -, and cephes' `i0` is a power series.
 
 ## Sources
 
