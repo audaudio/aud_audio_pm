@@ -4,6 +4,8 @@
 - Date: 2026-10-07
 - Canonical source: Gabriel Gatzsche's answers at the plan review on
   2026-10-07; topics/licenses-and-dsp-sources.md
+- Superseded in part by: [license-003](license-003.md) — the one-line
+  Faust helpers are exempt from the Faust rule of the Consequences
 - Open work: none
 
 ## Decision

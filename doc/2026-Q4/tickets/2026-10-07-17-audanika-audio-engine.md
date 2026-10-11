@@ -311,13 +311,18 @@ roughly 22 to 32 engineer-weeks.
   xruns and command-to-sound latency on the reference devices — and
   grows into loopback latency measurement, CPU per node type and memory
   per device; results as JSON published on the docs site; its numbers
-  gate the parallel scheduler's default (sched-001). Depends on S4
-  (minimal), S22 (publishing).
+  gate the parallel scheduler's default (sched-001); it takes the Galaxy
+  Tab S4 numbers of ticket 25 with the question of scheduling on big and
+  little cores. Depends on S4 (minimal), S22 (publishing).
 - S9 (L, built 2026-10-11 in ticket 25 for iOS and Android; the numbers of
   the reference devices are open) `aud_dsp_sampler`: sfizz node, loaders,
   SFZ presets as node presets, the message API on routes. No backward
   compatibility with the presets or the API of the existing Audanika app
-  (scope-002). Depends on S4, S0d.
+  (scope-002). Depends on S4, S0d. Result: sampler-002 (the package is the
+  fork of sfizz), sampler-003 (loads into a standby synth), license-003
+  (the one-line Faust helpers are exempt), lifecycle-002 (workers, loads
+  and one sample cache budget per process) and osc-002 (messages to
+  nodes).
 - S29a (M, M1) Early app integration: an integration branch of `aud_app`
   plays one SFZ instrument through `aud_audio` and `aud_dsp_sampler` from
   the app's MIDI stream on iOS and Android as soon as S4 and S9 exist,
@@ -479,10 +484,10 @@ roughly 22 to 32 engineer-weeks.
   oscillator, modal resonator, granular processor — under neutral node
   names with MIT notices and the trademark rule. Depends on S4.
 - S28 (S) Faust pipeline for `aud_dsp_effects`: generate C++ from `.dsp`
-  files that use only functions declared STK-4.3 or MIT, a license gate
-  that reads every `declare license`, generated code checked in with
-  notices; the LGPL compiler runs at development time only. Depends on
-  S10a and on open question 3.
+  files that use only functions declared STK-4.3 or MIT plus the helpers
+  license-003 exempts, a license gate that reads every `declare license`,
+  generated code checked in with notices; the LGPL compiler runs at
+  development time only. Depends on S10a and on open question 3.
 
 ## Model and effort for the implementation
 
@@ -552,9 +557,10 @@ effort follow the class of the ticket (process-002):
 2. Is `aud_audio_clap` wanted in the first round of plugin shells, or
    after VST3 and AUv3 ship?
 3. Faust: is the LGPL Faust compiler acceptable as a development-time
-   tool whose generated code (from STK-4.3 and MIT functions only) is
-   checked in under MIT? Nothing of the compiler is shipped (S28); the
-   question must be settled before S28 starts.
+   tool whose generated code (from STK-4.3 and MIT functions and the
+   helpers of license-003) is checked in under MIT? Nothing of the
+   compiler is shipped (S28); the question must be settled before S28
+   starts.
 4. Musical transitions beyond quantized song switching — crossfades,
    fills, key changes between songs — wanted in `aud_audio_backing`
    (backing-001)?

@@ -3,9 +3,15 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/sfizz.md (R19)
-- Open work: none. The fork builds for iOS and Android (ticket 5); the
-  Faust audit, the node, its loaders and the message API are done in
-  ticket 25 (sampler-002, sampler-003, license-003)
+- Refined by: [sampler-002](sampler-002.md) — the package is the fork,
+  changed in place; [sampler-003](sampler-003.md) — loads and the node
+- Superseded in part by: [license-003](license-003.md) — the one-line
+  Faust helpers are exempt from its Faust rule
+- Open work: the M1 numbers of the sampler on the iPad Pro M5 and a Pixel
+  (ticket 25 measured the simulators, an iPhone 16 Pro Max and a Galaxy
+  Tab S4, which misses the live budget at its peaks). Done: the fork
+  builds for iOS and Android (ticket 5); the Faust audit, the node, its
+  loaders and the message API (ticket 25)
 
 ## Decision
 

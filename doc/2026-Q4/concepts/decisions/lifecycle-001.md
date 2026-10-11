@@ -4,11 +4,13 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 10)
-- Open work: the default budgets, the sample cache and the cancellable,
-  reference-counted asset loads are built in ticket 25 and refined by
-  lifecycle-002 (one budget per process); the recovery
-  numbers on the reference devices; the drift-tracking resampler for
-  duplex streams on two clocks. The states, the handshake with the audio
+- Superseded in part by: [lifecycle-002](lifecycle-002.md) — one sample
+  cache budget per process instead of per engine; its other decisions
+  stand
+- Open work: the recovery numbers on the reference devices; the
+  drift-tracking resampler for duplex streams on two clocks. The default
+  budgets, the sample cache and the cancellable, reference-counted asset
+  loads are built in ticket 25. The states, the handshake with the audio
   thread and the reprepare sequence are implemented in ticket 19; ticket
   20 proved the route change under load - the transport keeps its
   position across a new sample rate and a stop, tracked notes get note

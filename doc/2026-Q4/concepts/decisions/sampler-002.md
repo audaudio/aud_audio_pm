@@ -4,6 +4,8 @@
 - Date: 2026-10-11
 - Canonical source: tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md
   (question 5)
+- Refines: [sampler-001](sampler-001.md) — the fork is the package;
+  [build-001](build-001.md) — sfizz is no longer refreshed as a subset
 - Open work: none; a branch in `audanika/sfizz` only if the fork is ever
   shared outside the package
 

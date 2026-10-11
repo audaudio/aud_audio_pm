@@ -67,7 +67,7 @@ what every copy obliges us to.
 | Resonance Audio (Google) | Apache-2.0 | archived | copy for aud_dsp_spatial; propagate NOTICE; verify the HRTF data license |
 | dr_libs, stb_vorbis | public domain or MIT-0 / MIT | active | copy for aud_audio_file |
 | libvorbis, libogg, libopus, libFLAC, WavPack | BSD-3-Clause (libFLAC's command-line tools are GPL and stay out) | active | copy or link for aud_audio_file |
-| Faust-generated code | per library function: STK-4.3, MIT, LGPL-with-exception, some GPL-3.0-only | active | copy only from STK-4.3 / MIT functions (LGPL-with-exception excluded by license-002); read every `declare license` |
+| Faust-generated code | per library function: STK-4.3, MIT, LGPL-with-exception, some GPL-3.0-only | active | copy only from STK-4.3 / MIT functions and the one-line helpers license-003 exempts; other LGPL-with-exception functions stay out (license-002); read every `declare license` |
 | Faust compiler | LGPL-2.1 | active | a build tool of which nothing is shipped; whether to use it at all is part of the Faust suggestion in the plan |
 | Csound | LGPL-2.1 | active | never; algorithms re-implemented from the literature where needed |
 | libsndfile, liblo | LGPL-2.1 | active | never; dr_libs, and tinyosc or oscpack, instead |

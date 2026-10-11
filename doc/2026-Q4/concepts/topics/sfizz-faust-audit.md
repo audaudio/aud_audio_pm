@@ -2,12 +2,13 @@
 
 The provenance audit of sampler-001's open work for ticket 25 (S9), done on
 2026-10-11 by Claude over the audanika fork of sfizz (master `824afdc`) and
-the subset vendored in `aud_dsp_sampler` (`src/third_party/sfizz`). The rule
-is license-002 and the table of
-[licenses-and-dsp-sources.md](licenses-and-dsp-sources.md): Faust-generated
-code may stay only where every Faust library function that went into it is
-STK-4.3, MIT or BSD, or the author's own permissive code; "LGPL with
-exception" counts as LGPL.
+the subset vendored in `aud_dsp_sampler` (`src/third_party/sfizz`). It
+applied the rule of license-002 and of the table of
+[licenses-and-dsp-sources.md](licenses-and-dsp-sources.md) as they stood
+then: Faust-generated code may stay only where every Faust library function
+that went into it is STK-4.3, MIT or BSD, or the author's own permissive
+code; "LGPL with exception" counts as LGPL. Its result, license-003,
+exempts the one-line helpers (see What holds for aud_dsp_sampler).
 
 ## Facts
 
@@ -46,9 +47,15 @@ exception" counts as LGPL.
 | `os.oscws`, `os.impulse` (oscillators.lib) | STK-4.3 (jos section) | Metronome |
 | trivial helpers: `ma.SR`, `ma.PI`, `ma.EPSILON`, `ma.sub`, `ma.neg`, `ma.sinh`, `ba.if`, `ba.db2linear`, `ba.linear2db`, `ba.time`, `si.smoo`, `si.interpolate`, `de.delay`, `os.sinwaveform` | LGPL with exception | nearly every module |
 
-The helpers compile to a sample-rate field, a constant, `a - b`, `c ? x : y`,
-`pow(10, 0.05 * x)` or a sample counter; no expression of the library
-survives in the generated C++.
+The helpers compile to a constant, a difference, a conversion, a
+conditional, a delay, an interpolation, a sine table or a sample counter.
+In the modules with helpers only (see Verdicts) they show up as a constant
+or a sample-rate field, a difference (`a - b`), a conditional
+(`c ? x : y`), a dB conversion (`pow(10, 0.05 * x)`, `20 * log10(x)`) or a
+sample counter; `ma.neg`, `ma.sinh`, `si.smoo`, `si.interpolate`,
+`de.delay` and `os.sinwaveform` occur only in `fverb` and the RBJ
+equalizer bands. No expression of the library survives in the generated
+C++.
 
 ## Verdicts
 
@@ -70,8 +77,9 @@ survives in the generated C++.
   torch-cephes package "BSD license is fine, modification is OK". The
   function is a few lines from the literature (a power series).
 - STK-4.3 code that stays has to ship the STK-4.3 notice (Julius O. Smith
-  III; Eric Tarr for the SV filters); the subset ships sfizz's BSD-2
-  license only.
+  III; Eric Tarr for the SV filters); the subset shipped sfizz's BSD-2
+  license only; since ticket 25 the fork ships the notice as
+  `sfizz/LICENSE-STK-4.3.md`.
 
 ## What holds for aud_dsp_sampler
 

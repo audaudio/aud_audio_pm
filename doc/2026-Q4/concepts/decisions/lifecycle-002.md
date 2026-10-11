@@ -3,19 +3,21 @@
 - Status: accepted
 - Date: 2026-10-11
 - Canonical source: tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md
-  (questions 1 and 2)
+  (questions 1 and 2, Findings)
+- Supersedes in part: [lifecycle-001](lifecycle-001.md) — one sample cache
+  budget per process instead of per engine
 - Open work: the defaults against the numbers of S24 (budget, workers,
   preload); a share of the budget per cache if packages compete
 
 ## Decision
 
 The resources of lifecycle-001 that span engines exist once per process in
-`aud_audio_graph` and reach the packages through ABI 0.4: two worker
-threads with a bounded lock-free task queue that the control thread, the
-workers and the audio thread may post to; loads with ids, progress, a
-result and cancellation, reported per graph as notifications, of which a
-graph keeps the running ones and the last 64; and one sample cache budget
-for the process, by default 256 MB, set through `AudEngineConfig` or
+`aud_audio_graph` and reach the packages through ABI 0.4. Two worker
+threads run tasks from a bounded lock-free queue that the control thread,
+the workers and the audio thread may post to. Loads have ids, progress, a
+result and cancellation; each graph reports them as notifications and
+keeps the running ones and the last 64. One sample cache budget holds for
+the process: 256 MB by default, set through `AudEngineConfig` or
 `AudGraph.cacheBudget`. Packages register their caches and report their
 bytes; when the process holds more than the budget, a worker asks the
 largest cache to free what nobody uses, the least recently used first, and
@@ -24,9 +26,9 @@ thread. What a cache pins - the heads of the instruments that are loaded -
 stays; a package refuses to pin more than the budget alone
 (`AUD_ERROR_CAPACITY`), and streamed data over the budget is read anyway, a
 note is never cut for it. Nodes report diagnostics from the audio thread,
-summed per block, e.g. a stream that fell behind. The decision refines
-lifecycle-001, whose budget was one per engine: the samples are shared
-between engines, so their budget is the process's.
+summed per block, e.g. a stream that fell behind. The budget replaces the
+one per engine of lifecycle-001: the samples are shared between engines,
+so their budget is the process's.
 
 ## Why
 

@@ -29,8 +29,8 @@ Research for R19, sources fetched 2026-10-07.
   st_audiofile (BSD-2), spline (BSD-3), threadpool (zlib), dr_libs
   (public domain / MIT-0). `SFIZZ_USE_SNDFILE` would pull libsndfile
   (LGPL-2.1) — stays off. Faust-derived effects carry STK-4.3 and
-  LGPL-with-exception terms — only the STK-4.3 and MIT ones may stay
-  (license-002).
+  LGPL-with-exception terms — what stays is decided by license-003
+  ([sfizz-faust-audit.md](sfizz-faust-audit.md)).
 - SIMD through simde (portable SSE/NEON). Official platforms: Linux,
   Windows, macOS; WASM via the emscripten branch; iOS and Android builds
   are unproven (only an Apple flag fix found); a clang-19 build break
@@ -49,8 +49,16 @@ Research for R19, sources fetched 2026-10-07.
   pairs), an event inlet for notes, CCs and pitch bend, parameters for
   the control-thread settings, the message API mapped onto node routes.
 - Loading (CT) runs on a worker thread the engine owns, never on the
-  audio thread; the node reports load progress as events (since ticket
-  25: loads with ids and progress, sampler-003).
+  audio thread. Since ticket 25 a load has an id, progress and a result,
+  reported as `AUD_NOTIFY_LOAD` notifications of the graph
+  (lifecycle-002); the new instrument swaps in through a standby synth
+  (sampler-003).
+- SFZ instruments are trusted input: `#include` and samples reach every
+  file the app can read, by absolute paths or `../` (many libraries share
+  samples that way), and a parse error quotes from the included file in
+  the load message; only the app's sandbox bounds them. If untrusted
+  instruments (downloads, shared presets) become a use case, a later step
+  decides on a path check: under the instrument's folder or library roots.
 - The first iOS and Android builds came with the spike of ticket 5; the
   fork is the package itself since ticket 25 (sampler-002).
 

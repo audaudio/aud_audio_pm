@@ -1,8 +1,12 @@
 # 25: S9 — Build the SFZ sampler on sfizz for iOS and Android
 
-Status: implemented and reviewed 2026-10-11; measured on the iOS simulator,
-the Android emulator, an iPhone 16 Pro Max and a Galaxy Tab S4; the iPad
-Pro M5 stays open.
+Status: in review since 2026-10-11 (pull requests open, the publish
+follows). Done: plan review, implementation, `/code-review` with its fixes,
+measurements on the iOS simulator, the Android emulator, an iPhone 16 Pro
+Max and a Galaxy Tab S4. Open: the numbers on the iPad Pro M5 and a Pixel;
+the ten-minute xrun runs after the twenty-minute warm-up of ticket 17; the
+tablet misses the live budget at its peaks (S24); open question 8 (Gabriel
+Gatzsche).
 
 ## Goal
 
@@ -20,10 +24,12 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 - The spike node (146 lines) loads with `sfizz_load_file` inside
   `set_string`, on the calling thread: the Dart isolate blocks for the
-  whole load, and the load must not overlap a render (sfizz's CT/OFF
-  tags; this sfizz has no internal guard between load and render). It
-  maps note on, note off and control events, has one parameter and
-  registers against ABI 0.1; the engine of tickets 19 to 22 is on ABI 0.3.
+  whole load, and the load must not overlap a render. sfizz tags each
+  function RT (audio thread), CT (control thread, may block) or OFF (never
+  while an RT call runs), and this sfizz has no internal guard between
+  load and render. It maps note on, note off and control events, has one
+  parameter and registers against ABI 0.1; the engine of tickets 19 to 22
+  is on ABI 0.3.
 - sfizz streams: a load reads only the head of every sample (8192 frames
   plus the largest `offset`); a note on queues a background read of the
   whole file, and the voice follows the frames read so far. The full data
@@ -97,9 +103,9 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 4. **Shared sample store** (`aud_dsp_sampler`, a rework of sfizz's
    `FilePool` in the fork, question 5): sample data lives in one store
    per process, keyed by file and direction, shared and reference-counted
-   by every synth of every node and engine. Heads stay pinned while an instrument
-   uses them; streamed full data becomes evictable once no voice reads
-   it. The store reports its bytes to the engine and evicts the least
+   by every synth of every node and engine. Heads stay pinned while an
+   instrument uses them; streamed full data becomes evictable once no voice
+   reads it. The store reports its bytes to the engine and evicts the least
    recently used data first when asked to trim. Streaming reads and
    frees run as engine tasks — sfizz's own threads and thread pool go —
    and nothing allocates or frees on the audio thread. A load whose
@@ -136,7 +142,8 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
    [sfizz-faust-audit.md](../concepts/topics/sfizz-faust-audit.md). Every
    Faust-generated module of the subset was traced to the library
    functions it was generated from. Three carry substantive "LGPL with
-   exception" code: the 32 RBJ filter and EQ headers (`maxmsp.lib`'s
+   exception" code: the 32 headers of the RBJ filters and EQs (after
+   Robert Bristow-Johnson's Audio EQ Cookbook, through `maxmsp.lib`'s
    `filtercoeff` — the default filter `lpf_2p` and every EQ band), `fverb`
    (`de.sdelay`) and the disabled `Metronome` (`en.ar`). All others are
    STK-4.3 and the author's BSD-2 code plus one-line GRAME helpers
@@ -176,8 +183,9 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
       load, cache trims and sharing between two nodes and two graphs,
       underflow.
     - Native tests of the sampler with the engine linked in, under
-      ASan/UBSan, RealtimeSanitizer (with the probe of ticket 20) and
-      ThreadSanitizer, with the watchdog, which then sees sfizz too.
+      AddressSanitizer and UndefinedBehaviorSanitizer (ASan/UBSan),
+      RealtimeSanitizer (RTSan, with the probe of ticket 20) and
+      ThreadSanitizer (TSan), with the watchdog, which then sees sfizz too.
     - Engine: stress tests of the task queue, the message slots and the
       reply ring; Dart at 100 % per mirrored file.
 12. **Numbers** (ticket 17, Verification), on the iOS simulator, the
@@ -292,32 +300,38 @@ wait for it. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 Gabriel Gatzsche decided:
 
-- 1 → (a) engine resources in `aud_audio_graph`, reached through ABI 0.4;
-  core joins the ticket, gg added io and web for their constraints.
+- 1 → (a) engine resources in `aud_audio_graph`, reached through ABI 0.4
+  (lifecycle-002); core joins the ticket, gg added io and web for their
+  constraints.
 - 2 → one budget per process, default 256 MB, preload 8192 frames, two
-  worker threads.
-- 3 → (a) a standby synth with a 5 ms crossfade.
-- 4 → (a) message events with replies through the notification path.
+  worker threads (lifecycle-002).
+- 3 → (a) a standby synth with a 5 ms crossfade (sampler-003).
+- 4 → (a) message events with replies through the notification path
+  (osc-002).
 - 5 → neither (a) nor (b): `aud_dsp_sampler` is the audaudio fork of
-  sfizz. Its copy of sfizz (`src/third_party/sfizz`) is reworked in place
-  and its history is the fork's history; no patch files, and
-  `scripts/vendor-sfizz.js` is retired so that no new vendoring
+  sfizz (sampler-002). Its copy of sfizz (`src/third_party/sfizz`) is
+  reworked in place and its history is the fork's history; no patch
+  files, and `scripts/vendor-sfizz.js` is retired so that no new vendoring
   overwrites the fork. sfizz's files keep their BSD-2-Clause headers,
   `NOTICES.md` names the fork's origin (audanika/sfizz `824afdc`) and what
   changed.
 - 6 → (a) poly pressure only; the other per-note messages are ignored,
-  documented and counted.
+  documented and counted (sampler-003).
 - 7 → (b) the one-line helpers of the audit are exempt; the STK-4.3
   modules stay with the STK-4.3 notice; the RBJ filters and EQs are
   re-implemented from the RBJ cookbook; `fverb` and the metronome go;
-  cephes' Bessel function is replaced.
+  cephes' Bessel function is replaced (license-003).
 
 ## Affected repos
 
-- `aud_audio_pm`: this plan, the row of ticket 25 in `doc/issues.md`, S9
-  in the plan of ticket 17, the open work of sampler-001, lifecycle-001,
-  interop-001, osc-001 and abi-001, the decisions of this ticket, the
-  sfizz topic.
+- `aud_audio_pm`: this plan; the row of ticket 25 in `doc/issues.md`; the
+  list in `tickets/README.md`; S9, S24, S28 and open question 3 in the plan
+  of ticket 17; the decisions sampler-002, sampler-003, license-003,
+  lifecycle-002 and osc-002; the open work and links of sampler-001,
+  lifecycle-001, interop-001, osc-001, abi-001, build-001, license-001 and
+  io-002; the links of license-002 and dsp-001; the decisions index; the
+  topics sfizz, sfizz-faust-audit (new) and licenses-and-dsp-sources, and
+  the list in `topics/README.md`.
 - `aud_audio_core` 0.5.0 (joins the ticket, question 1): ABI 0.4 —
   `AudHostApi` with `post_task`, the loads, the caches, `report` and
   `emit_message`; `AUD_EVENT_MESSAGE`, `AudMessage`,
@@ -356,8 +370,8 @@ Gabriel Gatzsche decided:
 7. io and web: constraints.
 8. Umbrella 0.3.0: engine config and numbers, the example with the
    keyboard, integration tests.
-9. Runs on the simulator, the emulator and the iPad; numbers recorded
-   below.
+9. Runs on the simulator, the emulator, an iPhone 16 Pro Max and a Galaxy
+   Tab S4 (the iPad was not reachable); numbers recorded below.
 10. Decisions, open work, ticket 17, the sfizz topic, READMEs and
     `index.jsonc`.
 11. `/code-review` at high effort on the realtime path, the asset loading
@@ -366,8 +380,17 @@ Gabriel Gatzsche decided:
 
 ## Open questions
 
-None; questions 1 to 7 were decided at the plan review. Deviations found
-while implementing are recorded under Findings.
+Questions 1 to 7 were decided at the plan review; deviations found while
+implementing are recorded under Findings. One question came from the
+implementation (8). Open work: the numbers on the iPad Pro M5 and a Pixel;
+the ten-minute xrun runs after the twenty-minute warm-up of ticket 17.
+
+8. **The deviations in sampler-003 and lifecycle-002** (for Gabriel
+   Gatzsche). Both decisions are accepted, but four of their rules come
+   from the Findings, not from the plan review: the reload for the tuning,
+   the virtual path that starts no load, the capacity rule on the heads
+   alone (scope 4 said "after everything evictable is gone") and the trim
+   on the calling thread. Confirm them, or set both decisions to proposed.
 
 ## Findings
 
@@ -375,6 +398,8 @@ Deviations from the plan and what the implementation found, 2026-10-11.
 
 - The virtual path starts no load (scope 1 said every key does): a text
   and its path come together, so setting both loaded twice.
+- `scala_file` and `scala_text` start no load while no instrument is set;
+  they apply with the next one.
 - `tuning_frequency` and `stretch_tuning` load the instrument again like
   the polyphony (scope 1 named them plain parameters): sfizz's tuning
   tables allocate, although sfizz marks the calls RT. They are no
@@ -461,15 +486,18 @@ test the test instrument (2-pole low-pass) at the live sample quality.
 
 | | iOS simulator (iPhone 17 Pro, M-series Mac) | Android emulator (API 36) | iPhone 16 Pro Max (iOS 26.7.1) | Galaxy Tab S4 (Snapdragon 835, Android 10) |
 | --- | --- | --- | --- | --- |
-| Load of the instrument (budget 2 s) | 15 ms | 34 ms | 24 ms | 149 ms |
+| Load of the test instrument (budget 2 s) | 15 ms | 34 ms | 24 ms | 149 ms |
 | 64 voices offline, 128-frame blocks (budget 1.33 ms) | 98 µs mean, 132 µs max | 124 µs mean, 1.78 ms max | 113 µs mean, 139 µs max | 854 µs mean, 971 µs max |
 | 64 voices live, steady (budget half a block) | block 256: 36 % mean, 48 % max | block 1920: 5 % mean, 13 % max | block 256: 18 % mean, 27 % max | block 384: 45 % mean, 58 % max |
-| Command to sound (budget a block plus the output latency) | 17.8 ms mean, 19.7 max of 16.1 | 118 ms mean, 128 max of 148.5 | 23.5 ms mean, 26.0 max of 26.0 | 33.7 ms mean, 35.7 max of 40.0 |
-| Auto-play with an animated UI (budget 0 xruns over 10 min) | 5 s: 0 xruns | 5 s: 0 xruns, 151 late | 10 min: 0 xruns, 5 late of 113,005 callbacks | 10 min: 0 xruns, 4858 late, render max 8.75 ms |
+| Command to sound (budget a block plus the output latency) | 17.8 ms mean, 19.7 ms max; budget 16.1 ms | 118 ms mean, 128 ms max; budget 148.5 ms | 23.5 ms mean, 26.0 ms max; budget 26.0 ms | 33.7 ms mean, 35.7 ms max; budget 40.0 ms |
+| Auto-play with an animated UI (budget 0 xruns over 10 min; without the 20-minute warm-up of ticket 17) | 5 s: 0 xruns | 5 s: 0 xruns, 151 late callbacks | 10 min: 0 xruns, 5 late callbacks of 113,005 | 10 min: 0 xruns, 4858 late callbacks, render max 8.75 ms |
 
 - On the simulator, the emulator and the iPhone the live maximum
   includes the block in which the 64 notes start; the tablet's run split
   them: that block took 78 % of the 8 ms.
+- The emulator's offline maximum (1.78 ms) is above the 1.33 ms budget;
+  the offline check takes the mean, and the emulator runs at its host's
+  speed.
 - The tablet misses the live budget at its peaks: 45 % of the block on
   average, 58 % at most in steady state, and in the ten minutes one block
   took 8.75 ms, longer than its 8 ms, without an xrun (the buffer had a
