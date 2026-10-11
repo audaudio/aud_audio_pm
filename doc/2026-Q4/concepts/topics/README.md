@@ -15,6 +15,8 @@ tried and what holds.
 - [licenses-and-dsp-sources.md](licenses-and-dsp-sources.md) — license
   classes, notices, the DSP source pool
 - [sfizz.md](sfizz.md) — the archived sampler library and its fork
+- [sfizz-faust-audit.md](sfizz-faust-audit.md) — the license audit of
+  sfizz's Faust-generated filters and effects (ticket 25)
 - [ableton-link.md](ableton-link.md) — Link licensing, platforms, API
 - [osc-addressing.md](osc-addressing.md) — OSC 1.1 and node addressing
 - [docs-site.md](docs-site.md) — GitHub Pages, generators, dartdoc

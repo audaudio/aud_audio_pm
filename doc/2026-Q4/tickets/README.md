@@ -29,3 +29,5 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md](2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md)
   — ticket 24: the spike S0-plugin-ui, a Flutter editor in the plugin
   shells on macOS and iOS
+- [2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md](2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md)
+  — ticket 25: the SFZ sampler on sfizz for iOS and Android (step S9)
