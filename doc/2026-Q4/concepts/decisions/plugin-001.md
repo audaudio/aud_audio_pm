@@ -4,10 +4,11 @@
 - Date: 2026-10-07
 - Canonical source: topics/plugin-formats.md (R23)
 - Refined by: [plugin-003](plugin-003.md) — the editor on macOS and iOS,
-  after the spike S0-plugin-ui (ticket 24)
+  after the spike S0-plugin-ui (ticket 24); [plugin-004](plugin-004.md) —
+  the symbol hygiene of every plugin binary
 - Open work: the plugin UI on Windows and Linux (S18, with the spike's
   measurements); the AUv3 memory budget with the sampler loaded (S20);
-  macOS and iOS are settled by plugin-003
+  macOS and iOS are settled by plugin-003 (proposed)
 
 ## Decision
 

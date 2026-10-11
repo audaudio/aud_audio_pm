@@ -226,11 +226,11 @@ roughly 22 to 32 engineer-weeks.
     session with LinkHut on a second machine and a loopback recording of
     both clicks measures the alignment error per platform, with native
     timestamps and the miniaudio shim.
-  - S0-plugin-ui (M, done 2026-10-09, ticket 24; gates the UI of S18 to
-    S20, answers open question 1, planned in ticket 23): (h) a Flutter UI
-    for a plugin shell. A
-    minimal VST3 over the headless host opens a Flutter window in a
-    separate process (as flutter_vst3 does), embeds it in the host's
+  - S0-plugin-ui (M, built 2026-10-09 and 2026-10-10 in ticket 24,
+    checklist open; gates the UI of S18 to S20, answers open question 1,
+    planned in ticket 23): (h) a Flutter UI for a plugin shell. A minimal
+    VST3 over the headless host opens a Flutter window in a separate
+    process (as flutter_vst3 does), embeds it in the host's
     editor window on macOS (Windows follows in S18), and drives
     parameters and the graph document through `AudCommand` over a Unix
     domain socket, reusing `aud_audio_ui_controls` unchanged; the spike
@@ -247,8 +247,10 @@ roughly 22 to 32 engineer-weeks.
     the editor is a Flutter app in a process of its own, shown through
     shared IOSurfaces with forwarded input, one process per DAW process
     and plugin build; on iOS Flutter runs in the AUv3 extension; Flutter
-    inside the DAW process is rejected. ui-003 (proposed) moves the
-    engine adapters of the UI packages into a binding package.
+    inside the DAW process is rejected. ui-003 (proposed) moves the engine
+    adapters of the UI packages into a binding package. plugin-004
+    (proposed) makes every plugin binary hide its symbols and name its
+    Objective-C classes at run time.
 - S1 (L, done 2026-10-08, ticket 18) `aud_audio_core`: the versioned C ABI (abi-001: sized structs,
   capabilities, allocator ownership, thread-affinity tags, state
   serialization, latency and tail reporting), buffer and event formats,
@@ -432,7 +434,8 @@ roughly 22 to 32 engineer-weeks.
   `Control`, `ArcKnob`, `ParamBinding` over an abstract parameter sink,
   the widgets free of the umbrella) and creates the binding package
   `aud_audio_ui_bindings` with the parameter sink over `AudEngine`
-  (ui-003). Depends on S4.
+  (ui-003). Knobs in a scrolling view take part in the gesture arena, and
+  trackpad pan-zoom moves them (review of ticket 24). Depends on S4.
 - S17b (M) `aud_audio_ui_keyboard`: `Keyboard` with the five layouts,
   `KeyboardModel` with multi-touch, latching and external activation,
   `KeyboardKey`, `MidiMonitorKeyboard`, `NoteBinding` into event inlets
@@ -453,8 +456,8 @@ roughly 22 to 32 engineer-weeks.
   test in REAPER on Windows and Linux; the editor per plugin-003 on
   macOS, growing from the spike's plugin and editor app (variant S), and
   on Windows and Linux decided here with the spike's measurements and
-  scripts; parameters only until it is decided. Depends on S4 (serial
-  engine), not on S6.
+  scripts; parameters only until it is decided; the symbol hygiene of
+  plugin-004, as S19 and S20. Depends on S4 (serial engine), not on S6.
 - S19 (M) `aud_audio_clap`: shell reusing S18's mapping and editor
   (plugin-003), note expressions from the per-note controllers, the
   thread-pool extension with its single-threaded fallback. Depends on

@@ -1,9 +1,10 @@
 # 24: S0-plugin-ui — Spike a Flutter editor for the plugin shells on macOS and iOS
 
-Status: in progress since 2026-10-09; plan review, implementation,
-measurements in the test host, in REAPER and on the iPad, the code
-review and the reruns after its fixes are done. Open: the embedding checklist by hand in REAPER and
-Live, and the open and close cycles in Live (Gabriel Gatzsche).
+Status: in review since 2026-10-10. Done: plan review, implementation,
+measurements in the test host, in REAPER and on the iPad, the code review and
+the reruns after its fixes, and the review of the pull requests. Open: the
+embedding checklist by hand in REAPER and Live, and the open and close cycles in
+Live (Gabriel Gatzsche).
 
 ## Goal
 
@@ -14,8 +15,9 @@ work of [plugin-001](../concepts/decisions/plugin-001.md): can the plugin
 shells S18 to S20 carry an editor built from the family's Flutter UI
 packages, embedded in the host's plugin window, without Dart in the DAW
 process, and at what cost compared with a native view and the host's
-generic view? The result is the decision record plugin-003 (proposed).
-Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
+generic view? The result is the decision record plugin-003 (proposed);
+plugin-004 (proposed) records the symbol hygiene. Serves
+[flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 ## Decided before this ticket
 
@@ -42,7 +44,7 @@ New with this ticket (Gabriel Gatzsche, 2026-10-09):
   other symbol. Objective-C has one class namespace per process, and dyld
   coalesces exported weak C++ definitions (inline functions, templates,
   type info) across images, so two engines of different versions would
-  otherwise run each other's code.
+  otherwise run each other's code. Recorded as plugin-004 (proposed).
 - **The "two Flutter plugins" measurement** uses two aud_audio-based
   plugins with different engine versions, not only different Flutter
   versions.
@@ -114,9 +116,9 @@ New with this ticket (Gabriel Gatzsche, 2026-10-09):
      surfaces as layer contents and forwards mouse, wheel, keys, focus and
      the cursor over the socket; the runner turns them into `NSEvent`s for
      the `FlutterView`.
-   - **For comparison: a following window.** A borderless editor window
-     over the editor rectangle, kept above the host's window with
-     `orderWindow:relativeTo:`, which accepts window numbers of other
+   - **For comparison: a following window (variant F).** A borderless
+     editor window over the editor rectangle, kept above the host's window
+     with `orderWindow:relativeTo:`, which accepts window numbers of other
      processes.
 7. **Flutter in process (variant B).** The plugin loads its own copy of
    FlutterMacOS.framework and of the app's AOT framework under per-build
@@ -145,14 +147,15 @@ New with this ticket (Gabriel Gatzsche, 2026-10-09):
    and close editors and play automation. Node scripts read
    `phys_footprint` and summarize the logs against the budgets.
 10. **The result.** plugin-003 (proposed), linked with plugin-001 in both
-    directions; S17a to S20 and open question 1 in the plan of ticket 17;
-    the open work of plugin-001; the decisions index; the findings in
-    `topics/plugin-formats.md`.
+    directions, and plugin-004 (proposed) for the symbol hygiene; S17a to S20
+    and open question 1 in the plan of ticket 17; the open work of plugin-001;
+    the decisions index; the findings in `topics/plugin-formats.md`.
 
 Out of scope: the shells' full features (buses, MIDI, note expression,
 presets, sample-accurate automation; S18 to S20), Windows and Linux (S18),
 CLAP (S19), a production editor design, notarization (the spike signs ad
-hoc or for development; open question 6 records what it saw).
+hoc or for development; the answer to open question 6 of ticket 23
+records what it saw).
 
 ## Variant A at a glance
 
@@ -184,8 +187,9 @@ As built (`aud_audio_vst3`, `lib/src/aud_shell_message.dart` and
 `$TMPDIR` (`aud-vst3-<pid>-<random>.sock`, mode 0600). Every message is a
 4-byte little-endian length followed by a UTF-8 JSON object with `type` and
 `instance`, the plugin instance it concerns, so that one editor process can
-serve several instances (variant S). The plugin accepts one connection, and
-only after `hello` carries the random token it passed to the editor.
+serve several instances (variant S, see Deviations from the plan). The plugin
+accepts one connection, and only after `hello` carries the random token it
+passed to the editor.
 
 | Direction | Messages |
 | --- | --- |
@@ -227,7 +231,7 @@ numbers against them. How each is taken:
   (BSD-3-Clause); NOTICES for both in `aud_audio_vst3`, for Flutter in
   `aud_audio_auv3`.
 - Model: Claude Fable 5.1 at max effort (process-002, class S0);
-  deviations are recorded under Findings.
+  deviations are recorded under Deviations from the plan.
 - Scripts are Node.js with the license header.
 - Examples and apps reach sibling packages through
   `pubspec_overrides.yaml`; no path dependency in a package manifest
@@ -239,9 +243,10 @@ numbers against them. How each is taken:
 
 ## Affected repos
 
-- `aud_audio_pm` (minor): this plan; the row in `doc/issues.md`; the list
-  in `tickets/README.md`; plugin-003; plugin-001's links and open work;
-  the decisions index; S17a to S20 and open question 1 in the plan of
+- `aud_audio_pm` (minor): this plan; the row in `doc/issues.md`; the list in
+  `tickets/README.md`; plugin-003 and plugin-004; plugin-001's links and
+  open work; ui-003 and its links in ui-001 and ui-002; plugin-002's open
+  work; the decisions index; S17a to S20 and open question 1 in the plan of
   ticket 17; the findings in `topics/plugin-formats.md`.
 - `aud_audio_vst3` (minor, 0.1.0): the plugin with variants A to D, the
   vendored SDK subset with NOTICES, the build, validate and measurement
@@ -275,10 +280,16 @@ numbers against them. How each is taken:
    the cycles in Live, the checklist in REAPER (by hand).
 10. Done: Flutter in process (B) with renamed copies.
 11. Done: iOS: Flutter in the AUv3 extension with the ballast on the iPad.
-12. Done: plugin-003; the updates of ticket 17, plugin-001, the index and
-    the topic; ui-003.
+12. Done: plugin-003 and plugin-004; the updates of ticket 17, plugin-001,
+    plugin-002, the index and the topic; ui-003.
 13. Done: `/code-review` at max effort on threading and IPC, its findings
-    fixed. Next: commits per repo; push; review; review-light.
+    fixed; commits per repo; push; review; review-light on the pull
+    requests, its findings fixed.
+
+## Open questions
+
+None open: the plan review answered them (below). Open work: the embedding
+checklist by hand in REAPER and Live, and the open and close cycles in Live.
 
 ## Questions of the plan review
 
@@ -391,12 +402,13 @@ Built 2026-10-09 on the M5 Mac (macOS 27, Xcode 27.0, Flutter 3.47.5).
     synthetic drag.
   - `aud_vst3_engine`: the control thread that owns every [control] call;
     parameter changes from `process` reach it through the core's SPSC
-    ring; `process` renders through `aud_host_render`; teardown waits for
-    a running block (sequentially consistent guard).
+    (single-producer, single-consumer) ring; `process` renders through
+    `aud_host_render`; teardown waits for a running block (sequentially
+    consistent guard).
   - `aud_vst3_objc`, `aud_vst3_exports.exp`, `aud_vst3_skew`: the symbol
-    hygiene (runtime Objective-C classes with a random suffix, hidden
-    visibility, three exported entry points) and the deliberate layout
-    skew of flavor 2 (graph 0.3.0) with its check.
+    hygiene of plugin-004 (runtime Objective-C classes with a random suffix,
+    hidden visibility, three exported entry points) and the deliberate
+    layout skew of flavor 2 (graph 0.3.0) with its check.
   - The views: `aud_vst3_native_view` (C), `aud_vst3_remote_view` with
     `aud_vst3_socket` and `aud_vst3_surfaces` (A, S, F),
     `aud_vst3_flutter_view` (B); `aud_vst3_driver` plays the 1000 knob
@@ -496,14 +508,14 @@ numbers are REAPER's unless marked "test host". Medians, then p99.
 | Memory, more editors | 50 MB per further editor | A 130 MB: fail. S 35 MB for the second, 26–32 MB each for four: pass. B 37–55 MB: borderline |
 | UI to audio | median 10 ms, p99 20 ms, C + 2 ms | C 1.39/2.72 ms; A 1.62/2.96; S 1.84/3.06; B 1.72/3.22 (probe fixed; test host 1.53/2.86); F not measured (its input bypasses the plugin). Pass |
 | Audio to UI | median 33 ms | C 1.3 ms; A 7.0 (p99 29); S 7.2 (p99 26); B 8.0 (p99 20). Pass |
-| Editor open | 500 ms cold, 150 ms warm | Cold: A 289–370 ms, S 272–377, F 217–272 (plugin side), B 53–116, C 12–22. Four at once: S 340/368, A 445/670 (the slowest of four processes misses), B 71/128. Warm: A 11/19, S 11/16 |
+| Editor open | 500 ms cold, 150 ms warm | Cold: A 289–370 ms, S 272–377, F 217–272 (plugin side), B 53–116, C 12–22. Four at once: S 340/368, A 445/670 (the slowest of four processes misses; 435/474 in the rerun), B 71/128. Warm: A 11/19, S 11/16 before the code review's fixes; after them A 25–43 ms median, p99 103–109 ms (cycles in REAPER; S not rerun), most likely because a view now starts paused until its window counts as visible, which the plugin learns from a notification or its 30 Hz check |
 | Editor close | 50 ms, no leftovers, 5 MB over 100 cycles | removed() 0.1–0.8 ms (B 3–8, 0.5 with the deferred shutdown); no editor process left after quitting. REAPER over 100 cycles: C +3.2 MB, A +2.0, S +2.2 (pass); F +9.4, B +8–25 (fail) |
 | Two instances | each drives its own | A and S with two and four instances. Pass |
 | Two Flutter plugins | both work, closing one leaves the other | A1 + A2 (graph 0.4.0 and 0.3.0, Flutter 3.47.5 and 3.44.9): pass, A2 draws on after A1 closes. B1 + B2: REAPER crashed once when B1 closed, inside B1's Flutter (a present after the engine shut down), and passed in the rerun |
-| Hygiene | no collision | Without hygiene C2's view runs C1's Objective-C class (`implFlavor 1`); with it each build its own. Weak C++ symbols were not coalesced in REAPER |
-| Crash and hang | UI ≤ 100 ms, no xrun, reopening recovers | Killed editor: restarted at once (hello after 0.15 s), frames again within a second; suspended 10 s: UI thread ≤ 3 ms, audio unaffected; stalls of 66–118 ms only when windows open. Pass |
+| Hygiene | no collision | Without hygiene C2's view runs C1's Objective-C class (`implFlavor 1`); with it each build its own. Weak C++ symbols were not coalesced in REAPER; so the skew test shows only the Objective-C collision |
+| Crash and hang | UI ≤ 100 ms, no xrun (an audio dropout), reopening recovers | Killed editor: restarted at once (hello after 0.15 s), frames again within a second; suspended 10 s: UI thread ≤ 3 ms, audio unaffected; stalls of 66–118 ms only when windows open. Pass for the hang; the stalls when windows open exceed 100 ms |
 | Audio thread | 0 violations, 0 xruns | RealtimeSanitizer, two animating editors, 10 min (test host): 0. Watchdog, two animating editors, 10 min in REAPER: 225,004 blocks each, 0 violations, 0 overloads, slowest block 168 µs of 2.67 ms. Pass |
-| CPU | idle 1 %, view 1 ms per frame | A meter animating at 30 Hz costs the editor process 6–8 % of a core (A, S, F) and the native view +6.4 % of REAPER; dragging 19 %. S with four editors 14 % (47 % before the fix of its meter phases). Idle, with a silent output: 0.1–0.2 % for the editor process (A, S, F), nothing measurable for B. Pass |
+| CPU | idle 1 %, view 1 ms per frame | A meter animating at 30 Hz costs the editor process 6–8 % of a core (A, S, F) and the native view +6.4 % of REAPER; dragging 19 %. S with four editors 14 % (47 % before the fix of its meter phases). Idle, with a silent output: 0.1–0.2 % for the editor process (A, S, F), nothing measurable for B. The view's time per frame not measured. Pass |
 | Embedding | checklist in REAPER and Live | open: by hand (Gabriel Gatzsche) |
 | iOS AUv3 | 360 MB, first frame 500 ms, never terminated | 1, 2, 4 instances for 10 min each: 184, 193, 214 MB median (max 258) with the 100 MB ballast; Flutter's share 69, 76, 93 MB; first frames 9–59 ms; never terminated. Pass |
 
@@ -567,27 +579,65 @@ finder angles, one verifier per candidate (27: 18 confirmed, 8 plausible,
   the editor inherits no descriptor of the DAW; non-finite meters are
   zero; a missing multi-view is reported.
 
-Deferred to S18: one control-thread engine for both shells in
-`aud_audio_graph` (the AUv3 engine is a copy), the core's clock and the
-graph's parameter-id helper instead of copies, one shell protocol for B
-and the socket, the frame copy on the GPU.
+### Review of the pull requests
 
-## Answers to the open questions
+`review-light` on the four pull requests (2026-10-10): five reviewers, 66
+findings. Fixed:
 
-1. Process model: one editor process per DAW process and plugin build (S).
-   A process per editor costs 130 MB per further editor; S costs 32–35 MB.
-   S needs Flutter's private `enableMultiView`; the editor reports when
-   it is missing and then takes one view.
-2. The editor stays warm for 10 s after its last view closes: a warm open
-   takes 11 ms instead of 290–370 ms, and the warm process keeps 64–82 MB
-   (A) until it quits.
-3. The cursor works (cursor messages); keys reach the editor and then the
-   host. Text input, IME and accessibility through the shared surface are
-   not built: the editor must claim the keys of a text field and expose an
-   accessibility proxy (S18).
-4. Signing: the editor app inside the bundle is signed ad hoc and starts
-   background-only; the hardened runtime, notarization and Gatekeeper on
-   first start remain for S18.
+- The AUv3 editor got no parameters since the code review's fix: a success
+  value was read as failure. The iPad numbers predate it.
+- The plugin's Mach receiver trusted the message id alone.
+- The SDK vendoring script could delete the repo with a wrong `--dest`.
+- The angular drag snapped back after half a turn.
+- A control removed during a drag threw.
+- Stepped values lost their unit.
+- `getState` ignored write errors.
+- The socket sent to a connection not yet authenticated.
+- Numbers from the socket were cast unchecked.
+- The READMEs (public API, German translations), the guides' rules in code
+  and tests, and native unit tests for the parameter mapping, the socket
+  framing and the skew.
+
+After the fixes all 13 bundles passed the validator, and a smoke run in
+REAPER (2026-10-11) drew frames in A1, S1, F1 and B1 and in the pair A1 +
+A2, where A2 drew on after A1 closed. The test host no longer shows frames
+while other apps' windows cover its window: the views pause as designed,
+and macOS lets the test host not come to the front by itself.
+
+Deferred: see below (S18) and S17a in the plan of ticket 17.
+
+### Deferred to S18
+
+- One control-thread engine for both shells in `aud_audio_graph` (the AUv3
+  engine is a copy).
+- The core's clock and the graph's parameter-id helper instead of copies.
+- One shell protocol for B and the socket.
+- The frame copy on the GPU.
+- The build scripts share one helper module (hash, source lists, compiler
+  lookup, compile pool).
+- One base class for the three editor views.
+- File names after the types they hold (`EditorHost` in a file of its own).
+- The long functions split (`EditorHost::handle`, `spawn`, the Mach receive,
+  the native view's drawing, the socket loop).
+- Work queued on the main queue (the warm shutdown, B's deferred engine
+  shutdown) ends before the module unloads (`bundleExit`).
+
+## Answers to the open questions of ticket 23
+
+- 1 → process model: one editor process per DAW process and plugin build
+  (S). A process per editor costs 130 MB per further editor; S costs
+  26–35 MB. S needs Flutter's private `enableMultiView`; the editor
+  reports when it is missing and then takes one view.
+- 2 → the editor stays warm for 10 s after its last view closes: a warm
+  open takes 11 ms, 25–43 ms with the visibility pause, instead of
+  290–370 ms, and the warm process keeps 64–82 MB (A) until it quits.
+- 5 → the cursor works (cursor messages); keys reach the editor and then
+  the host. Text input, IME (input method editor) and accessibility
+  through the shared surface are not built: the editor must claim the
+  keys of a text field and expose an accessibility proxy (S18).
+- 6 → signing: the editor app inside the bundle is signed ad hoc and
+  starts background-only; the hardened runtime, notarization and
+  Gatekeeper on first start remain for S18.
 
 ## Findings
 
@@ -618,10 +668,11 @@ and the socket, the frame copy on the GPU.
   the queue: hosts that flush parameters with empty `process()` calls
   fill it. The plugin parks refused values; the graph should keep the
   latest value per parameter regardless (open work of plugin-002).
-- **Frame copy.** Copying each frame on the CPU (IOSurfaceLock and
-  memcpy, 2.2 MB per frame at 2x) costs 6–8 % of a core for a meter at
-  30 Hz. Handing Flutter's own surfaces to the plugin, or a GPU blit,
-  removes most of it (S18).
+- **Frame copy.** An editor with a meter animating at 30 Hz costs 6–8 % of a
+  core in A, S and F alike, and F copies no frames. The copy on the CPU
+  (IOSurfaceLock and memcpy, 2.2 MB per frame at 2x) is therefore at most
+  about 1.5 points of it; Flutter's rendering is most of the cost. Handing
+  Flutter's own surfaces to the plugin, or a GPU blit, removes the copy (S18).
 - **B in REAPER.** Starting an engine stalls REAPER's UI thread (85 ms
   median over 100 opens, up to 214 ms); REAPER grows 8–25 MB over 100
   open and close cycles. Tearing an engine down crashed REAPER three
@@ -658,8 +709,6 @@ and the socket, the frame copy on the GPU.
 - **REAPER as a measurement host**: see topics/plugin-formats.md (started
   through LaunchServices in front, a resource folder of its own, a loop
   range against the stopping transport, no anticipative FX).
-- **Model deviation**: process-002 puts S0 on Claude Fable 5.1 at max
-  effort; this plan was written on Claude Opus 5.5.
 
 ## Rests on
 

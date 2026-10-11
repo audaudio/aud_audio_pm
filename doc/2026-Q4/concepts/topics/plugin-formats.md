@@ -102,8 +102,8 @@ Flutter 3.47.5, VST3 SDK 3.8.1, REAPER and a test host:
   copies each frame into a pool of three surfaces, sends them as Mach
   ports (rendezvous through `bootstrap_check_in` and `bootstrap_look_up`
   under a random name), and the plugin's view shows them as layer
-  contents and forwards the input over the socket. The editor's share of
-  a parameter change is about 0.35 ms.
+  contents and forwards the input over the socket. The socket and the
+  forwarded input add 0.2–0.5 ms to the latency of a native view.
 - One Flutter engine can drive several views on macOS, but turning it on
   is private in 3.47 (`enableMultiView`, which the experimental windowing
   API calls). Without it each editor needs an engine of its own.
@@ -116,13 +116,13 @@ Flutter 3.47.5, VST3 SDK 3.8.1, REAPER and a test host:
   build (byte-replaced names of the same length, re-signed): two plugins
   with Flutter 3.47.5 and 3.44.9 run in one process, and the latency is that
   of a separate process (1.5 ms from input to the processor). But Dart runs
-  on the DAW's main thread (platform and UI threads are merged), starting
-  an engine there stalls the DAW's UI for up to 214 ms, the framework keeps
-  about 40 MB after the last editor closes, and closing such an editor
-  crashed REAPER three times inside Flutter's compositor: a present that
-  `ResizeSynchronizer` scheduled for a later vsync ran after the engine
-  had shut down. Keeping the view controller and the engine for 200 ms
-  after the view closes avoided it in 100 cycles.
+  on the DAW's main thread (platform and UI threads are merged), starting an
+  engine there stalls the DAW's UI for up to 214 ms, REAPER grows 8–25 MB
+  over 100 open and close cycles, and closing such an editor crashed REAPER
+  three times inside Flutter's compositor: a present that
+  `ResizeSynchronizer` scheduled for a later vsync ran after the engine had
+  shut down. Keeping the view controller and the engine for 200 ms after the
+  view closes avoided it in 100 cycles.
 - A probe that takes the input's time stamp in a global pointer route of
   Flutter gets the previous event's: the framework runs the global routes
   after the widgets. The spike's first B numbers (18 ms) were this
@@ -130,8 +130,8 @@ Flutter 3.47.5, VST3 SDK 3.8.1, REAPER and a test host:
 - Two plugin builds in one process collide without symbol hygiene: the
   Objective-C runtime takes the class of whichever image loaded first.
   Runtime-created classes with a random suffix, hidden visibility and an
-  exported-symbols list with the three VST3 entry points avoid it; the
-  VST3 SDK's own host did not coalesce weak C++ symbols across bundles.
+  exported-symbols list with the three VST3 entry points avoid it;
+  REAPER did not coalesce weak C++ symbols across bundles.
 - RealtimeSanitizer cannot run inside a notarized DAW: its interceptors
   need the runtime at process start, and a hardened runtime without
   `allow-dyld-environment-variables` ignores `DYLD_INSERT_LIBRARIES`.
@@ -153,6 +153,8 @@ Flutter 3.47.5, VST3 SDK 3.8.1, REAPER and a test host:
   Dart on the host's render thread. See decision plugin-001.
 - The editor on macOS and iOS: decision plugin-003, after the spike
   S0-plugin-ui (ticket 24).
+- The symbol hygiene of every plugin binary: decision plugin-004, from the
+  same spike.
 
 ## Sources
 

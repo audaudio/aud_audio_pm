@@ -22,6 +22,16 @@
 
 - Record B's teardown crash and its workaround; refresh plugin-003's numbers and the plugin-formats topic
 
+- Add plugin-004 and the review of the pull requests
+
+- Split the symbol hygiene of every plugin binary into plugin-004 (proposed)
+
+- Correct the CPU and latency claims, the numbers of the reruns and the status of ticket 24
+
+- Add the open questions, the review of the pull requests and the items deferred to S18 and S17a
+
+- Mark proposed decisions as proposed and add the open work of plugin-002 from ticket 24
+
 ## 0.6.0 - 2026-10-09
 
 ### Changed
