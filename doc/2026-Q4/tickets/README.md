@@ -31,3 +31,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   shells on macOS and iOS
 - [2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md](2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md)
   — ticket 25: the SFZ sampler on sfizz for iOS and Android (step S9)
+- [2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md](2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md)
+  — ticket 26: the aud_midi ports as event inlets and outlets of the engine
+  on iOS and Android (step S8)

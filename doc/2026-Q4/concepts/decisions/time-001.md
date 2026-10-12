@@ -4,13 +4,15 @@
 - Date: 2026-10-08
 - Canonical source: topics/ableton-link.md ("What the engine must
   provide for Link"), topics/audio-io-platforms.md
-- Open work: measure timestamp quality per backend on the reference
-  devices. The segment struct, the capability flags, the conversions and
-  the filter are defined (ticket 18: `aud_abi.h`, `aud_transport.h`,
-  `aud_time_filter.h`); the streams of ticket 21 deliver the
-  `AudStreamTime` with source, accuracy and latency per direction, move
-  the sample position across a gap so that the filter resets, and the
-  latency probe of their example measures the round trip
+- Open work: measure timestamp quality per backend on the reference devices. The
+  segment struct, the capability flags, the conversions and the filter are
+  defined (ticket 18: `aud_abi.h`, `aud_transport.h`, `aud_time_filter.h`); the
+  streams of ticket 21 deliver the `AudStreamTime` with source, accuracy and
+  latency per direction, move the sample position across a gap so that the
+  filter resets, and the latency probe of their example measures the round trip;
+  ticket 26 maps the host timestamps of CoreMIDI and Android's MIDI onto the
+  fitted output time and records delivery delays and late shares per device
+  (midi-003)
 
 ## Decision
 

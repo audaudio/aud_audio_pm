@@ -1,5 +1,43 @@
 # Changelog
 
+## 0.9.0 - 2026-10-12
+
+### Added
+
+- Add the plan and decisions of ticket 26 (S8, the MIDI bridge)
+
+- Plan of ticket 26: the aud_midi ports as event inlets and outlets of the engine on iOS and Android, with the decisions of the plan review and the findings so far
+
+- interop-003: native producers feed the graph through event sources
+
+- midi-003: external MIDI sounds at a fixed latency of one period plus the output latency plus 1 ms
+
+- The package graph: aud_audio_midi depends on aud_audio and aud_midi
+
+- Add the findings of the implementation of ticket 26
+
+- aud_midi_standard from two sources, the repos gg added, the commits before gg do add, the end packets of a cut SysEx
+
+- Add the measurements of step 5 and midi-002
+
+- midi-002: external MIDI reaches the audio thread through native taps
+
+- midi-003 refined: P from the percentile of the render gaps, m per input
+
+- The open work of midi-001, time-001, interop-002, graph-001, graph-003, lifecycle-001 and repos-001; S8 in the plan of ticket 17; the architecture
+
+- Add the code review and the keyboard session of ticket 26
+
+- The code review findings, the keyboard session on iPhone and tablet, midi-003 refined
+
+- Add the long runs of ticket 26
+
+- iPhone and Galaxy Tab S4 meet the budgets; midi-002 with the corrected late shares
+
+- Add review fixes of ticket 26
+
+- Add family-002: every package has a version of its own
+
 ## 0.8.0 - 2026-10-12
 
 ### Added

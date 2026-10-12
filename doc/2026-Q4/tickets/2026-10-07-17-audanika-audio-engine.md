@@ -298,10 +298,16 @@ roughly 22 to 32 engineer-weeks.
   filter → output on iOS and Android, the desktop platforms as S3b
   lands), first `0.x` release of core, graph, io and umbrella with iOS
   and Android platform tags. Depends on S2, S3.
-- S8 (M) `aud_audio_midi`: `aud_midi` input and output ports as event
+- S8 (M, built 2026-10-12 in ticket 26 for iOS and Android)
+  `aud_audio_midi`: `aud_midi` input and output ports as event
   inlets and outlets, MIDI 1.0 and UMP mapping, keyboard-to-synth demo.
   Depends on S4 and on the `aud_midi` family, which is available; the
   minimal bridge release-002 held in reserve is not needed (2026-10-08).
+  Result: interop-003 (event sources for native producers in the graph),
+  midi-003 (external MIDI at a fixed latency), midi-002 (the native tap
+  of the aud_midi backends as the path to the audio thread), native-001
+  and ports-001 in `aud_midi_pm`; the aud_audio family takes
+  `aud_midi_standard` and `aud_midi` from pub.dev.
 - S22 (M) Tooling: starts small with S1 — analyze, format, tests and
   the notices check on every repo — and grows into the CI matrix (macOS,
   Windows, Linux runners, Android emulator, headless Chrome), Clang's

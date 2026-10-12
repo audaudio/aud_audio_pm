@@ -4,9 +4,11 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 1); decisions/graph-001.md; the review of ticket 19
-- Open work: none. Fades of 5 ms and a tail limit of 10 s were decided at
-  the review of ticket 19 and implemented there: a retired node renders
-  its tail, at most 10 s, with its incoming connections faded out
+- Open work: the notes that generator nodes emitted when they retire (S14).
+  Fades of 5 ms and a tail limit of 10 s were decided at the review of ticket 19
+  and implemented there: a retired node renders its tail, at most 10 s, with its
+  incoming connections faded out; ticket 26 keeps the event routes of a retiring
+  node until it is done, so the note offs a pass-through node forwards arrive
 
 ## Decision
 
