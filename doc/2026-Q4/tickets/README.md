@@ -34,3 +34,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md](2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md)
   — ticket 26: the aud_midi ports as event inlets and outlets of the engine
   on iOS and Android (step S8)
+- [2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md](2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md)
+  — ticket 27: audanika_app plays its sounds as SFZ on the new engine on
+  iOS and Android (step S29a)
