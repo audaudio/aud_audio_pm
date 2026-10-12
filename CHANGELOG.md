@@ -35,9 +35,16 @@
 - Add the review results and final numbers of ticket 25
 
 - Ticket 25 done: the review of the pull requests with 103 findings, 97 fixed, and the bugs it found
+
 - Measurements after the review: the iPhone and the Galaxy Tab S4 after the twenty-minute warm-up of ticket 17, the simulator and the emulator; the first runs for comparison
+
 - Open question 9: the license of Audanika code in the fork of sfizz
+
 - io-002: the late callbacks of the tablet in the final run
+
+- Add disk streaming as open work of sampler-003
+
+- A ring buffer per voice, so that a voice needs the same memory whatever the length of its sample; today a note that plays holds its whole file in memory, as in sfizz
 
 ## 0.7.0 - 2026-10-11
 

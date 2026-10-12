@@ -7,7 +7,10 @@
 - Refines: [sampler-001](sampler-001.md) — loads and the node
 - Open work: per-note pitch bend and the other per-note controllers of
   MIDI 2.0 with the note expressions of S18 and S19; a retuning that keeps
-  the notes that sound
+  the notes that sound; disk streaming through a small ring buffer per
+  voice, so that a voice needs the same memory whatever the length of its
+  sample - today a note that plays holds its whole file in memory, as in
+  sfizz, which matters for samples of minutes and for the file player
 
 ## Decision
 
