@@ -3,7 +3,8 @@
 - Status: accepted
 - Date: 2026-10-11
 - Canonical source: tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md
-  (questions 3 and 6, Findings)
+  (questions 3 and 6, Findings; Gabriel Gatzsche confirmed the deviations
+  of the Findings at the review, 2026-10-12)
 - Refines: [sampler-001](sampler-001.md) — loads and the node
 - Open work: per-note pitch bend and the other per-note controllers of
   MIDI 2.0 with the note expressions of S18 and S19; a retuning that keeps

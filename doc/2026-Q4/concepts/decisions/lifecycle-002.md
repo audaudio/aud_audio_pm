@@ -3,11 +3,16 @@
 - Status: accepted
 - Date: 2026-10-11
 - Canonical source: tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md
-  (questions 1 and 2, Findings)
+  (questions 1 and 2, Findings; Gabriel Gatzsche confirmed the deviations
+  of the Findings at the review, 2026-10-12)
 - Supersedes in part: [lifecycle-001](lifecycle-001.md) — one sample cache
   budget per process instead of per engine
 - Open work: the defaults against the numbers of S24 (budget, workers,
-  preload); a share of the budget per cache if packages compete
+  preload); a share of the budget per cache if packages compete; a
+  capacity rule that also counts the heads of the other instruments, but
+  not those of the instrument a load replaces, so that the budget bounds
+  what all instruments pin; a smaller budget that a worker trims when one
+  runs, on the calling thread only without one
 
 ## Decision
 

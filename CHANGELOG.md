@@ -46,6 +46,13 @@
 
 - A ring buffer per voice, so that a voice needs the same memory whatever the length of its sample; today a note that plays holds its whole file in memory, as in sfizz
 
+- Add the answers to questions 8 and 9 of ticket 25
+
+- sampler-003 and lifecycle-002: Gabriel Gatzsche confirmed the deviations of the Findings
+- lifecycle-002: a capacity rule over all instruments and the trim of a smaller budget on a worker as open work
+- sampler-002: Audanika code in the fork is BSD-2-Clause like sfizz
+- The plan: questions 8 and 9 answered, none open
+
 ## 0.7.0 - 2026-10-11
 
 ### Added

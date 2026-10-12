@@ -5,7 +5,7 @@ and the review of the pull requests with their fixes, measurements on the
 iOS simulator, the Android emulator, an iPhone 16 Pro Max and a Galaxy Tab
 S4, the devices after the twenty-minute warm-up of ticket 17. Open: the
 numbers on the iPad Pro M5 and a Pixel; the tablet misses the live budget
-at its peaks (S24); open questions 8 and 9 (Gabriel Gatzsche).
+at its peaks (S24).
 
 ## Goal
 
@@ -379,10 +379,11 @@ Gabriel Gatzsche decided:
 
 ## Open questions
 
-Questions 1 to 7 were decided at the plan review; deviations found while
-implementing are recorded under Findings. One question came from the
-implementation (8), one from the review of the pull requests (9). Open
-work: the numbers on the iPad Pro M5 and a Pixel.
+None open. Questions 1 to 7 were decided at the plan review; deviations
+found while implementing are recorded under Findings. Question 8 came from
+the implementation, question 9 from the review of the pull requests; both
+were answered at the review on 2026-10-12. Open work: the numbers on the
+iPad Pro M5 and a Pixel.
 
 8. **The deviations in sampler-003 and lifecycle-002** (for Gabriel
    Gatzsche). Both decisions are accepted, but four of their rules come
@@ -390,12 +391,18 @@ work: the numbers on the iPad Pro M5 and a Pixel.
    the virtual path that starts no load, the capacity rule on the heads
    alone (scope 4 said "after everything evictable is gone") and the trim
    on the calling thread. Confirm them, or set both decisions to proposed.
+   Answer: confirmed. The middle grounds are open work of lifecycle-002: a
+   capacity rule over all instruments that leaves out the instrument a
+   load replaces, and the trim of a smaller budget on a worker when one
+   runs.
 9. **The license of Audanika's code in the fork** (for Gabriel Gatzsche).
    `RbjFilters.hpp`, the one new file of the fork, is under the package's
    MIT license; Audanika's changes in sfizz's files sit under their
    BSD-2-Clause headers, and NOTICES.md says so. Should new files of the
    fork take BSD-2-Clause too, so that the fork stays uniform and its
-   fixes can go upstream?
+   fixes can go upstream? Answer: yes; Audanika's code in the fork is
+   BSD-2-Clause (sampler-002), `RbjFilters.hpp` carries sfizz's header
+   with Audanika's copyright.
 
 ## Findings
 
@@ -490,9 +497,11 @@ the README of every public API. They reported 103 findings, each checked
 against the code; the report lies in the ticket folder
 (`review-light-25.md`). At the request of Gabriel Gatzsche every finding
 that could be fixed was fixed, one commit per step, each native fix with a
-test under the sanitizers: 97 fixed, 4 skipped, 2 open (questions 8 and 9;
-instruments as trusted input in the sfizz topic). Four more came up while
-fixing and were fixed. The bugs among them:
+test under the sanitizers: 97 fixed, 4 skipped and 2 left to Gabriel
+Gatzsche. He confirmed the deviations of question 8; instruments stay
+trusted input (sfizz topic), a path check is for a later step. Question 9
+came from the review too. Four more came up while fixing and were fixed.
+The bugs among them:
 
 - A stream that finished while a trim ran could lose its file data under
   the task (use after free); the task reads everything before it marks the

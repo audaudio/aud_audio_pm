@@ -3,7 +3,8 @@
 - Status: accepted
 - Date: 2026-10-11
 - Canonical source: tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md
-  (question 5)
+  (question 5; question 9, the license of Audanika's code, answered by
+  Gabriel Gatzsche at the review, 2026-10-12)
 - Refines: [sampler-001](sampler-001.md) — the fork is the package;
   [build-001](build-001.md) — sfizz is no longer refreshed as a subset
 - Open work: none; a branch in `audanika/sfizz` only if the fork is ever
@@ -19,7 +20,10 @@ place since ticket 25: no patch files and no new vendoring -
 git history of the package is the history of the fork. sfizz's files keep
 their BSD-2-Clause headers; every changed file says what changed in a
 "Modified by Audanika" note below its header, and
-`src/third_party/NOTICES.md` names the origin and the changes. The decision
+`src/third_party/NOTICES.md` names the origin and the changes. Audanika's
+code in the fork - those changes and new files such as `RbjFilters.hpp` -
+is BSD-2-Clause like sfizz, so that the fork has one license and its fixes
+can go upstream. The decision
 refines sampler-001, which named the audanika fork as the source, and
 build-001, whose subset is no longer refreshed for sfizz.
 
