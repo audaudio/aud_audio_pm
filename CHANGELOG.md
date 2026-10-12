@@ -36,6 +36,8 @@
 
 - Add review fixes of ticket 26
 
+- Add family-002: every package has a version of its own
+
 ## 0.8.0 - 2026-10-12
 
 ### Added

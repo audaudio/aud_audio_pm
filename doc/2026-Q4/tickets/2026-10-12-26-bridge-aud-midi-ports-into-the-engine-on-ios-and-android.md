@@ -486,6 +486,12 @@ Gabriel Gatzsche decided:
 - Removed from the ticket unchanged: `aud_midi_standard` and
   `aud_midi_rtp`. The examples of `aud_midi` and `aud_midi_android`
   resolve `aud_midi_standard` from pub.dev.
+- Versions of their own (family-002, review): `aud_dsp_sampler` left the
+  ticket; the branches of `aud_midi_linux`, `aud_midi_network`,
+  `aud_midi_web`, `aud_midi_windows`, `aud_audio_io` and `aud_audio_web`,
+  which only followed their siblings, are reset to `main` (gg keeps them
+  between the ticket's repos). `aud_midi_core`, `aud_midi_apple` and
+  `aud_midi` publish patches, `aud_midi_android` and `aud_audio` minors.
 
 ## Steps
 

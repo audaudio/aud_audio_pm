@@ -3,7 +3,8 @@
 | ID | Status | Date | Decision | Open work |
 | --- | --- | --- | --- | --- |
 | [repos-001](repos-001.md) | accepted | 2026-10-08 | All repos created up front (S00), wired by git references with tag_pattern per the package graph, initial tags, ocean refreshed | Initial version; switch to pub.dev; aud_midi packages from pub.dev since ticket 26 |
-| [family-001](family-001.md) | proposed | 2026-10-07 | One repo per package, the aud_audio family, shared major version; the AUv3 shell is aud_audio_auv3 | none |
+| [family-001](family-001.md) | proposed | 2026-10-07 | One repo per package, the aud_audio family; the AUv3 shell is aud_audio_auv3; versioning superseded by family-002 | none |
+| [family-002](family-002.md) | accepted | 2026-10-12 | Every package of the aud_audio and aud_midi families has its own version; only changed packages are published | none |
 | [interop-001](interop-001.md) | proposed | 2026-10-07 | Dart never runs on the audio thread; FFI command queue, ring buffers, build hooks, C ABI | Command to sound on the reference devices; `@RecordUse` and a link hook in aud_dsp_sampler since ticket 25 |
 | [interop-002](interop-002.md) | proposed | 2026-10-08 | Real-time contract: queue classes, capacities, overflow and late-event policies, note-off recovery, notification thread for Dart wake-ups | Defaults of ticket 19 measured in S24; policies stress-tested in ticket 20; refined by interop-003 |
 | [web-001](web-001.md) | proposed | 2026-10-07 | One Wasm module per AudioContext in an AudioWorklet, Dart on the main thread | Prebuilt per-package Wasm vs. generated build |
