@@ -29,8 +29,8 @@ Research for R19, sources fetched 2026-10-07.
   st_audiofile (BSD-2), spline (BSD-3), threadpool (zlib), dr_libs
   (public domain / MIT-0). `SFIZZ_USE_SNDFILE` would pull libsndfile
   (LGPL-2.1) — stays off. Faust-derived effects carry STK-4.3 and
-  LGPL-with-exception terms — only the STK-4.3 and MIT ones may stay
-  (license-002).
+  LGPL-with-exception terms — what stays is decided by license-003
+  ([sfizz-faust-audit.md](sfizz-faust-audit.md)).
 - SIMD through simde (portable SSE/NEON). Official platforms: Linux,
   Windows, macOS; WASM via the emscripten branch; iOS and Android builds
   are unproven (only an Apple flag fix found); a clang-19 build break
@@ -49,9 +49,49 @@ Research for R19, sources fetched 2026-10-07.
   pairs), an event inlet for notes, CCs and pitch bend, parameters for
   the control-thread settings, the message API mapped onto node routes.
 - Loading (CT) runs on a worker thread the engine owns, never on the
-  audio thread; the node reports load progress as events.
-- Risk: the first iOS and Android builds and the maintenance of the
-  fork (the upstream is archived) are our own work; schedule a spike.
+  audio thread. Since ticket 25 a load has an id, progress and a result,
+  reported as `AUD_NOTIFY_LOAD` notifications of the graph
+  (lifecycle-002); the new instrument swaps in through a standby synth
+  (sampler-003).
+- SFZ instruments are trusted input: `#include` and samples reach every
+  file the app can read, by absolute paths or `../` (many libraries share
+  samples that way), and a parse error quotes from the included file in
+  the load message; only the app's sandbox bounds them. If untrusted
+  instruments (downloads, shared presets) become a use case, a later step
+  decides on a path check: under the instrument's folder or library roots.
+- The first iOS and Android builds came with the spike of ticket 5; the
+  fork is the package itself since ticket 25 (sampler-002).
+
+## What ticket 25 found in the fork
+
+The fork of `aud_dsp_sampler` (sampler-002) runs under the engine's
+watchdog, RealtimeSanitizer and ThreadSanitizer since ticket 25. What they
+and the review of the code found in sfizz, all fixed in the fork:
+
+- Allocations on the audio thread: every message built a `std::vector` of
+  path indices; the messages `/region&/add_filter`, `add_eq`, `add_eg`
+  and `eg&/add_point` grew regions and voices; setters with string
+  arguments copy and parse strings; a CC modulation set by a message was
+  inserted into a sorted vector; the tuning frequency and the stretch
+  tuning rebuild their tables (sfizz marks both RT); without `NDEBUG`
+  its debug messages write to `std::cerr`.
+- Data races once synths are built on workers while others render: every
+  synth reset the process-wide SIMD dispatch table and the windowed-sinc
+  tables, and the global random generator of each file was shared
+  without synchronisation.
+- Indexing: a message path index one past the end was read (`<=`), and
+  `/cc512/...` passed the CC check; the windowed sinc formed its sample
+  pointer with an unsigned offset that wrapped (UBSan).
+- Streaming: a voice ended at the head when its stream had not delivered
+  yet, without a report; reading whether a file is complete after its
+  data could end a voice at the frames a block got.
+- A controller replayed into a new synth glides from its default, since
+  the smoothers keep the value of the load.
+- Loads: `loadSfzString` succeeds when every sample is missing, a parse
+  error goes to `std::cerr` only, an unknown effect type is dropped
+  silently.
+- Android's libc++ counts file times in 128 bits, which `std::to_string`
+  does not take.
 
 ## Sources
 

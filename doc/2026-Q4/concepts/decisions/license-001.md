@@ -3,6 +3,8 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/licenses-and-dsp-sources.md (R26, R27)
+- Refined by: [license-003](license-003.md) — Faust-generated code is
+  judged by the library functions it was generated from
 - Open work: add the notices check to the DNA layer; the check exists as
   `aud_audio_core/scripts/check-notices.js` with its guide (ticket 18)
 
