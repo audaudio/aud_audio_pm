@@ -4,9 +4,11 @@
 - Date: 2026-10-08
 - Canonical source: Gabriel Gatzsche's decision at the plan review on
   2026-10-08; the aud_midi plan (aud_midi_pm, ticket aud_midi_01)
-- Open work: align the first core ticket (S1) with the release of
-  `aud_midi_standard`; agree the shared major-version rule across the
-  two families
+- Open work: agree the shared major-version rule across the two families. Done:
+  S1 on the release of `aud_midi_standard` (ticket 18); `aud_audio_midi` bridges
+  the `aud_midi` ports on these types (ticket 26, midi-002); the aud_audio
+  family takes `aud_midi_standard` from pub.dev like the aud_midi family, so
+  that apps combine both (ticket 26)
 
 ## Decision
 

@@ -4,15 +4,18 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-engine-contracts.md
   (point 2); decisions/interop-001.md
-- Open work: the defaults chosen in ticket 19 — queues of 1024 parameter
-  changes and 4096 events, a budget of 1024 entries per block, a
-  scheduler of 4096 events with a lookahead of 10 s, note trackers of 256
-  notes — are measured again in S24. Ticket 20 proved the policies with
-  stress tests, reserves a place of the scheduler at the enqueue (a full
-  scheduler refuses there), budgets scheduled events per block and drops
-  a note on that a full tracker cannot hold. It narrowed the retrigger
-  exception to sounding notes: a note on and its own note off at the
-  same time keep their order, swapped they hung the note
+- Refined by: [interop-003](interop-003.md) — event sources for producers
+  other than the Dart proxy
+- Open work: the defaults chosen in ticket 19 — queues of 1024 parameter changes
+  and 4096 events, a budget of 1024 entries per block, a scheduler of 4096
+  events with a lookahead of 10 s, note trackers of 256 notes — are measured
+  again in S24. Ticket 20 proved the policies with stress tests, reserves a
+  place of the scheduler at the enqueue (a full scheduler refuses there),
+  budgets scheduled events per block and drops a note on that a full tracker
+  cannot hold. It narrowed the retrigger exception to sounding notes: a note on
+  and its own note off at the same time keep their order, swapped they hung the
+  note; the engine's own closing of notes (stop, reset, retirement) lifts no
+  sustain pedal, a source's release does (ticket 26)
 
 ## Decision
 

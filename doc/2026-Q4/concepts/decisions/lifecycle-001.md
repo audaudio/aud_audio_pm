@@ -7,23 +7,23 @@
 - Superseded in part by: [lifecycle-002](lifecycle-002.md) — one sample
   cache budget per process instead of per engine; its other decisions
   stand
-- Open work: the recovery numbers on the reference devices; the
-  drift-tracking resampler for duplex streams on two clocks. The default
-  budgets, the sample cache and the cancellable, reference-counted asset
-  loads are built in ticket 25. The states, the handshake with the audio
-  thread and the reprepare sequence are implemented in ticket 19; ticket
-  20 proved the route change under load - the transport keeps its
-  position across a new sample rate and a stop, tracked notes get note
-  offs with the first block after the restart, pending events survive -
-  and added asset references to graph documents; ticket 21 built the
-  behaviour per platform - interruptions, the audio focus, disconnects,
-  route and rate changes, the reset of the media services - with a stream
-  that recovers on its own and holds the renderer until the client
-  acknowledges a new format; ticket 22 put the sequence into `AudEngine`
-  of `aud_audio` - one sequence for format and route changes,
-  interruptions, lost devices and recovery, prepared only while the stream
-  holds the graph - and measured it on an iPad; the numbers of the
-  reference devices are open
+- Open work: the recovery numbers on the reference devices; the drift-tracking
+  resampler for duplex streams on two clocks. The default budgets, the sample
+  cache and the cancellable, reference-counted asset loads are built in ticket
+  25. The states, the handshake with the audio thread and the reprepare sequence
+  are implemented in ticket 19; ticket 20 proved the route change under load -
+  the transport keeps its position across a new sample rate and a stop, tracked
+  notes get note offs with the first block after the restart, pending events
+  survive - and added asset references to graph documents; ticket 21 built the
+  behaviour per platform - interruptions, the audio focus, disconnects, route
+  and rate changes, the reset of the media services - with a stream that
+  recovers on its own and holds the renderer until the client acknowledges a new
+  format; ticket 22 put the sequence into `AudEngine` of `aud_audio` - one
+  sequence for format and route changes, interruptions, lost devices and
+  recovery, prepared only while the stream holds the graph - and measured it on
+  an iPad; the numbers of the reference devices are open; a MIDI port that goes
+  ends its held notes through the release of its event source, and the audio
+  runs on (ticket 26)
 
 ## Decision
 

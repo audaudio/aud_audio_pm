@@ -559,6 +559,41 @@ Gabriel Gatzsche decided:
 - The example of `aud_audio_io` asked for `aud_audio_core ^0.3.0`; it
   asks for `^0.5.0` now.
 
+## Measurements
+
+### Step 5: the paths (2026-10-12)
+
+`integration_test/midi_paths_test.dart` of the example of `aud_audio`: a
+source of the app plays a recorded performance (chords, sustain pedal,
+fast repeats, about 25 events/s) into three event sources at once - the
+native tap, Dart in an isolate with a MIDI engine of its own (one hop),
+the bridge's Dart path behind aud_midi's MIDI isolate (two hops) - one
+minute without the margin, then ten minutes with the page animated and
+garbage collected in the app's isolate group. On iOS the source is a
+CoreMIDI source of a second MIDI host in an isolate of its own (the app's
+own source is no input of the app), on Android the loopback device of
+`aud_midi_android`.
+
+| Ten minutes under load | iOS simulator (5 s) | Android emulator (5 s) | iPhone 16 Pro Max | Galaxy Tab S4 |
+| --- | --- | --- | --- | --- |
+| Callbacks, reported output latency | 512 frames, 10.8 ms | 64 to 960 frames, 108.9 ms | 256 frames, 20.7 ms | 192 frames, 26.7 ms |
+| Native: delay p50 / p99 / p99.9 / max | 0.05 / 0.05 / 0.1 / 0.08 ms | 0.1 / 2.15 / 2.45 / 4.1 ms | 0.1 / 0.25 / 0.35 / 6.4 ms | 0.35 / 1.4 / 5.85 / 29.8 ms |
+| Dart, one hop | 0.15 / 1.9 / 2.0 / 8.4 ms | 0.35 / 9.15 / 19.1 / 19.0 ms | 0.2 / 0.55 / 4.7 / 14.5 ms | 0.95 / 5.5 / 25 / 61.7 ms |
+| Dart, two hops | 0.2 / 9.5 / 10.7 / 10.6 ms | 0.55 / 21.2 / 25.1 / 29.3 ms | 0.2 / 5.25 / 12.2 / 41.3 ms | 1.7 / ≥ 25 / ≥ 25 / 144 ms |
+| Late share: native / one hop / two hops | 0 / 0 / 5.5 % | 0 / 0 / 0 % | (C inflated, see below) | 0.02 / 19.6 / 5.9 % |
+
+- Decision by the rule of scope 4: both Dart paths miss a p99 of 1 ms on
+  both devices, so the native tap is the default (midi-002).
+- C: the iPhone's run held C at 214 ms instead of 27 ms. The graph's
+  longest gap between two renders since the last reset (P of the plan)
+  kept a start-up gap of 177 ms, while the callbacks come every 5.33 ms;
+  the stream's format does not help either (the simulator's callbacks
+  are twice its buffer). P is now the 99.9th percentile of the render gaps
+  (a histogram in the graph's timing), and m is at least 1 ms and grows
+  to the input's own 99.9th percentile of the delivery delay: the tablet
+  delivers with a p99.9 of 5.85 ms, the iPhone with 0.35 ms (midi-003).
+  The runs with the new C follow.
+
 ## Open questions
 
 None open.

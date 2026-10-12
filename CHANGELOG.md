@@ -18,6 +18,12 @@
 
 - aud_midi_standard from two sources, the repos gg added, the commits before gg do add, the end packets of a cut SysEx
 
+- Add the measurements of step 5 and midi-002
+
+- midi-002: external MIDI reaches the audio thread through native taps
+- midi-003 refined: P from the percentile of the render gaps, m per input
+- The open work of midi-001, time-001, interop-002, graph-001, graph-003, lifecycle-001 and repos-001; S8 in the plan of ticket 17; the architecture
+
 ## 0.8.0 - 2026-10-12
 
 ### Added

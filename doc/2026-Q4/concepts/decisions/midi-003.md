@@ -15,12 +15,18 @@
 Every event source has a timing policy. `fixed`, the default for external
 MIDI, lets an event sound at its timestamp plus a constant
 C = P + L + m: L the output latency as the stream reports it (callback to
-first frame out; on iOS it contains a block already), P the longest time
-between two callbacks since the stream started, at least the nominal
-period, and m a margin for the transport inside the device, the residual
-of the time filter and early callbacks (default 1 ms). C is set when the
-source is created and again after every reset of the time filter and every
-restart; when late events grow, the bridge raises C. An event that misses
+first frame out; on iOS it contains a block already); P the 99.9th
+percentile of the gaps between two renders since the last reset of the
+time filter, the stream's period before there are any; m a margin for the
+delivery inside the device, the residual of the time filter and early
+callbacks: at least 1 ms, and the input's own 99.9th percentile of the
+delivery delay once a thousand events measured it. C is set when the
+source is created and again after every reset of the time filter and
+every restart; in between it only grows. The measurements of ticket 26
+replaced the first rule of the plan review - P as the longest gap since
+the start, m fixed at 1 ms: a single start-up gap of 177 ms held the
+iPhone's C at 214 ms, and the Galaxy Tab S4 delivers with a p99.9 of
+5.85 ms where the iPhone needs 0.35 ms. An event that misses
 its target plays at the start of the block and counts as late with its
 lateness. `fixed` events carry no `AUD_EVENT_FLAG_LIVE`, so the lead of the
 path places them at T + C at the output. `immediate` plays an event at the

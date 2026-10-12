@@ -4,8 +4,11 @@
 - Date: 2026-10-08
 - Canonical source: Gabriel Gatzsche's instruction at the plan review on
   2026-10-08 (R35)
-- Open work: the initial version to tag (0.0.1 proposed); the switch to
-  pub.dev versions once the packages are published (S22)
+- Open work: the initial version to tag (0.0.1 proposed); the switch to pub.dev
+  versions once the packages are published (S22). Since ticket 26 the packages
+  of the aud_midi family, which live on pub.dev, are referenced from pub.dev
+  (`aud_midi_standard`, `aud_midi`), so that apps combine both families; the
+  aud_audio packages keep git references with `tag_pattern` until S22
 
 ## Decision
 

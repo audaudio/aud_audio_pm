@@ -107,6 +107,16 @@ event inlets and outlets; all MIDI types come from `aud_midi_standard`
 (midi-001), and per-note controllers of MPE and MIDI 2.0 travel as UMP
 to the nodes and to the note expressions of the plugin shells.
 
+An input port is an `aud.midi.input` node fed by an event source of the
+graph (interop-003): the backend of `aud_midi` calls a native tap on its
+receive thread (native-001), the tap pushes UMP with the host timestamp
+into the source's lock-free queue, and the audio thread plays every event
+at its timestamp plus one period plus the output latency plus 1 ms
+(midi-003, midi-002). An output port is an `aud.midi.output` node whose
+events reach Dart as notifications and leave through `aud_midi` at the
+time their frame reaches the audio output. A port that goes releases its
+notes; one that returns plays again (ports-001).
+
 ## Time, transport and sequencing
 
 The engine's reference clock is the platform's monotonic host time in
