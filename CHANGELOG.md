@@ -7,9 +7,16 @@
 - Add the plan and decisions of ticket 26 (S8, the MIDI bridge)
 
 - Plan of ticket 26: the aud_midi ports as event inlets and outlets of the engine on iOS and Android, with the decisions of the plan review and the findings so far
+
 - interop-003: native producers feed the graph through event sources
+
 - midi-003: external MIDI sounds at a fixed latency of one period plus the output latency plus 1 ms
+
 - The package graph: aud_audio_midi depends on aud_audio and aud_midi
+
+- Add the findings of the implementation of ticket 26
+
+- aud_midi_standard from two sources, the repos gg added, the commits before gg do add, the end packets of a cut SysEx
 
 ## 0.8.0 - 2026-10-12
 

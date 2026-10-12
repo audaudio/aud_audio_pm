@@ -533,6 +533,32 @@ Gabriel Gatzsche decided:
   core and the sampler resolve through their tags, and the example asks for
   `aud_dsp_sampler ^0.2.0`.
 
+- The two families referenced `aud_midi_standard` from two sources: the
+  aud_audio family by git (`aud_audio_core`, the graph's tests,
+  `aud_dsp_sampler`, the umbrella's example), the aud_midi family from
+  pub.dev. pub refuses one package from two sources, so `aud_audio_midi`
+  and every app with both families could not resolve. The user had the
+  needed repos added with `gg do add`: `aud_audio_core`,
+  `aud_dsp_sampler` and `aud_midi_standard` (whose sibling path the
+  examples of the aud_midi family need), and gg added `aud_midi_rtp`
+  between them. The aud_audio family now references `aud_midi_standard`
+  and `aud_midi` from pub.dev, as the aud_midi family does; this deviates
+  from the ticket's rule of git references with `tag_pattern`, which stays
+  for the packages of the aud_audio family (repos-001; the switch of the
+  whole family to pub.dev belongs to S22). `aud_midi_standard` and
+  `aud_midi_rtp` change nothing and leave the ticket before `gg do
+  review` if they stay unchanged.
+- `gg do add` re-localizes every repo of the ticket, runs `pub upgrade`
+  and commits unfinished work under the ticket's title first; the repos are
+  committed with `gg one do commit` before every `gg do add`.
+- The adapter ends a SysEx that the cap or a full queue cuts after some of
+  its packets left with an end packet: SysEx7 `0x3g300000 0`, SysEx8 with
+  the byte count 1 (the stream id; a count of 0 would be malformed for the
+  UMP specification). Only a refused end packet leaves a torn SysEx; both
+  are counted.
+- The example of `aud_audio_io` asked for `aud_audio_core ^0.3.0`; it
+  asks for `^0.5.0` now.
+
 ## Open questions
 
 None open.
