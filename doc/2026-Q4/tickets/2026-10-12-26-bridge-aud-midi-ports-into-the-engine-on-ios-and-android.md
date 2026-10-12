@@ -1,6 +1,7 @@
 # 26: S8 — Bridge aud_midi ports into the engine on iOS and Android
 
-Status: planned 2026-10-12; plan review done 2026-10-12 (decisions below).
+Status: implemented 2026-10-12; plan review done 2026-10-12 (decisions
+below).
 
 ## Goal
 
@@ -482,6 +483,9 @@ Gabriel Gatzsche decided:
   the parser is the bridge's own), `aud_audio_io`, `aud_audio_web`,
   `aud_dsp_sampler` (`^0.5.0` accepts graph 0.5.1), `aud_midi_standard`
   (the Dart types suffice).
+- Removed from the ticket unchanged: `aud_midi_standard` and
+  `aud_midi_rtp`. The examples of `aud_midi` and `aud_midi_android`
+  resolve `aud_midi_standard` from pub.dev.
 
 ## Steps
 
@@ -594,6 +598,17 @@ seqlock, the adapter's close, the detach guarantees on Apple and Android,
 JNI, the clock domains, the C = P + L + m arithmetic, the order of the
 release, the lifetimes from the tap to the engine's dispose, the ABI
 structs.
+
+Review-light of the pull requests (2026-10-12), fixed in the ticket:
+the German READMEs lacked the native taps, and the READMEs the Bluetooth
+system picker, `MidiTimeout` and `MidiBluetoothSystemPicker`; a failed
+detach of a native tap other than a gone port lost the tap, and a tap
+attached while its proxy left stayed attached (aud_midi); the engine's
+dispose told the extensions `engineDisposing` without `engineStopping`
+first (aud_audio); the example asked Android only for the scan, not for
+the connection; the version increments of the changed packages were
+`patch` instead of `minor`; `MidiCompositeBackend` cast where a pattern
+fits; the CHANGELOGs had duplicate entries.
 
 ## Measurements
 

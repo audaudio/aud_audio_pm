@@ -34,6 +34,8 @@
 
 - iPhone and Galaxy Tab S4 meet the budgets; midi-002 with the corrected late shares
 
+- Add review fixes of ticket 26
+
 ## 0.8.0 - 2026-10-12
 
 ### Added
