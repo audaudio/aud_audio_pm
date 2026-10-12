@@ -1,7 +1,8 @@
 # 27: S29a — Play an SFZ instrument from audanika_app on the new engine on iOS and Android
 
-Status: planned 2026-10-12; implemented without a plan review, as the
-user asked (the defaults below answer the open questions).
+Status: implemented 2026-10-13 without a plan review, as the user asked
+(the defaults below answer the open questions); findings and numbers
+below.
 
 ## Goal
 
@@ -71,34 +72,41 @@ aud_midi 0.1.1 on pub.dev) — see tickets 22, 25 and 26:
    the bundle leaves the app. The app never reads the legacy format at
    run time. Per sample set one folder with its WAVs and an
    `instrument.sfz`; per preset of the sound group one folder with
-   `main.sfz` (the channel mapping of the preset with `lochan`/`hichan`)
-   and `external.sfz` (the melody sound on all channels). Regions
+   `channel-<n>.sfz` per mapped MIDI channel and `external.sfz` (the
+   melody sound on all channels), listed in `index.json`. Regions
    reproduce the nearest-root mapping (transposition shifts the key
-   ranges, not the pitch centre), loops, attack and release
-   (`ampeg_*`, sustain 100 %), `linearGain` as `volume`, the legacy
-   velocity curve as `amp_velcurve_N` plus a volume offset.
-2. **Assets.** `content/sfz` ships as Flutter assets and is copied once
-   per content version into the application support directory on a
-   background isolate; the sampler loads from there.
-3. **Engine.** One `AudEngine` with the sampler and the MIDI bridge; two
-   sampler nodes into the output: `main` (on-screen keys, motion
-   sensors, play hints) and `external` (external MIDI). Choosing a sound
-   loads both presets; a failed load keeps the old sound.
-4. **On-screen keys.** The adapter turns the app's MIDI bytes into
-   `AudUmpEvent`s and calls `graph.sendEvent` on `main`; no MIDI isolate
-   on that path.
+   ranges, not the pitch centre), loops, linear attack and release (flex
+   envelope), `linearGain` as `volume`, the legacy velocity curve as
+   `amp_velcurve_N`, CC 7 after the legacy table, the legacy level and a
+   limiter per node (app-001).
+2. **Assets.** As with the legacy engine, nothing is copied. On iOS the
+   Xcode folder reference `content` puts `content/sfz` into the app
+   bundle and the sampler reads it in place. On Android the native assets
+   `assets/content` carry it uncompressed, and `aud_dsp_sampler` reads
+   `apk:/` paths through `AAssetManager` (new in this ticket: a file layer
+   under sfizz for the SFZ, its includes and the samples).
+3. **Engine.** One `AudEngine` with the sampler and the MIDI bridge; one
+   sampler node per mapped channel (on-screen keys, motion sensors, play
+   hints) and one node `external` (external MIDI), all into the output.
+   Choosing a sound loads every node; a failed load keeps the old sound.
+4. **On-screen keys.** A router turns the app's MIDI bytes into
+   `AudUmpEvent`s and calls `graph.sendEvent` on the node of their
+   channel; CC 64 goes to all, CC 120/123 become note offs (app-002); no
+   MIDI isolate on that path.
 5. **External MIDI.** `aud_midi` opens all inputs; the bridge connects
    them to `external` over the native tap (Dart path where no tap
    exists); hot-plug through the bridge.
 6. **MIDI out.** `aud_midi` replaces `flutter_midi_command` for the
    outputs, the virtual ports on iOS and BLE.
-7. **Removal.** `audio_engine`, `flutter_midi_command`, the bundle, the
-   asset symlinks of Android and the folder reference of iOS go;
-   `abiFilters` arm64-v8a and x86_64 on Android.
+7. **Removal.** `audio_engine`, `flutter_midi_command` and the bundle go;
+   the Android assets and the iOS folder reference carry `content/sfz`;
+   `aud_dsp_sampler` builds for `armeabi-v7a` again, so the app keeps its
+   three ABIs.
 8. **Numbers** on the iOS simulator and the Android emulator with an
    integration test of the app: key-to-sound latency, xruns and late
    callbacks over a played minute, process RSS before and after the
-   instrument load, load time (copy and sampler load).
+   instrument load, load time (finding the content and the sampler
+   load).
 
 Out of scope: reverb and delay (S10a, S29b), the instrument reference
 suite and the reference devices (S29b), macOS and the web (no sound
@@ -127,8 +135,9 @@ defaults decide the questions and become decisions where they hold:
 2. External MIDI plays the melody sound of the current preset on every
    channel, on its own node, so that a keyboard on channel 1 does not play
    the contra bass.
-3. Assets are copied, not read from the iOS bundle in place: one path for
-   both platforms.
+3. Both platforms read the instruments in place, as the legacy engine
+   did (the user's instruction of 2026-10-12): iOS from the bundle,
+   Android from the APK through `AAssetManager`; no copy.
 4. Velocity follows the legacy curve, not the sfizz default, so that the
    app sounds as before at velocity 76.
 
@@ -137,13 +146,17 @@ defaults decide the questions and become decisions where they hold:
 - `audanika_app`: converter, SFZ content, engine service, MIDI on
   `aud_midi`, removal of the legacy engine, tests, numbers.
 - `aud_audio_pm`: this plan, decisions, findings, issues.md.
-- `aud_audio`, `aud_audio_midi`, `aud_dsp_sampler`, `aud_midi`: only if
-  the integration finds a defect; otherwise they leave the ticket.
+- `aud_dsp_sampler`: `apk:/` paths read from the APK's assets on Android
+  (sampler-004), the `armeabi-v7a` build, and the defects the integration
+  found (see Findings).
+- `aud_audio`, `aud_audio_midi`, `aud_midi`: unchanged. gg keeps them in
+  the ticket because they connect the app to its other repos; they get no
+  commits and are not published (family-002).
 
 ## Steps
 
 1. Write the converter and generate `content/sfz`; test it on the bundle.
-2. Add the engine service and the asset copy; play the keys through it.
+2. Add the engine service; play the keys through it.
 3. Move the MIDI outputs, virtual ports and BLE onto `aud_midi`; add the
    inputs over the bridge.
 4. Remove `audio_engine`, `flutter_midi_command` and the bundle; fix the
@@ -151,9 +164,69 @@ defaults decide the questions and become decisions where they hold:
 5. Build and play on the iOS simulator and the Android emulator; measure.
 6. Write the findings into decisions and this plan; review; publish.
 
+## Findings
+
+- sfizz ignores `lochan`/`hichan` and the sampler node drops the MIDI
+  channel, so a preset is one instrument per channel (app-001, app-002).
+- sfizz releases exponentially; the legacy engine linearly. A flex
+  envelope reproduces the legacy curves (release −6.02 dB after 1 s of
+  2 s, attack −6.02 dB at half the time).
+- sfizz cuts all voices on CC 120/123; the app turns them into note offs.
+- Five notes at velocity 76 clipped (peak 1.0015 on iOS, 1.012 on
+  Android). sfizz's `limiter` has no look-ahead (a chord reached 1.17);
+  its compressor at attack 0 holds every node below −0.5 dBFS. A limiter
+  on the sum of the nodes is open work for S10a.
+- The sample store keyed samples by their raw path, so presets did not
+  share samples; it keys them by the lexically normal path now.
+- `aud_dsp_sampler` did not build for `armeabi-v7a`: the vendored Abseil
+  20240116.0 lacked `int128_no_intrinsic.inc` and `int128.cc`. Both are
+  added; the hook links with `--no-undefined` on Android, so a missing
+  symbol fails the build instead of the app's start.
+- Fixed in the fork: a text with only a comment failed to load; the gain
+  effect, Rectify and Width failed on blocks shorter than the largest;
+  comp and gate with stereo link read the wrong sample (upstream typo);
+  `sustain_sw`/`sostenuto_sw` were swapped (upstream); a stolen voice
+  with a flex envelope played its whole release; the node's tail ignored
+  a flex envelope.
+- The pedal releases at the frame of CC 64 = 0, like a note off. sfizz
+  holds from CC 64 = 1 (`sustain_lo`), as the legacy engine did.
+- The RSS rise of +146 MB during a played minute on the iOS simulator was
+  the MIDI start (a CoreMIDI client and the MIDI isolate, about 760 ms)
+  landing after the measurement point. With `midiReady` the minute adds
+  28 MB; malloc and the cache stay flat over five minutes.
+- `aud_midi_linux` 0.1.1 requires `dbus ^0.7.15`, which clashes with
+  `connectivity_plus` 7.3.2 (`dbus ^0.8.0`); the app stays on
+  `connectivity_plus` 7.3.1. Open for the aud_midi family:
+  `dbus ">=0.7.15 <0.9.0"`.
+- `aud_dsp_sampler` gained an Android plugin (a ContentProvider that hands
+  the `AssetManager` to the native library); its example app needed its
+  own application id.
+
+## Measurements
+
+Debug builds, 60 s of play on channels 0 to 2 at velocity 76
+(`integration_test/sound_numbers_test.dart`), preset Welcome_Combi:
+
+| | iOS simulator (iPhone 17 Pro) | Android emulator (API 36, arm64) |
+| --- | --- | --- |
+| Content found (no copy) | 15 ms | 101 ms |
+| Load of the preset | 28 ms | 59 ms |
+| RSS: load | +21 MB | +16 MB |
+| RSS: played minute | +31 MB | +13 MB |
+| Sample cache: load, end | 2.3 MB, 15.4 MB | 2.3 MB, 15.4 MB |
+| Key to sound (min, mean, max) | 15.4, 18.6, 20.2 ms | 106.7, 112.7, 128.2 ms |
+| Block, output latency | 256, 10.8 ms | 1920, 106.9 ms |
+| Xruns, late callbacks | 0, 0 | 0, 809 |
+| Render time (mean, max) | 1.45, 1.87 ms | 1.54, 7.16 ms |
+| Output peak | 0.999 | 0.955 |
+
+The emulator's block of 1920 frames sets its latency, as in tickets 22 and
+26. The reference devices follow in S29b.
+
 ## Open questions
 
-None open; see the defaults above.
+None open; see the defaults above. Open work is listed in app-001,
+app-002 and sampler-004.
 
 ## Rests on
 

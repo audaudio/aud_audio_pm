@@ -7,6 +7,12 @@
 - Add the plan of ticket 27 (S29a, audanika_app on the new engine)
 - Plan the SFZ conversion, the engine service, MIDI on aud_midi and the removal of audio_engine
 - Add ticket 27 to doc/issues.md and raise the counter to 28
+- Add the decisions, findings and numbers of ticket 27
+- sampler-004: the sampler reads Android assets in place
+- app-001: the sounds of the Audanika app are rebuilt once as SFZ
+- app-002: the app routes its MIDI to one sampler node per channel
+- Findings and measurements of the iOS simulator and the Android emulator in the plan
+- Ticket 27 is implemented in doc/issues.md
 
 ## 0.9.0 - 2026-10-12
 
