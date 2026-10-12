@@ -28,7 +28,11 @@ path's p99 delivery delay exceeds the margin of 1 ms or its late share
 | Native tap: delivery delay p50 / p99 / p99.9 / max | 0.1 / 0.25 / 0.35 / 6.4 ms | 0.35 / 1.4 / 5.85 / 29.8 ms |
 | Dart, one hop: p50 / p99 / p99.9 / max | 0.2 / 0.55 / 4.7 / 14.5 ms | 0.95 / 5.5 / 25 / 61.7 ms |
 | Dart, two hops (today's API): p50 / p99 / p99.9 / max | 0.2 / 5.25 / 12.2 / 41.3 ms | 1.7 / ≥ 25 / ≥ 25 / 144 ms |
-| Late share at the same C: native / one hop / two hops | 0.03 / 0.06 / 0.03 % | 0.02 / 19.6 / 5.9 % |
+| Late share at the same C: native / one hop / two hops | 0.35 / 0.59 / 2.4 % | 0.02 / 19.6 / 5.9 % |
+
+Through the bridge, ten minutes after a twenty-minute warm-up, the native
+tap played 0 late events on the iPhone (C 27.3 ms constant) and 0.05 % on
+the tablet (C 41.7 ms, jitter below 1.5 ms).
 
 ## Why
 

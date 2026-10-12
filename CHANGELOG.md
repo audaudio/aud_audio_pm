@@ -30,6 +30,10 @@
 
 - The code review findings, the keyboard session on iPhone and tablet, midi-003 refined
 
+- Add the long runs of ticket 26
+
+- iPhone and Galaxy Tab S4 meet the budgets; midi-002 with the corrected late shares
+
 ## 0.8.0 - 2026-10-12
 
 ### Added

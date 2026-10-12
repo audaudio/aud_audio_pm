@@ -630,6 +630,33 @@ own source is no input of the app), on Android the loopback device of
   delivers with a p99.9 of 5.85 ms, the iPhone with 0.35 ms (midi-003).
   The runs with the new C follow.
 
+### The long runs (2026-10-12)
+
+`integration_test/midi_test.dart`: a recorded performance from a source of
+the app through the bridge (native path, `fixed`) into the sampler, the
+page animated, 20 minutes of warm-up, then 10 measured minutes.
+
+| | iPhone 16 Pro Max | Galaxy Tab S4 |
+| --- | --- | --- |
+| Events | 14562 | 12299 |
+| Late | 0 | 0.05 % (6, at most 4.7 ms) |
+| Delivery p50 / p99 / p99.9 | 0.05 / 0.15 / 0.15 ms | 0.55 / 3.4 / 6.2 ms |
+| C = P + L + m | 27.3 ms (5.6 + 20.7 + 1) | 41.7 ms (5.6 + 30.3 + 5.6) |
+| Input to output p50 / p99 | 27.5 / 27.5 ms | 41.75 / 43.0 ms |
+| Xruns, late callbacks | 0, 0 | 0, 3703 |
+| Render max | 1.37 ms | 6.0 ms |
+
+Both meet the budgets: a constant latency of one block plus the output
+latency plus the transport, at most 0.1 % late events, no xrun over ten
+minutes after the warm-up. The tablet's late callbacks are its known
+weakness (S24).
+
+- `aud_dsp_sampler` does not build for 32-bit ARM (`armeabi-v7a`): its
+  Abseil copy lacks `int128_no_intrinsic.inc`; the device runs build
+  arm64 only. Open for the sampler.
+- `permission_handler` 13 needs Android SDK platform 37; the example takes
+  12.
+
 ### The keyboard session (2026-10-12)
 
 `integration_test/midi_keyboard_test.dart` with the user playing a Roland
