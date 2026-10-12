@@ -15,8 +15,7 @@
     },
     "aud_midi": {
       "git": "https://github.com/audmidi/aud_midi.git",
-      "version": "^0.1.0",
-      "deferred": "added when audmidi/aud_midi has a tag"
+      "version": "^0.1.0"
     }
   },
   "packages": [
@@ -101,7 +100,7 @@
     },
     {
       "name": "aud_audio_midi",
-      "template": "dart",
+      "template": "ffi",
       "description": "MIDI bridge of the Audanika Audio Engine: aud_midi ports as event inlets and outlets of the graph",
       "platforms": [
         "ios",
@@ -112,7 +111,8 @@
         "web"
       ],
       "deps": [
-        "aud_audio_graph"
+        "aud_audio",
+        "aud_midi"
       ]
     },
     {

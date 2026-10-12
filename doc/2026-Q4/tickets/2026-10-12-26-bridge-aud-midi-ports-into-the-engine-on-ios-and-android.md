@@ -511,6 +511,28 @@ Gabriel Gatzsche decided:
     ABI; fixes; publish configs; commits per repo; `gg do push`; after the
     user's confirmation `gg do review`, then review-light; fixes.
 
+## Findings
+
+- `gg do add` brought six more repos into the ticket, the ones between its
+  repos in the dependency graph: `aud_audio_io` and `aud_audio_web`
+  (between the umbrella and the graph) and `aud_midi_linux`,
+  `aud_midi_network`, `aud_midi_web` and `aud_midi_windows` (between
+  `aud_midi` and `aud_midi_core`). They need a publish config before
+  `gg do review`. It also committed the plan files that were open in
+  `aud_audio_pm`, under the ticket's title.
+- The bridge implements the umbrella's extension point and reads its
+  timing, so `aud_audio_midi` depends on `aud_audio` and `aud_midi`
+  (`architecture/packages.jsonc`, `img/package-graph.mmd`); the
+  umbrella keeps its dependencies (decision 5).
+- `AudEngine.dispose` is synchronous, but a tap detaches through the
+  MIDI isolate. The adapter of `aud_audio_midi` therefore closes
+  synchronously first: after its close the tap never touches the source
+  again, so the engine may free the graph before the detach completes.
+- The example's `pubspec_overrides.yaml` still pointed at the checkouts of
+  ticket 25 (core, the sampler); it names the repos of this ticket now,
+  core and the sampler resolve through their tags, and the example asks for
+  `aud_dsp_sampler ^0.2.0`.
+
 ## Open questions
 
 None open.
