@@ -13,6 +13,8 @@
 - app-002: the app routes its MIDI to one sampler node per channel
 - Findings and measurements of the iOS simulator and the Android emulator in the plan
 - Ticket 27 is implemented in doc/issues.md
+- Add the results of the code review of ticket 27
+- Three findings fixed, four left open with their reasons
 
 ## 0.9.0 - 2026-10-12
 

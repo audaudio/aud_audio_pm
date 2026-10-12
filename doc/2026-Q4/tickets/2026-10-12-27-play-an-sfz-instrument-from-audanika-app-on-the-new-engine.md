@@ -202,6 +202,23 @@ defaults decide the questions and become decisions where they hold:
   the `AssetManager` to the native library); its example app needed its
   own application id.
 
+## Code review
+
+`/code-review` at high effort (2026-10-13) found seven points. Fixed: a
+preset that loads on some nodes and fails on others now brings the
+previous preset back on all of them; an unknown default preset no longer
+recurses; the fade of a turned-off voice no longer computes a stage
+number from the points of its flex envelope (not reachable today,
+hardened). Open:
+
+- The +7.35 dB gain effect in every SFZ file undoes sfizz's internal synth
+  volume; a limiter on the sum (S10a) or a node that sets the synth volume
+  would remove it, and the per-node limiters that run on idle nodes too.
+- Every store key of an `apk:/` sample opens the asset once more;
+  compressed assets are inflated on every open (sampler-004).
+- The sounds extension waits for presets forever when the engine has no
+  content; the legacy engine behaved the same.
+
 ## Measurements
 
 Debug builds, 60 s of play on channels 0 to 2 at velocity 76
