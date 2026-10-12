@@ -559,6 +559,42 @@ Gabriel Gatzsche decided:
 - The example of `aud_audio_io` asked for `aud_audio_core ^0.3.0`; it
   asks for `^0.5.0` now.
 
+## Code review
+
+`/code-review` at high effort on the event path, the timing and the C ABI
+(Claude Fable 5.1, 2026-10-12), every finding verified against the code:
+
+1. Important: a reset of the time filter recorded the gap that caused it
+   as the first sample of the new histogram of render gaps; for about a
+   thousand renders P read 51.3 ms, and C, which only grows between
+   resets, stayed there (graph).
+2. The audio thread set a retired source's `done` before it cleared its
+   slot: a source created into the same slot in between could be cleared
+   (graph).
+3. Apple: a slot leaked by a timed-out detach shadowed a later tap of the
+   same reference constant.
+4. The release of several sources in one block could overflow the block's
+   event table with note offs and pedals (graph).
+5. Zombie event routes revived an edge the same transaction disconnected
+   (graph).
+6. `openInput(path: native)` fell back to Dart silently; a failed forced
+   attach left a half-attached input (bridge).
+7. GONE did not reset the SysEx state of the UMP path (bridge adapter).
+8. A closed MIDI proxy throws `StateError` on detach, which stopped
+   `AudMidiBridge.close` (bridge).
+9. `aud_graph_timing` failed after 16 torn reads instead of taking the
+   last one (graph).
+10. The input's statistics read the native statistics twice (bridge).
+11. Outside the focus: the notices checks of `aud_audio_midi`,
+    `aud_midi_apple` and `aud_midi_android` used ESM imports without
+    `"type": "module"`.
+
+Verified as correct: the SPSC queue and the hand-over of producers, the
+seqlock, the adapter's close, the detach guarantees on Apple and Android,
+JNI, the clock domains, the C = P + L + m arithmetic, the order of the
+release, the lifetimes from the tap to the engine's dispose, the ABI
+structs.
+
 ## Measurements
 
 ### Step 5: the paths (2026-10-12)
@@ -593,6 +629,32 @@ own source is no input of the app), on Android the loopback device of
   to the input's own 99.9th percentile of the delivery delay: the tablet
   delivers with a p99.9 of 5.85 ms, the iPhone with 0.35 ms (midi-003).
   The runs with the new C follow.
+
+### The keyboard session (2026-10-12)
+
+`integration_test/midi_keyboard_test.dart` with the user playing a Roland
+GO:KEYS (USB, and Bluetooth LE MIDI), guided by prompts on the page; the
+iPhone over the network (`flutter drive --publish-port`), the tablet over
+adb on Wi-Fi with the keyboard on an OTG adapter.
+
+| | iPhone 16 Pro Max | Galaxy Tab S4 |
+| --- | --- | --- |
+| USB, playing | 8310 events in 10 min, delivery p50 0.05 ms, p99 0.1 ms; the GO:KEYS was also the audio output (L 6.4 ms); C inflated to 82.7 ms by the reset gap in P (code review 1, fixed since) | 7488 events in 10 min, 0.15 % late (at most 6.4 ms), delivery p99 2.3 ms, input to output 42.25 / 44.75 ms (p50 / p99), 0 xruns, 5180 late callbacks |
+| Hot-plug with a held chord and the pedal | silent 25 ms after the port went offline; playing again 9 ms after it returned under its id | silent 1184 ms after the removal (with the release of the instrument); playing again 162 ms after it returned under a new id, found by its fingerprint |
+| Bluetooth LE MIDI, 60 s | after the fix: 41.5 ms constant at m = 15 ms, 5 % late (delivery p99 18.1 ms) | 48.5 / 51.25 ms (p50 / p99), 22 % late by at most 3.3 ms at m = 15 ms (delivery p99 21.5 ms) |
+
+- On iOS the pairing of the GO:KEYS through aud_midi's own CoreBluetooth
+  path got stuck ("Now Pairing"); `aud_midi_apple` now presents Apple's
+  `CABTMIDICentralViewController` (`MidiBluetooth.showSystemDevicePicker`)
+  and its own path repeats the activation while it waits. The user had this
+  fix done by Claude Opus at low effort (a deviation from process-002).
+- Bluetooth LE MIDI carries the sender's timestamps, delivered 10 to 20 ms
+  later: its inputs start at m = 15 ms and calibrate up to 30 ms (25 ms with
+  the histogram's range); within one minute neither reached its 1000 events.
+- Android 10 needs the location permission for a BLE scan; the page asks
+  for it (`permission_handler`, example only).
+- The app as a Bluetooth peripheral is not supported by aud_midi; open work
+  in native-001.
 
 ## Open questions
 

@@ -26,7 +26,13 @@ every restart; in between it only grows. The measurements of ticket 26
 replaced the first rule of the plan review - P as the longest gap since
 the start, m fixed at 1 ms: a single start-up gap of 177 ms held the
 iPhone's C at 214 ms, and the Galaxy Tab S4 delivers with a p99.9 of
-5.85 ms where the iPhone needs 0.35 ms. An event that misses
+5.85 ms where the iPhone needs 0.35 ms. The keyboard session refined it
+further: C follows the current P + L + m in both directions (a USB audio
+route changed L from 20.7 to 6.4 ms); m grows to the input's p99.9 delivery
+delay at most up to one period, so a burst of old timestamps when a
+keyboard's port opens plays late instead of delaying every note; a Bluetooth
+LE input, whose packets carry the sender's timestamps, starts at m = 15 ms
+and calibrates up to 30 ms. An event that misses
 its target plays at the start of the block and counts as late with its
 lateness. `fixed` events carry no `AUD_EVENT_FLAG_LIVE`, so the lead of the
 path places them at T + C at the output. `immediate` plays an event at the
