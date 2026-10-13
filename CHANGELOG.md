@@ -46,6 +46,9 @@
 - Ticket 29: a voice budget per device that follows the load, so that playing hard never drops out
 - Ticket 30: faster sampler voices with SIMD on ARM, a voice loop over the sounding voices only, and the audio thread on the big cores
 - Add both to doc/issues.md and raise the counter to 31; S9b and S9c in the plan of ticket 17
+- Add sampler-007: the sfizz fork may change its output within the golden tolerance
+- Optimizations of the fork may change the samples by up to 1e-5 of full scale; the bit-exact rule of sampler-006 is superseded
+- The plan of ticket 30 takes the tolerance; its first open question is answered
 
 ## 0.10.0 - 2026-10-13
 

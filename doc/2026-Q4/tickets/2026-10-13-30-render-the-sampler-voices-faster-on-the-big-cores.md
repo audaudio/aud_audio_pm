@@ -36,8 +36,9 @@ sampler-006 and app-004):
   `AudEffectsBench` on the test's thread (io-002 open work). Oboe 1.11
   offers `setPerformanceHintEnabled` (ADPF), which needs Android 12; the
   tablet runs Android 10.
-- sampler-006: performance changes to the fork keep its output bit for bit
-  unless their own decision says otherwise.
+- sampler-007 (2026-10-13, superseding sampler-006): performance changes
+  to the fork may change its output within the golden tolerance of 1e-5
+  of full scale.
 
 ## Scope
 
@@ -49,16 +50,15 @@ sampler-006 and app-004):
    the hook for arm64 and armv7 (and SSE where they exist on x86_64),
    check which operations have NEON code and which are worth writing
    (gain, gain1, multiply-add, pan, the interpolation's inner loop).
-   SIMD changes the rounding; a decision allows a documented tolerance
-   against the golden of sampler-006 (e.g. 1e-6), or keeps bit-exactness
-   where it holds.
+   SIMD changes the rounding, which sampler-007 allows within 1e-5 of full
+   scale against the golden of the release before.
 3. **The voice loop** (`aud_dsp_sampler`, the sfizz fork): a list of the
    sounding voices so that `isFree` and the per-block loops visit only
    those; the flex envelope rendered per segment instead of per sample
    where its shape allows; panning and the gains of a voice fused into one
    pass; the interpolation's common case — no pitch modulation within the
    block — with a constant step. Each with the reference tests of
-   sampler-006.
+   sampler-006, compared within the tolerance of sampler-007.
 4. **The audio thread on the big cores** (`aud_audio_io`, the Oboe
    backend): on Android 12 and later the performance hint of Oboe (ADPF)
    with the work of each callback reported; before Android 12 an affinity
@@ -79,8 +79,8 @@ sampler-006 and app-004):
   minor version.
 - `aud_audio_io`: the performance hint and the affinity on Android; a
   minor version.
-- `aud_audio_pm`: this plan and the decisions (a SIMD tolerance,
-  io-003).
+- `aud_audio_pm`: this plan and the decisions (io-003; the tolerance is
+  sampler-007).
 - `audanika_app`: only if the app must opt in (e.g. sustained performance
   mode of its window).
 
@@ -95,8 +95,8 @@ sampler-006 and app-004):
 
 ## Open questions
 
-1. May SIMD change the output within a tolerance (and which), or must the
-   fork stay bit-exact (sampler-006)?
+1. Answered on 2026-10-13: SIMD and the other changes may change the
+   output within 1e-5 of full scale (sampler-007).
 2. Pinning the audio thread to cores is discouraged by Android's audio
    guidelines; accept it on Android 10 and 11 only, as a fallback where
    the performance hint does not exist?
@@ -114,5 +114,5 @@ The standing rules of process-005.
 
 ## Rests on
 
-io-001, io-002, sampler-002, sampler-006, lifecycle-001, interop-001,
+io-001, io-002, sampler-002, sampler-006, sampler-007, lifecycle-001, interop-001,
 process-004, process-005; the measurements of ticket 28.

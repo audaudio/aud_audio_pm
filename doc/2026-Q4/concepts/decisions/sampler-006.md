@@ -1,6 +1,6 @@
 # sampler-006: Optimizations of the sfizz fork keep its output bit for bit
 
-- Status: accepted
+- Status: superseded
 - Date: 2026-10-13
 - Canonical source: tickets/2026-10-13-28-build-reverb-delay-and-a-master-limiter.md
   (Measurements, Galaxy Tab S4: the user's request to make the MIDI flush
@@ -9,8 +9,9 @@
 - Refines: [sampler-002](sampler-002.md) — changes in place with
   "Modified by Audanika" notes; [sampler-005](sampler-005.md) — the
   shared state stays thread-safe
-- Open work: the voice loop (interpolation, flex envelopes, panning,
-  `Voice::isFree`), which now dominates on small cores
+- Superseded by: [sampler-007](sampler-007.md) on 2026-10-13 — output
+  may change within the golden tolerance; the optimizations stay
+- Open work: none; the voice loop is planned in ticket 30
 
 ## Decision
 
