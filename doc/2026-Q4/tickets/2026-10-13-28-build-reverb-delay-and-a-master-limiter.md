@@ -128,6 +128,11 @@ modulation and distortion of S10b.
   tests and numbers; a minor version.
 - `aud_audio_pm`: this plan, process-004 and process-005, the decisions of
   the findings, `issues.md`.
+- `aud_midi_windows`: joined on 2026-10-13 with the user's consent, because
+  `flutter run --release` of the app failed on Android and on a hardware
+  iPad (see Findings); 0.1.2 (patch). `aud_midi` and `aud_audio_midi` came
+  with it, as gg keeps the repos between it and the app; they carry only
+  gg's own changes (references, DNA, the helix dev dependency).
 - `aud_dsp_sampler`: joined on 2026-10-13 with the user's consent after
   the app crashed in the measurement: thread safety of the shared state
   (sampler-005) and, on the user's request, a faster MIDI flush,
@@ -200,6 +205,17 @@ asking the user.
   dr_flac and dr_mp3. All are fixed in `aud_dsp_sampler` 0.3.1 with tests
   that fail under ThreadSanitizer, or crash, without the fixes
   (sampler-005).
+- **Release builds of the app failed** on Android and iOS, since ticket
+  27 already: the AOT snapshotter stopped with "Unexpected object (Class
+  with illegal cid, full-aot) … win32 … DNS_SERVICE_INSTANCE" (Dart
+  3.13.4). `aud_midi_windows` 0.1.1 names win32's struct in the signature
+  of the DNS-SD completion callback (`NativeCallable`), which the app
+  reaches only as an unused tear-off through `aud_midi`'s lazy advertiser;
+  AOT then drops the struct class but keeps the signature. 0.1.2 passes
+  void pointers and casts in Dart; a test compiles the backend with
+  `dart compile exe` and failed before the fix. The release builds then
+  ran on the Galaxy Tab S4 and on the user's iPad (`flutter run
+  --release`, 2026-10-14). A bug report for the Dart SDK is open work.
 - **DunneAudioKit's StereoDelay mixes inverted:** `(1 - mix) * wet +
   mix * dry`, so mix 1 is dry. The port renders 0 dry, 1 wet (dsp-002).
 - **Denormals.** Freeverb's `undenormalise` reads a float through an

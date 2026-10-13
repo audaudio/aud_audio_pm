@@ -55,6 +55,9 @@
 - Add the reference devices and the answers for tickets 29 and 30
 - release-004: Galaxy Tab S4, iPad Pro (M5) and iPhone 16 Pro Max are the reference devices
 - Ticket 29 first, then ticket 30; more battery drain on the big cores is accepted
+- Add the release-build fix of the app to ticket 28
+- aud_midi_windows joined the ticket: void pointers in the DNS-SD callback, so that AOT release builds compile
+- The release builds ran on the Galaxy Tab S4 and on the user's iPad
 
 ## 0.10.0 - 2026-10-13
 
