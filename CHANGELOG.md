@@ -14,6 +14,11 @@
 - dsp-003: the master limiter looks ahead 1.5 ms and never exceeds its ceiling
 - app-003: an app plays through a master delay, reverb and limiter with effects per preset
 - The open work of dsp-001, license-003 and app-001 points to the new decisions
+- Add the findings and numbers of ticket 28
+- The measurements of the effects and the master chain on the iOS simulator and the Android emulator
+- sampler-005: the state all synths of a process share is thread-safe
+- aud_dsp_sampler joined the ticket for the race that crashed the measurement
+- process-005: commit every repo before gg do add adds another one
 
 ## 0.10.0 - 2026-10-13
 

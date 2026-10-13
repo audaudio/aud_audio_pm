@@ -35,6 +35,9 @@ unless its plan records a deviation the user asked for:
   "Add", details as "- " bullets, no Co-Authored-By trailer. Commit
   messages, merge messages and changelog lines name no repo of
   `audanika-legacy` or `audanika-private`. `CHANGELOG.md` belongs to gg.
+- **Adding a repo.** Every repo is committed before `gg do add` adds
+  another one: its localize step commits the uncommitted work of every
+  repo with the ticket title as the message (found in ticket 28).
 - **Publish config.** Every repo of the ticket has
   `.gg/publish_config.json` with `mergeMessage` and `versionIncrement`
   before `gg do review`.
