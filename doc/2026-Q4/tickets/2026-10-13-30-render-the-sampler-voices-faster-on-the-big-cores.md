@@ -61,8 +61,9 @@ sampler-006 and app-004):
    sampler-006, compared within the tolerance of sampler-007.
 4. **The audio thread on the big cores** (`aud_audio_io`, the Oboe
    backend): on Android 12 and later the performance hint of Oboe (ADPF)
-   with the work of each callback reported; before Android 12 an affinity
-   of the callback thread to the fastest cluster, found from
+   with the work of each callback reported; on Android 10 and 11 (accepted
+   by the user on 2026-10-13) an affinity of the callback thread to the
+   fastest cluster, found from
    `cpuinfo_max_freq` of every core and set once from inside the first
    callback, with a fallback when the system refuses it; measured against
    battery and heat. On iOS the audio workgroup of the stream, if the
@@ -97,9 +98,10 @@ sampler-006 and app-004):
 
 1. Answered on 2026-10-13: SIMD and the other changes may change the
    output within 1e-5 of full scale (sampler-007).
-2. Pinning the audio thread to cores is discouraged by Android's audio
-   guidelines; accept it on Android 10 and 11 only, as a fallback where
-   the performance hint does not exist?
+2. Answered on 2026-10-13: pinning the audio thread to the big cores is
+   accepted on Android 10 and 11, where the performance hint does not
+   exist; Android 12 and later use the performance hint (to be recorded in
+   io-003).
 3. Does the app accept more battery drain on the big cores while it plays,
    and only while it plays?
 4. Order with ticket 29: limit the voices first (no drop-outs), then speed

@@ -49,6 +49,9 @@
 - Add sampler-007: the sfizz fork may change its output within the golden tolerance
 - Optimizations of the fork may change the samples by up to 1e-5 of full scale; the bit-exact rule of sampler-006 is superseded
 - The plan of ticket 30 takes the tolerance; its first open question is answered
+- Add the answers to the open questions of ticket 30
+- SIMD may change the output within the tolerance of sampler-007
+- The audio thread may be pinned to the big cores on Android 10 and 11
 
 ## 0.10.0 - 2026-10-13
 
