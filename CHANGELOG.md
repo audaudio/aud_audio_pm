@@ -30,6 +30,10 @@
 - Record S10a (ticket 28) and S29a (ticket 27) as built in the plan of ticket 17, with their results
 - Wrap a line of app-003 at 80 characters
 - Correct the code review in the plan and add the results of review-light
+- Add the numbers of the Galaxy Tab S4 to ticket 28
+- The render time of every node, the effects example and the app's dense chords on a real tablet
+- A profile of the audio thread: the sampler's controller events and per-node compressors dominate, the effects take 5.8 %
+- app-003 and io-002 name the cost of the per-node limiters and the audio thread on the small cores
 
 ## 0.10.0 - 2026-10-13
 

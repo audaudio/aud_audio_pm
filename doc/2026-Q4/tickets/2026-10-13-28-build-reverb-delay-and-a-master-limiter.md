@@ -318,7 +318,61 @@ spread of the sampler's render time between two runs, so the difference
 with and without the chain is noise on both platforms.
 
 The emulator's late callbacks come with and without the effects, as in
-tickets 22 to 27. The reference devices follow in S29b.
+tickets 22 to 27.
+
+### Galaxy Tab S4
+
+On 2026-10-13 the user connected a Samsung Galaxy Tab S4 (SM-T830,
+Snapdragon 835, Android 10, arm64; debug builds, the native code
+optimized). Oboe opened 48 kHz with a buffer of 384 frames and blocks of
+about 180 frames; the device reports an output latency of 21.5 ms.
+
+Render time per node (`AudEffectsBench` on the test's thread, mean per
+block; p99 in brackets) — about ten times the simulators:
+
+| Node | 180 frames | 256 frames | Share of the block |
+| --- | --- | --- | --- |
+| freeverb | 32.1 µs (39.1) | 45.4 µs (53.0) | 0.86 % |
+| plate | 27.9 µs (34.0) | 39.6 µs (46.9) | 0.74 % |
+| stereo_delay | 15.5 µs (21.1) | 22.1 µs (28.6) | 0.41 % |
+| tempo_delay | 15.6 µs (21.6) | 22.0 µs (28.0) | 0.41 % |
+| limiter | 10.4 µs (11.4) | 14.8 µs (19.9) | 0.28 % |
+| tremolo | 1.9 µs (2.0) | 2.6 µs (2.8) | 0.05 % |
+
+The example, 60 s each: the chord through delay → plate → limiter at
++12 dB peaks at 0.891251 with 0 xruns (581 late callbacks, 538 dry); the
+render mean is 735 µs against 152 µs dry, so the chain costs 583 µs per
+block on the audio thread — 15.5 % of a 3.75 ms block, ten times its
+bench. The limiter's latency is 72 frames, the offline impulse 72.
+
+The app, dense chords for 60 s per preset (bass, an eight-note chord and
+melody at velocity 127 with sustain — a stress test):
+
+| | With the chain, per preset | Without the chain |
+| --- | --- | --- |
+| Output peak | 0.891251 (−1.0 dBFS) | 2.386 (+7.6 dBFS) |
+| Xruns | 1068 to 3674 | 3572 |
+| Late callbacks | 1971 to 7940 | 7779 |
+| Render mean, max | 3.65 to 6.63 ms, 8.2 to 10.5 ms | 6.44 ms, 9.97 ms |
+
+The limiter holds the ceiling, and the chain adds 0.19 ms to the mean; the
+tablet cannot render the stress test on four sampler nodes with or
+without it. A profile of the audio thread (`simpleperf`, the debuggable
+app, first preset) shows where the time goes: 68 % in the sampler, of it
+about a third in `sfz::MidiState::flushEvents` (the controller events of
+every node, every block); 17 to 25 % in libm — `powf`, `exp2f` and
+`log10f`, the per-sample `pow(10, …)` and `log10` of sfizz's compressor
+(`effects/gen/compressor.hxx`), which every SFZ file of the app runs as
+its limiter per node, on idle nodes too (app-001); 5.8 % in the effects.
+The audio thread (`AudioTrack`, SCHED_FIFO 2, cpuset top-app) ran on the
+small cores 0 to 3 in every sample.
+
+Consequences, open work of S29b and S24: the per-node limiters can go now
+that the master limiter guards the sum (app-001, app-003), which frees a
+fifth of the audio thread; `flushEvents` of the sfizz fork costs per node
+and block whether a node plays or not; the audio thread's placement on
+the small cores (io-002) explains the gap between the bench and the live
+render time. The other reference devices follow in S29b.
 
 ## Open questions
 
