@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.10.0 - 2026-10-13
+
+### Added
+
+- Add the plan of ticket 27 (S29a, SFZ instruments of an app on the new engine)
+- Plan the SFZ conversion, the engine service, MIDI on aud_midi and the removal of the legacy engine
+- Add ticket 27 to doc/issues.md and raise the counter to 28
+- Add the decisions, findings and numbers of ticket 27
+- sampler-004: the sampler reads Android assets in place
+- app-001: the sounds of a legacy app are rebuilt once as SFZ
+- app-002: an app routes its MIDI to one sampler node per channel
+- Findings and measurements of the iOS simulator and the Android emulator in the plan
+- Ticket 27 is implemented in doc/issues.md
+- Add the results of the code review of ticket 27
+- Three findings fixed, four left open with their reasons
+- Add the review results to the plan of ticket 27
+- aud_audio and aud_midi get patch releases for their examples
+- The issue title names no repo
+
 ## 0.9.0 - 2026-10-12
 
 ### Added
