@@ -129,8 +129,10 @@ modulation and distortion of S10b.
 - `aud_audio_pm`: this plan, process-004 and process-005, the decisions of
   the findings, `issues.md`.
 - `aud_dsp_sampler`: joined on 2026-10-13 with the user's consent after
-  the app crashed in the measurement: a lock for the shared curves of the
-  flex envelopes (see Findings); 0.3.1 (patch). The app requires it.
+  the app crashed in the measurement: thread safety of the shared state
+  (sampler-005) and, on the user's request, a faster MIDI flush,
+  compressor and gain with the same output (sampler-006); 0.3.1 (patch).
+  The app requires it.
 
 `aud_audio`, `aud_audio_graph` and `aud_audio_core` stay unchanged and out
 of the ticket (family-002).
@@ -167,7 +169,8 @@ asking the user.
    ceiling keeps room for inter-sample peaks; 1.5 ms (72 frames at
    48 kHz) is small against the output latency of the devices.
 7. **The per-node limiters and the gain effect stay** in the SFZ files,
-   as the user asked; whether they can go is open work of app-001.
+   as the user asked; whether they can go is open work of app-001. Later
+   in the ticket the user removed them (app-004).
 
 ## Steps
 
@@ -396,15 +399,36 @@ the mean. The three-sound presets still overload the tablet under the
 stress test: the voices themselves — interpolation, flex envelopes,
 panning, `Voice::isFree` over all voices (6.8 %) — on the small cores.
 
-Consequences, open work of S29b and S24: the per-node limiters can go now
-that the master limiter guards the sum (app-001, app-003); the voice
-loop of the fork and the audio thread's placement on the small cores
-(io-002) are the next costs; the other reference devices follow in S29b.
+Then, on the user's instruction, the per-node limiters left the SFZ files
+(app-004): no compressor and no gain effect; `global_volume` rises by the
+7.35 dB the gain effect restored, to −0.3422 dB, which keeps every note's
+level within 0.0055 dB (the piano at velocity 76 peaks at −15.884 dBFS as
+before). The same 60 s test a third time:
+
+| Preset | Xruns: first, optimized, no node limiters | Render mean | Render max |
+| --- | --- | --- | --- |
+| E-Piano | 1101, 17, 6 | 3.65, 2.68, 2.53 ms | 8.56, 5.22, 4.99 ms |
+| Welcome_Combi | 3595, 2602, 2328 | 6.63, 4.55, 4.35 ms | 10.52, 8.10, 8.24 ms |
+| Organ_Combi | 1068, 6, 0 | 3.66, 2.83, 2.72 ms | 8.17, 5.92, 6.32 ms |
+| Strings | 3674, 519, 182 | 5.82, 3.27, 3.12 ms | 9.11, 5.77, 6.73 ms |
+| Vibraphone | 3618, 2117, 2039 | 6.45, 4.18, 4.09 ms | 9.61, 7.60, 7.52 ms |
+| Without the chain | 3572, 2265, 2036 | 6.44, 4.33, 4.12 ms | 9.97, 7.67, 7.56 ms |
+
+The master limiter holds 0.891251 on every preset; without the chain the
+sum now peaks at 4.461 (+13.0 dBFS), since no node is limited. Removing
+the limiters saved another 0.1 to 0.2 ms per block: the optimization had
+already made the compressor cheap below its threshold. Under the stress
+test the three-sound presets still overload the tablet.
+
+Open work of S29b and S24: the voice loop of the fork and the audio
+thread's placement on the small cores (io-002) are the next costs; the
+other reference devices follow in S29b.
 
 ## Open questions
 
 None open; see the defaults above. The findings went into dsp-002,
-dsp-003, app-003 and sampler-005; open work is listed there.
+dsp-003, app-003, app-004, sampler-005 and sampler-006; open work is
+listed there.
 
 ## Rests on
 

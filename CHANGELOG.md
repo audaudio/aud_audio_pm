@@ -38,6 +38,10 @@
 - The MIDI flush and the compressor of the sfizz fork are 100 to 2500 times faster where they were hot, with the same output
 - The Galaxy Tab S4 before and after: xruns and render time per preset
 - sampler-006: performance changes to the fork keep its output bit for bit
+- Add the removal of the per-node limiters to ticket 28
+- app-004: the master limiter alone limits the app; the SFZ files carry no effect, global_volume keeps the level
+- app-001 and app-003 are superseded in part
+- The Galaxy Tab S4 without the per-node limiters: xruns and render time per preset
 
 ## 0.10.0 - 2026-10-13
 
