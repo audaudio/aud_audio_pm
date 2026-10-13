@@ -149,9 +149,11 @@ defaults decide the questions and become decisions where they hold:
 - `aud_dsp_sampler`: `apk:/` paths read from the APK's assets on Android
   (sampler-004), the `armeabi-v7a` build, and the defects the integration
   found (see Findings).
-- `aud_audio`, `aud_audio_midi`, `aud_midi`: unchanged. gg keeps them in
-  the ticket because they connect the app to its other repos; they get no
-  commits and are not published (family-002).
+- `aud_audio`, `aud_midi`: their examples override only their own
+  checkout and take the family from git tags and pub.dev, so that they
+  resolve outside a full ticket; patch releases (family-002).
+- `aud_audio_midi`: unchanged; gg keeps it in the ticket because it
+  connects the app to its other repos; not published.
 
 ## Steps
 

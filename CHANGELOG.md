@@ -15,6 +15,9 @@
 - Ticket 27 is implemented in doc/issues.md
 - Add the results of the code review of ticket 27
 - Three findings fixed, four left open with their reasons
+- Add the review results to the plan of ticket 27
+- aud_audio and aud_midi get patch releases for their examples
+- The issue title names no repo
 
 ## 0.9.0 - 2026-10-12
 

@@ -21,7 +21,7 @@ Next number: 28
 | 24 | S0-plugin-ui: Spike a Flutter editor for the plugin shells on macOS and iOS | done | [2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md](2026-Q4/tickets/2026-10-09-24-spike-a-flutter-editor-for-the-plugin-shells.md) |
 | 25 | S9: Build the SFZ sampler on sfizz for iOS and Android | done | [2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md](2026-Q4/tickets/2026-10-11-25-build-the-sfz-sampler-on-sfizz-for-ios-and-android.md) |
 | 26 | S8: Bridge aud_midi ports into the engine on iOS and Android | implemented | [2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md](2026-Q4/tickets/2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md) |
-| 27 | S29a: Play an SFZ instrument from audanika-legacy/audanika_app/ on the new engine on iOS and Android | implemented | [2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md](2026-Q4/tickets/2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md) |
+| 27 | S29a: Play an SFZ instrument on the new engine on iOS and Android | implemented | [2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md](2026-Q4/tickets/2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the
