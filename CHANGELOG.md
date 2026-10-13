@@ -42,6 +42,10 @@
 - app-004: the master limiter alone limits the app; the SFZ files carry no effect, global_volume keeps the level
 - app-001 and app-003 are superseded in part
 - The Galaxy Tab S4 without the per-node limiters: xruns and render time per preset
+- Add the plans of tickets 29 and 30 (S9b, S9c)
+- Ticket 29: a voice budget per device that follows the load, so that playing hard never drops out
+- Ticket 30: faster sampler voices with SIMD on ARM, a voice loop over the sounding voices only, and the audio thread on the big cores
+- Add both to doc/issues.md and raise the counter to 31; S9b and S9c in the plan of ticket 17
 
 ## 0.10.0 - 2026-10-13
 

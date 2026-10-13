@@ -361,6 +361,16 @@ roughly 22 to 32 engineer-weeks.
   instrument reference suite of the new instruments passes on the
   reference devices (release-001, release-002). Depends on S29a, S10a.
 
+- S9b (M, M2, planned as ticket 29) Voice budget: a voice limit of the
+  sampler that changes in real time, one voice budget per process and a
+  governor that sets it from the measured load, so that playing hard never
+  drops out (lifecycle-001: instrument nodes bound their polyphony).
+  Depends on S9, S10a.
+- S9c (M, M2, planned as ticket 30) Faster voices: SIMD on ARM, a voice
+  loop that visits only the sounding voices, and the audio thread on the
+  big cores of Android devices (io-002). Depends on S9; raises the budget
+  of S9b.
+
 ### Milestone M3: AUv3 on iOS
 
 - S20 (L, M3) `aud_audio_auv3`: the AUv3 extension over the headless
