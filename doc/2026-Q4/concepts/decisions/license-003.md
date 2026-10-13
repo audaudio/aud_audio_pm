@@ -8,6 +8,8 @@
 - Supersedes in part: the Faust rule of [license-002](license-002.md)
   (Consequences), [dsp-001](dsp-001.md) and [sampler-001](sampler-001.md)
   — the helpers listed here are exempt; their other decisions stand
+- Refined by: [dsp-002](dsp-002.md) — the audit for `aud_dsp_effects`
+  finds no Faust code (ticket 28)
 - Open work: the same audit for every later package with Faust-generated
   code; done for `aud_dsp_effects` in ticket 28 (dsp-002: no Faust code)
 

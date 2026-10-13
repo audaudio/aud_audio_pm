@@ -1,8 +1,8 @@
 # 28: S10a — Build reverb, delay and a master limiter in aud_dsp_effects for iOS and Android
 
-Status: in progress since 2026-10-13. Planned and implemented without a
-plan review, as the user asked; the defaults below answer the open
-questions.
+Status: implemented 2026-10-13 without a plan review, as the user asked
+(the defaults below answer the open questions); findings, code review and
+numbers below.
 
 ## Goal
 
@@ -214,7 +214,7 @@ asking the user.
   thread meets cold caches between callbacks. Devices decide (S29b).
 - **The iOS simulator renders 512-frame blocks** while it reports a
   buffer of 256; the example computes shares from the frames it rendered.
-- **Dense chords reach +6 to +7 dBFS on the sum** without the chain,
+- **Dense chords reach +7.1 to +7.6 dBFS on the sum** without the chain,
   although every node is limited at −0.5 dBFS; the master limiter holds
   −1 dBFS exactly on every preset.
 - **The app did not build for Android:** `permission_handler_android`
@@ -233,14 +233,36 @@ asking the user.
 `aud_dsp_sampler` and the app found six points. Fixed: the app plays
 without effects when the master chain cannot be created (a refused
 effects package no longer silences it, a half-built chain is removed);
-the distortion of the sampler now sets its constants for the real sample
-rate, which the race fix changed without saying so — documented in the
-note and the notices (the original kept the constants of 48 kHz); the
-tempo delay's 4 s limit is documented. Left as they are, since each would
-move the goldens for a gain below a microsecond: the delays set their
-parameters every frame, the nodes flush their output mix and not only
-their feedback, and a loader waiting for stb_vorbis's CRC table spins
-without a pause.
+the tempo delay's 4 s limit is documented. Wrong: the point that the
+race fix changed the sample-rate constants of the sampler's distortion —
+the original set them already; the note written for it was corrected in
+review-light, but the changelog line of that commit (owned by gg) still
+says otherwise and the next line corrects it. Left as they are, for a
+gain below a microsecond each: the delays set their parameters every
+frame, the nodes flush their output mix and not only their feedback, and
+a loader waiting for stb_vorbis's CRC table spins without a pause.
+
+## Review
+
+`gg do review` opened the pull requests on 2026-10-13; review-light ran
+with one reviewer per repo, each fixing what it found:
+
+- `aud_dsp_effects`: one interpolated read for the plate's delays, the
+  stereo delay's longest time from its descriptor, the bench split into
+  smaller functions, the comment landmarks of the code guide, the Dart
+  API in both READMEs, a test of the tempo delay's 4 s limit.
+- `aud_dsp_sampler`: the corrected distortion notes, named states of the
+  once guards, a redundant flag of dr_flac dropped, the TSan symbolizer
+  and the shared-state audit in both READMEs.
+- The app: the parameter ids of `SfzEffects.defaults` from the effects
+  package, the fallback documented, the converter's options documented.
+- `aud_audio_pm`: this status, the numbers of the peak without the chain,
+  the back links of the refined decisions, the steps S10a and S29a in the
+  plan of ticket 17.
+
+Left: the effect defaults live in the converter and in the app, tied
+together by a test; a spinning wait in dr_flac as in stb_vorbis; the
+experimental `record_use` package, as in the sampler.
 
 ## Measurements
 
@@ -300,10 +322,12 @@ tickets 22 to 27. The reference devices follow in S29b.
 
 ## Open questions
 
-None open; see the defaults above.
+None open; see the defaults above. The findings went into dsp-002,
+dsp-003, app-003 and sampler-005; open work is listed there.
 
 ## Rests on
 
 dsp-001, license-001, license-002, license-003, app-001, app-002,
 graph-001, graph-002, graph-003, abi-001, time-001, interop-001,
-family-002, process-003, process-004, process-005.
+lifecycle-002, sampler-002, family-002, process-003, process-004,
+process-005.

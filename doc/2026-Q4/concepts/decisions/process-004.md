@@ -8,6 +8,8 @@
   the C++ and FFI work during ticket 27
 - Supersedes: [process-002](process-002.md) — model and effort per ticket
   class
+- Refined by: [process-005](process-005.md) — the standing rules of an
+  implementation ticket refer to it for model and effort
 - Open work: revisit when new models ship
 
 ## Decision

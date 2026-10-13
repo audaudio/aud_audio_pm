@@ -21,6 +21,15 @@
 - process-005: commit every repo before gg do add adds another one
 - Add the results of the code review of ticket 28
 - Three findings fixed, three left with their reasons
+- Add the review-light fixes of ticket 28
+- Mark ticket 28 as implemented in its plan and in doc/issues.md
+- Correct the peak of the sum without the chain to +7.1 to +7.6 dBFS in the plan and app-003
+- Point the plan to dsp-002, dsp-003, app-003 and sampler-005; add lifecycle-002 and sampler-002 to Rests on
+- Match the index rows of dsp-002, app-003, process-005 and sampler-005 with their files
+- Link the refined decisions back: dsp-001, license-003, graph-001, app-001, app-002, lifecycle-002, sampler-002, process-003, family-002, process-004
+- Record S10a (ticket 28) and S29a (ticket 27) as built in the plan of ticket 17, with their results
+- Wrap a line of app-003 at 80 characters
+- Correct the code review in the plan and add the results of review-light
 
 ## 0.10.0 - 2026-10-13
 

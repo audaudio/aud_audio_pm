@@ -4,6 +4,8 @@
 - Date: 2026-10-08
 - Canonical source: Gabriel Gatzsche's decision on 2026-10-08 at the end
   of ticket 5; supersedes [process-001](process-001.md)
+- Refined by: [process-005](process-005.md) — the number and the plan
+  come before the implementation (ticket 28)
 - Open work: none
 
 ## Decision

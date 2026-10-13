@@ -4,7 +4,8 @@
 - Date: 2026-10-07
 - Canonical source: topics/graph-engines-and-audiokit.md (R6, R7, R9)
 - Refined by: [midi-003](midi-003.md) — timestamped external MIDI sounds
-  at a fixed latency
+  at a fixed latency; [dsp-003](dsp-003.md) — the look-ahead of the master
+  limiter is a latency fixed at `prepare` (ticket 28)
 - Open work: none. The port and buffer formats are in the core
   (ticket 18); the compiler, the feedback split into a reader and a
   writer and the latency alignment are in `aud_audio_graph` (ticket 19)

@@ -329,18 +329,30 @@ roughly 22 to 32 engineer-weeks.
   (the one-line Faust helpers are exempt), lifecycle-002 (workers, loads
   and one sample cache budget per process) and osc-002 (messages to
   nodes).
-- S29a (M, M1) Early app integration: an integration branch of `aud_app`
-  plays one SFZ instrument through `aud_audio` and `aud_dsp_sampler` from
-  the app's MIDI stream on iOS and Android as soon as S4 and S9 exist,
-  and feeds its findings back into the contracts. The code repo lives in
-  `audanika-private`; the plan file lives here. Depends on S4, S9.
+- S29a (M, M1, built 2026-10-13 in ticket 27 for iOS and Android, in
+  `audanika_app` of `audanika-legacy` instead of `aud_app`, with the
+  legacy engine removed there) Early app integration: an integration
+  branch of `aud_app` plays one SFZ instrument through `aud_audio` and
+  `aud_dsp_sampler` from the app's MIDI stream on iOS and Android as soon
+  as S4 and S9 exist, and feeds its findings back into the contracts. The
+  code repo lives in `audanika-private`; the plan file lives here.
+  Depends on S4, S9. Result: app-001 (the sounds rebuilt once as SFZ),
+  app-002 (one sampler node per MIDI channel) and sampler-004 (`apk:/`
+  paths on Android).
 
 ### Milestone M2: reverb and delay in the Audanika app
 
-- S10a (M, M2) `aud_dsp_effects`, first ticket — reverb and delay: a
-  Freeverb-based reverb (public domain) and a plate reverb re-implemented
-  from the literature (dsp-001), DunneAudioKit's StereoDelay (MIT) and a
-  tempo-synced delay. Depends on S4.
+- S10a (M, M2, built 2026-10-13 in ticket 28 for iOS and Android; the
+  numbers of the reference devices are open) `aud_dsp_effects`, first
+  ticket — reverb and delay: a Freeverb-based reverb (public domain) and
+  a plate reverb re-implemented from the literature (dsp-001),
+  DunneAudioKit's StereoDelay (MIT) and a tempo-synced delay. Depends on
+  S4. Result: dsp-002 (the reverbs and delays as independent nodes),
+  dsp-003 (a master limiter with a look-ahead of 1.5 ms), app-003 (the
+  Audanika app plays through a master delay, plate reverb and limiter,
+  ahead of S29b, which keeps the tuning by ear and the reference devices)
+  and sampler-005 (the state all synths of a process share is
+  thread-safe).
 - S29b (L, M2) App migration: `aud_app` replaces the legacy
   `audio_engine` with `aud_audio`, `aud_audio_midi` over the `aud_midi`
   ports and `aud_dsp_sampler` with the reverb and
