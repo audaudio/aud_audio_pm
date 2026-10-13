@@ -601,7 +601,9 @@ and effort followed the class of the ticket (process-002):
    The size estimates become a schedule and the steps get owners only
    with this answer.
 6. Reference devices for the budgets: which iPhone and which Android
-   device define the lower bound?
+   device define the lower bound? Answered on 2026-10-13: a Samsung
+   Galaxy Tab S4, an iPad Pro (M5) and the user's iPhone 16 Pro Max
+   (release-004).
 
 ## Answered at plan review
 

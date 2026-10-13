@@ -52,6 +52,9 @@
 - Add the answers to the open questions of ticket 30
 - SIMD may change the output within the tolerance of sampler-007
 - The audio thread may be pinned to the big cores on Android 10 and 11
+- Add the reference devices and the answers for tickets 29 and 30
+- release-004: Galaxy Tab S4, iPad Pro (M5) and iPhone 16 Pro Max are the reference devices
+- Ticket 29 first, then ticket 30; more battery drain on the big cores is accepted
 
 ## 0.10.0 - 2026-10-13
 

@@ -36,7 +36,7 @@
 | [ui-002](ui-002.md) | accepted | 2026-10-08 | aud_audio_ui_controls after AudioKit Controls, aud_audio_ui_keyboard after AudioKit Keyboard | Music-theory dependency for labels and scales; shared theming; adapters moved by ui-003 (proposed) |
 | [ui-003](ui-003.md) | proposed | 2026-10-09 | The engine adapters of the UI packages live in the binding package aud_audio_ui_bindings; the widgets bind to abstract sinks | S17a creates the package; S17b adds NoteBinding |
 | [release-001](release-001.md) | accepted | 2026-10-08 | Mobile first: the first releases cover iOS and Android; desktop and web follow in their own tickets | When macOS joins; platform tags of core, graph and io |
-| [release-002](release-002.md) | proposed | 2026-10-08 | Milestone M1: the sampler plays Audanika's instruments on iOS and Android; everything else conditional | Owners and capacity; reference devices |
+| [release-002](release-002.md) | proposed | 2026-10-08 | Milestone M1: the sampler plays Audanika's instruments on iOS and Android; everything else conditional | Owners and capacity; reference devices named by release-004 |
 | [release-003](release-003.md) | accepted | 2026-10-08 | Delivery order: sampler, reverb and delay, AUv3, then the backing player with time stretching; iOS and Android | none |
 | [naming-001](naming-001.md) | accepted | 2026-10-08 | Aud is the prefix of all classes in Dart and C++; aud_ for C symbols | none |
 | [process-002](process-002.md) | superseded | 2026-10-08 | Claude model and effort per ticket class: Fable 5.1 max for the real-time core, high as default, Opus 5.5 for Dart ports, Sonnet 5.5 for mechanical work | superseded by process-004 |
@@ -67,3 +67,4 @@
 | [sampler-006](sampler-006.md) | superseded | 2026-10-13 | Performance changes to the sfizz fork keep its output bit for bit, proved against reference copies and a golden; the MIDI flush, compressor, effect bus and gain conversions were optimized in ticket 28 | superseded by sampler-007 |
 | [app-004](app-004.md) | accepted | 2026-10-13 | The master limiter alone limits the app: no compressor and gain effect per SFZ file; the synth-volume compensation moves into global_volume | none |
 | [sampler-007](sampler-007.md) | accepted | 2026-10-13 | Optimizations of the sfizz fork may change its output within the golden tolerance (1e-5 of full scale); supersedes the bit-exact rule of sampler-006 | none |
+| [release-004](release-004.md) | accepted | 2026-10-13 | The reference devices are a Galaxy Tab S4 (the lower bound), an iPad Pro (M5) and the user's iPhone 16 Pro Max; a release is measured on them | Confirm the iPhone model |

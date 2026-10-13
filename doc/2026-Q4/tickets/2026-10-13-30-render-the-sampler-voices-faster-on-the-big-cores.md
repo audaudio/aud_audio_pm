@@ -102,11 +102,13 @@ sampler-006 and app-004):
    accepted on Android 10 and 11, where the performance hint does not
    exist; Android 12 and later use the performance hint (to be recorded in
    io-003).
-3. Does the app accept more battery drain on the big cores while it plays,
-   and only while it plays?
-4. Order with ticket 29: limit the voices first (no drop-outs), then speed
-   them up (more voices) — or the other way round?
-5. Which devices are the reference devices (open question 6 of ticket 17)?
+3. Answered on 2026-10-13: more battery drain on the big cores while the
+   app plays is accepted.
+4. Decided on 2026-10-13 (the user left it to Claude): ticket 29 first —
+   the voice budget ends the drop-outs on every device — then this ticket,
+   whose faster voices the governor of ticket 29 turns into more voices.
+5. Answered on 2026-10-13: the Galaxy Tab S4, the iPad Pro (M5) and the
+   iPhone 16 Pro Max (release-004).
 
 ## Model and rules
 

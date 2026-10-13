@@ -111,7 +111,8 @@ process).
    it automatic?
 5. Does the budget also lower the sample quality (sfizz's interpolation)
    before it steals voices?
-6. Which devices are the reference devices (open question 6 of ticket 17)?
+6. Answered on 2026-10-13: the Galaxy Tab S4, the iPad Pro (M5) and the
+   iPhone 16 Pro Max (release-004).
 
 ## Out of scope
 
