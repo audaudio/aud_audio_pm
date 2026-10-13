@@ -367,12 +367,39 @@ its limiter per node, on idle nodes too (app-001); 5.8 % in the effects.
 The audio thread (`AudioTrack`, SCHED_FIFO 2, cpuset top-app) ran on the
 small cores 0 to 3 in every sample.
 
+On the user's request (2026-10-13) the two hot spots were optimized in
+the sfizz fork, with the same output bit for bit (sampler-006):
+`flushEvents` flushes only the event vectors that received events; the
+compressor calls `log10` only above its threshold and `pow` only for a
+gain other than 0 dB, passes silence through at rest, and a silent bus
+whose effects are at rest skips them; the gain effect, a voice's pitch
+ratio and its volume modulation convert once per run of equal values
+instead of per sample (the source of `exp2f`). Micro-benchmarks against
+0.3.0 on the Mac: `flushEvents` without events 2551 times faster, with
+one 251 times; the compressor on silence 165 times, active 1.5 to 2.5
+times (its oversampling filters are sample-serial); an idle synth 16
+times; four synths 1.4 times. On the tablet `flushEvents` left the
+profile (24 % before) and libm fell from 17 % to 1.6 % of the audio
+thread. The same 60 s test again:
+
+| Preset | Xruns before, after | Late callbacks before, after | Render mean before, after |
+| --- | --- | --- | --- |
+| E-Piano | 1101, 17 | 2013, 286 | 3.65, 2.68 ms |
+| Welcome_Combi | 3595, 2602 | 7940, 3111 | 6.63, 4.55 ms |
+| Organ_Combi | 1068, 6 | 1971, 274 | 3.66, 2.83 ms |
+| Strings | 3674, 519 | 6146, 339 | 5.82, 3.27 ms |
+| Vibraphone | 3618, 2117 | 7579, 1792 | 6.45, 4.18 ms |
+| Without the chain | 3572, 2265 | 7779, 2823 | 6.44, 4.33 ms |
+
+The peak stays at 0.891251 on every preset; the chain adds 0.22 ms to
+the mean. The three-sound presets still overload the tablet under the
+stress test: the voices themselves — interpolation, flex envelopes,
+panning, `Voice::isFree` over all voices (6.8 %) — on the small cores.
+
 Consequences, open work of S29b and S24: the per-node limiters can go now
-that the master limiter guards the sum (app-001, app-003), which frees a
-fifth of the audio thread; `flushEvents` of the sfizz fork costs per node
-and block whether a node plays or not; the audio thread's placement on
-the small cores (io-002) explains the gap between the bench and the live
-render time. The other reference devices follow in S29b.
+that the master limiter guards the sum (app-001, app-003); the voice
+loop of the fork and the audio thread's placement on the small cores
+(io-002) are the next costs; the other reference devices follow in S29b.
 
 ## Open questions
 

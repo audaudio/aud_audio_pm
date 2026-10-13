@@ -8,7 +8,9 @@
 - Refines: [sampler-001](sampler-001.md) — the fork is the package;
   [build-001](build-001.md) — sfizz is no longer refreshed as a subset
 - Refined by: [sampler-005](sampler-005.md) — the state the fork shares
-  across the process is made thread-safe in place (ticket 28)
+  across the process is made thread-safe in place (ticket 28);
+  [sampler-006](sampler-006.md) — optimizations keep the output bit for
+  bit (ticket 28)
 - Open work: none; a branch in `audanika/sfizz` only if the fork is ever
   shared outside the package
 

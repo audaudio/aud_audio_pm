@@ -8,6 +8,8 @@
 - Refines: [lifecycle-002](lifecycle-002.md) — loads run on several
   workers at once; [sampler-002](sampler-002.md) — changed in place with
   "Modified by Audanika" notes
+- Refined by: [sampler-006](sampler-006.md) — optimizations keep the
+  output bit for bit and the shared state thread-safe
 - Open work: repeat the audit when sfizz code or a decoder is added
 
 ## Decision

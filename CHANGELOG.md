@@ -34,6 +34,10 @@
 - The render time of every node, the effects example and the app's dense chords on a real tablet
 - A profile of the audio thread: the sampler's controller events and per-node compressors dominate, the effects take 5.8 %
 - app-003 and io-002 name the cost of the per-node limiters and the audio thread on the small cores
+- Add the optimized sampler and its numbers to ticket 28
+- The MIDI flush and the compressor of the sfizz fork are 100 to 2500 times faster where they were hot, with the same output
+- The Galaxy Tab S4 before and after: xruns and render time per preset
+- sampler-006: performance changes to the fork keep its output bit for bit
 
 ## 0.10.0 - 2026-10-13
 
