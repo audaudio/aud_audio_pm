@@ -9,6 +9,11 @@
 - Add ticket 28 to doc/issues.md and raise the counter to 29
 - process-004: Opus 5.5 at extra high effort, Fable only on request
 - process-005: the standing rules of an implementation ticket
+- Add the decisions of the effects and the master chain of ticket 28
+- dsp-002: the reverbs and delays of aud_dsp_effects as independent nodes, their sources and the license audit
+- dsp-003: the master limiter looks ahead 1.5 ms and never exceeds its ceiling
+- app-003: an app plays through a master delay, reverb and limiter with effects per preset
+- The open work of dsp-001, license-003 and app-001 points to the new decisions
 
 ## 0.10.0 - 2026-10-13
 
