@@ -497,8 +497,13 @@ roughly 22 to 32 engineer-weeks.
 
 ## Model and effort for the implementation
 
-The implementation tickets are worked with Claude Code; model and
-effort follow the class of the ticket (process-002):
+Since 2026-10-13 every ticket runs on Claude Opus 5.5 at extra high
+effort, the agents included; Fable 5.1 joins only after the user agrees
+(process-004, which supersedes process-002). The standing rules of an
+implementation ticket are in process-005.
+
+Until then the implementation tickets were worked with Claude Code; model
+and effort followed the class of the ticket (process-002):
 
 | Ticket class | Model | Effort |
 | --- | --- | --- |

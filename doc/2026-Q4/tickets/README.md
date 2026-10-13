@@ -37,3 +37,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md](2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md)
   — ticket 27: audanika_app plays its sounds as SFZ on the new engine on
   iOS and Android (step S29a)
+- [2026-10-13-28-build-reverb-delay-and-a-master-limiter.md](2026-10-13-28-build-reverb-delay-and-a-master-limiter.md)
+  — ticket 28: reverbs, delays and a master limiter in `aud_dsp_effects`,
+  and the master chain of the Audanika app on iOS and Android (step S10a)

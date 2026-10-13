@@ -39,7 +39,7 @@
 | [release-002](release-002.md) | proposed | 2026-10-08 | Milestone M1: the sampler plays Audanika's instruments on iOS and Android; everything else conditional | Owners and capacity; reference devices |
 | [release-003](release-003.md) | accepted | 2026-10-08 | Delivery order: sampler, reverb and delay, AUv3, then the backing player with time stretching; iOS and Android | none |
 | [naming-001](naming-001.md) | accepted | 2026-10-08 | Aud is the prefix of all classes in Dart and C++; aud_ for C symbols | none |
-| [process-002](process-002.md) | accepted | 2026-10-08 | Claude model and effort per ticket class: Fable 5.1 max for the real-time core, high as default, Opus 5.5 for Dart ports, Sonnet 5.5 for mechanical work | Revisit with new models |
+| [process-002](process-002.md) | superseded | 2026-10-08 | Claude model and effort per ticket class: Fable 5.1 max for the real-time core, high as default, Opus 5.5 for Dart ports, Sonnet 5.5 for mechanical work | superseded by process-004 |
 | [backing-001](backing-001.md) | proposed | 2026-10-08 | aud_dsp_stretch (Signalsmith Stretch) and aud_audio_backing: transport-driven multitrack loops with pitch-preserving tempo changes | Song schema; stem groups; transitions |
 | [process-001](process-001.md) | superseded | 2026-10-08 | Ticket IDs are the GitHub issue numbers of aud_audio_pm; status on an organization Projects board | superseded by process-003 |
 | [scope-002](scope-002.md) | accepted | 2026-10-08 | No backward compatibility with the existing Audanika app: no legacy preset is loaded, converted or emulated; the instruments are rebuilt on SFZ and graph documents | none |
@@ -58,3 +58,5 @@
 | [sampler-004](sampler-004.md) | accepted | 2026-10-12 | On Android `apk:/` paths read SFZ files and samples from the APK in place through a file backend under sfizz; the store keys samples by their normal path | Compressed assets inflated on every open; directories matched exactly |
 | [app-001](app-001.md) | accepted | 2026-10-12 | The Audanika app's sounds are rebuilt once as SFZ by a converter that reproduces the legacy engine: one file per channel, linear envelopes, legacy level, a limiter per node | A limiter on the sum (S10a); MIDI channels in the sampler |
 | [app-002](app-002.md) | accepted | 2026-10-12 | The app routes its MIDI to one sampler node per channel; CC 120/123 become note offs; external MIDI plays the melody sound on its own node over the native tap | One instrument with channels; a choice of the external sound |
+| [process-004](process-004.md) | accepted | 2026-10-13 | Every ticket runs on Claude Opus 5.5 at extra high effort, the agents included; Fable 5.1 only after asking the user | Revisit with new models |
+| [process-005](process-005.md) | accepted | 2026-10-13 | The standing rules of an implementation ticket: real time, licenses, scripts, versions, commits, publish config, measurements, review | none |
