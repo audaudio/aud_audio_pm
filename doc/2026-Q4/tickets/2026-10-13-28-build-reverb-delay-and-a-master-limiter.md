@@ -227,6 +227,21 @@ asking the user.
   interpolated echo of 0.99993. The engine caps tails at 10 s; the
   reverbs report up to 30 s.
 
+## Code review
+
+`/code-review` at high effort (2026-10-13) over `aud_dsp_effects`,
+`aud_dsp_sampler` and the app found six points. Fixed: the app plays
+without effects when the master chain cannot be created (a refused
+effects package no longer silences it, a half-built chain is removed);
+the distortion of the sampler now sets its constants for the real sample
+rate, which the race fix changed without saying so — documented in the
+note and the notices (the original kept the constants of 48 kHz); the
+tempo delay's 4 s limit is documented. Left as they are, since each would
+move the goldens for a gain below a microsecond: the delays set their
+parameters every frame, the nodes flush their output mix and not only
+their feedback, and a loader waiting for stb_vorbis's CRC table spins
+without a pause.
+
 ## Measurements
 
 Debug builds on the iOS simulator (iPhone 17 Pro) and the Android emulator

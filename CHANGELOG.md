@@ -19,6 +19,8 @@
 - sampler-005: the state all synths of a process share is thread-safe
 - aud_dsp_sampler joined the ticket for the race that crashed the measurement
 - process-005: commit every repo before gg do add adds another one
+- Add the results of the code review of ticket 28
+- Three findings fixed, three left with their reasons
 
 ## 0.10.0 - 2026-10-13
 
