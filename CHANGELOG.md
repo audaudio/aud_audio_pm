@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.10.0 - 2026-10-13
 
 ### Added
 
@@ -56,7 +56,6 @@
 - Add review fixes of ticket 26
 
 - Add family-002: every package has a version of its own
-
 
 ## 0.8.0 - 2026-10-12
 
@@ -114,7 +113,6 @@
 
 - The plan: questions 8 and 9 answered, none open
 
-
 ## 0.7.0 - 2026-10-11
 
 ### Added
@@ -153,7 +151,6 @@
 - Mark ticket 24 as done
 
 - The embedding checklist in REAPER and Live and the cycles in Live stay open
-
 
 ## 0.6.0 - 2026-10-09
 
@@ -194,7 +191,6 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
-
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -212,7 +208,6 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
-
 
 ## 0.1.0 - 2026-10-08
 
