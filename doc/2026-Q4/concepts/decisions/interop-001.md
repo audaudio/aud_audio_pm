@@ -3,6 +3,9 @@
 - Status: proposed
 - Date: 2026-10-07
 - Canonical source: topics/dart-interop-and-web.md
+- Refined by: [lifecycle-003](lifecycle-003.md) — the load governor ticks
+  on the control thread and reads the audio thread's numbers through
+  atomics (ticket 29)
 - Open work: measure command-queue and event latency in the spike
   ticket; ticket 22 measures command to sound in `AudEngine` (iOS
   simulator, Android emulator, iPad), the reference devices are open;

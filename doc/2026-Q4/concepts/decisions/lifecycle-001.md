@@ -7,6 +7,10 @@
 - Superseded in part by: [lifecycle-002](lifecycle-002.md) — one sample
   cache budget per process instead of per engine; its other decisions
   stand
+- Refined by: [sampler-008](sampler-008.md) and
+  [lifecycle-003](lifecycle-003.md) — instrument nodes steal voices above a
+  real-time limit and a voice budget of the process that a governor sets
+  from the load (ticket 29)
 - Open work: the recovery numbers on the reference devices; the drift-tracking
   resampler for duplex streams on two clocks. The default budgets, the sample
   cache and the cancellable, reference-counted asset loads are built in ticket

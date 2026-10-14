@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.12.1 - 2026-10-14
+
+### Added
+
+- Add the plan, decisions and results of ticket 29 (S9b, a voice budget by the CPU power of the device)
+
+- The plan review: the governor in aud_audio, released voices first with a fade of 10 ms and a reserve, automatic only, voices only
+
+- Decision 3 revised after the sweeps on the Galaxy Tab S4: the mean share steers, 75 / 72 / 85 %, not the p99
+
+- The findings, the voice sweep, the listening check and the measurements on the Galaxy Tab S4, the iPhone 16 Pro Max, the iOS simulator and the Android emulator
+
+- sampler-008, graph-004, lifecycle-003 and app-005, linked from lifecycle-001, lifecycle-002 and sampler-003
+
+- The iPhone model of release-004 confirmed
+
+- Add the fixes of the review of ticket 29
+
+- The 50 % of release-004 is not met on the Galaxy Tab S4: recorded as open work of lifecycle-003 and in the goal of the plan
+
+- Links from interop-001 and app-002 to lifecycle-003 and app-005; the two refinements of lifecycle-002 in one line
+
+- The plan: the p99 at 0.69 or more, the counts of the voice columns, the unsettled Vibraphone, the dependency repos, the decisions it went into
+
+- lifecycle-003 names the inputs of the start budgets as the code uses them; the index matches the open work of sampler-008
+
 ## 0.12.0 - 2026-10-14
 
 ### Added
