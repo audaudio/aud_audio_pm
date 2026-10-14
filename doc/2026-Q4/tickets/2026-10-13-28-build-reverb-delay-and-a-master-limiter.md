@@ -143,7 +143,8 @@ modulation and distortion of S10b.
   the app crashed in the measurement: thread safety of the shared state
   (sampler-005) and, on the user's request, a faster MIDI flush,
   compressor and gain with the same output (sampler-006); 0.3.1 (patch),
-  published on 2026-10-14. The app requires it.
+  published on 2026-10-14. The app requires it. The fixes of the second
+  review follow as 0.3.2 (patch).
 
 `aud_audio`, `aud_audio_graph` and `aud_audio_core` stay unchanged and out
 of the ticket (family-002).
@@ -280,15 +281,17 @@ unlimited only when no limiter can be created. A comment of the converter
 cited app-003 instead of app-004. The AOT test of `aud_midi_windows`
 compiled an executable in every `dart test`; it runs `dart compile
 aot-snapshot` now, which needs nothing beyond the Dart SDK (3.4 s for the
-whole suite) and still fails on the old binding. In the published
-`aud_dsp_sampler` 0.3.1, whether a patch follows is open: the
-compressor's `isAtRest` needs states of exactly zero, so the app's former
-limiter came to rest only 4.4 s after a loud burst (a flush of the tiny
-states during silent blocks brings it to about 1 s, within 1.2e-7 of the
-output); `markForFlush` checks out-of-range controller numbers only in
-debug builds, though no path of the node reaches it — only upstream's
-`set_cc512` in an SFZ file, which wrote out of bounds before; the gain
-effect's `isAtRest` computes a `pow` every block.
+whole suite) and still fails on the old binding. The user then asked to
+fix the three points of the published `aud_dsp_sampler` 0.3.1 as 0.3.2:
+the compressor settles its tiny states after a silent block, so the app's
+former limiter rests 1.07 s after a loud burst instead of 4.4 s (output
+within 1.19e-7), and a silent compressor below its threshold skips its
+filters and gains (2 s after a loud tone 0.49 µs per block instead of
+7.1 µs); controller numbers out of range are ignored in `ccEvent`,
+`set_cc`, `set_hdcc`, `label_cc` and the regions' `_onccN` opcodes, where
+upstream's `offset_cc512` read and wrote one past the last controller; the
+gain effect converts its gain once at load. The render of the app-like
+instrument stays bit-identical to its golden.
 
 Review-light of the second round, one reviewer per repo: the app — the
 limiter-only fallback in the README, one helper for the engine on the app
@@ -296,10 +299,10 @@ content; `aud_midi_windows` — a code example in both READMEs, the
 example's notes through the encoder of `aud_midi_standard`, the inputs
 opened side by side; `aud_audio_pm` — the status lines, the numbers of the
 peak without the chain, the profile cited by ticket 30, the back links of
-release-004; `aud_dsp_sampler` — reported only (published): tests of the
-gain, the effect bus and `SameArgumentCache` belong in the files named
-after their code, and two README sentences overstate when the compressor
-calls `log10` and `pow`.
+release-004; `aud_dsp_sampler` — reported first, since it was published,
+then fixed in 0.3.2: the tests of the gain, the effect bus and
+`SameArgumentCache` moved into the files named after their code, and the
+READMEs say exactly when the compressor calls `log10` and `pow`.
 
 ## Review
 

@@ -13,6 +13,9 @@
 - Add S9b and S9c to milestone M2 and the new decisions to S10a
 - Mark the open questions of ticket 30 as answered; wrap lines at 80
 - Record the fixes and the review-light of the second round, and the open sampler patch
+- Add the sampler fixes of 0.3.2 to the plan of ticket 28
+- An earlier rest of idle compressors, range checks of controller numbers and a gain computed once
+- The review-light points of the sampler are fixed in 0.3.2
 
 ## 0.11.0 - 2026-10-14
 
