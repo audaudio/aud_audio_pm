@@ -6,6 +6,8 @@
   26 on 2026-10-12
 - Supersedes: the versioning of [family-001](family-001.md) — shared major
   version, released together, the umbrella pins exact versions
+- Refined by: [process-005](process-005.md) — only repos with changes of
+  their own stay in a ticket and are published (ticket 28)
 - Open work: none
 
 ## Decision

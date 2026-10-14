@@ -1,0 +1,454 @@
+# 28: S10a — Build reverb, delay and a master limiter in aud_dsp_effects for iOS and Android
+
+Status: implemented 2026-10-13 without a plan review, as the user asked
+(the defaults below answer the open questions); findings, code review and
+numbers below.
+
+## Goal
+
+Build step S10a of the plan of ticket 17 (milestone M2): `aud_dsp_effects`
+offers effect nodes for the `aud_audio` graph on iOS and Android — a
+reverb on Freeverb (public domain), a plate reverb re-implemented from
+the literature (dsp-001), DunneAudioKit's StereoDelay (MIT), a
+tempo-synced delay and a master limiter with look-ahead for the sum of
+the nodes. The Audanika app routes its sampler nodes through a master
+delay, a master reverb and the master limiter, with moderate defaults that
+each of its presets can adjust; the limiter works in addition to the
+per-node limiters and the +7.35 dB gain effect of its SFZ files (open
+work of app-001). Findings go back into the contracts as decisions.
+Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
+
+## What the code base gives
+
+- `aud_dsp_effects` 0.1.0 is the spike of ticket 5: one tremolo node
+  against ABI 0.1 (`aud_audio_core` ^0.1.0), a hook without flags, no
+  notices, no native tests. Nothing depends on it; `aud_audio`'s example
+  dropped it in ticket 22.
+- `aud_audio_core` 0.5.1 is ABI 0.4. `AudNodeBase` and
+  `AudNodeVTableFor<T>` (`aud_node_base.hpp`) split a block at its events
+  and ramp parameters; `AudCoreGain` is the reference node.
+- `aud_audio_graph` 0.5.1: connections into one input sum; parallel paths
+  are aligned by the node latencies; `get_latency` is read once after
+  `prepare`, `get_tail` after `prepare` and at every commit. Scheduled
+  events are pre-delivered by the latency of their path, live events
+  sound later by it, and `graph.outputLatency` reports it. The internal
+  transport runs at 120 BPM by default and fills the tempo of every
+  segment, also while stopped. `graph.stats.outputPeak` holds the
+  largest output sample since `resetStats`; the engine times only whole
+  blocks — no per-node render time exists.
+- `aud_dsp_sampler` 0.3.0 is the model of a DSP package: the hook, the
+  link hook with `@RecordUse`, the neutral and the ffi library, ids as
+  constants, golden renders on the offline renderer within 1e-5, native
+  tests under ASan/UBSan, RealtimeSanitizer and TSan. The notices check
+  is `scripts/check-notices.js` of `aud_audio_midi`.
+- The app (ticket 27) connects one sampler node per MIDI channel and the
+  node `external` straight to the output and loads presets from
+  `content/sfz/index.json`, which `tool/convert-content-bundle.js`
+  writes. The app has no tempo. The legacy engine ran Apple's reverb and
+  delay on iOS only and off by default; its reverb presets used wet 0.05
+  to 0.2 with 2 to 3 s decay and a delay of 0.4 s, feedback 0.15, wet
+  0.02 to 0.08.
+- Sources: Freeverb by Jezar at Dreampoint, public domain
+  (`sinshu/freeverb`, commit `cfcea55`); DunneAudioKit, MIT, Copyright
+  (c) 2021 AudioKit (commit `be581d0`): `StereoDelay` and
+  `AdjustableDelayLine`; its dry/wet mix is inverted (mix 1 is dry).
+
+## Scope
+
+1. **The package on ABI 0.4.** `aud_dsp_effects` 0.2.0 depends on
+   `aud_audio_core` ^0.5.1 and follows the sampler: hook flags after
+   `aud_audio_io` (C++17, hidden visibility, 16 KB pages, static C++
+   runtime on Android, `--no-undefined`), a link hook with `@RecordUse`,
+   `aud_dsp_effects.dart` without `dart:ffi`, `aud_dsp_effects_ffi.dart`
+   with `AudDspEffects.name`, `.register` and `.registerWith`, ids as
+   constants. The tremolo moves onto `AudNodeBase`.
+2. **Nodes** (stereo out; mono or stereo in; variable blocks, in place,
+   ramped parameters; buffers allocated in `prepare`; `mix` is a linear
+   crossfade, 0 dry, 1 wet):
+   - `aud.effects.freeverb` — Jezar's comb and allpass model with the
+     tunings scaled from 44.1 kHz to the sample rate: `room_size`,
+     `damping`, `width`, `mix`; tail from the longest comb's decay.
+   - `aud.effects.plate` — Dattorro's plate (J. Dattorro, "Effect Design,
+     Part 1", JAES 45(9), 1997), written from the paper with the delays
+     scaled from 29 761 Hz: `pre_delay`, `bandwidth`, `decay`,
+     `damping`, `mix`; tail from the decay.
+   - `aud.effects.stereo_delay` — the port of Dunne's StereoDelay:
+     `time` (s, up to 2), `feedback`, `mix`, `ping_pong`; the mix fixed
+     to 0 dry, 1 wet; tail until −60 dB.
+   - `aud.effects.tempo_delay` — the same delay lines with the time from
+     the transport's tempo (`AUD_NODE_CAP_TRANSPORT`): `division` (note
+     values with dotted and triplet ones), `feedback`, `mix`,
+     `ping_pong`; the time ramps when the tempo changes.
+   - `aud.effects.limiter` — a look-ahead peak limiter of our own: the
+     signal is delayed by the look-ahead, the gain follows a peak hold
+     over the look-ahead and a smoothing that reaches the needed gain
+     before the peak leaves the delay, linked over all channels, so that
+     no sample exceeds `ceiling` (dBFS); `release`, `gain` (dB). The
+     look-ahead is 1.5 ms and reported as the latency.
+3. **Licenses.** `src/third_party/{freeverb,dunne_audio_kit}` with the
+   original headers, "Modified by Audanika" notes and
+   `src/third_party/NOTICES.md`; `scripts/check-notices.js`. The audit of
+   license-003 for every ported source.
+4. **Tests.** Dart tests per file at 100 % coverage, golden renders per
+   node, native tests through the vtable under the sanitizers, a test that
+   an impulse leaves the limiter after exactly its latency and that no
+   output sample exceeds the ceiling for signals up to +24 dB over full
+   scale.
+5. **Render time per node.** `package:aud_dsp_effects/testing.dart` gets
+   `AudEffectsBench`: it runs a node through its vtable on the calling
+   thread, block by block, and returns the mean, p99 and maximum time per
+   block and the share of the block's duration.
+6. **Example.** A page that plays a chord through delay, plate, Freeverb
+   and limiter with their parameters; `integration_test/effects_test.dart`
+   measures the bench of every node, the chain on the engine (xruns, late
+   callbacks, render time with and without the effects), the peak of the
+   output with a dense chord pushed 12 dB over full scale, and the latency
+   the limiter adds.
+7. **The app.** The channel nodes and `external` sum into the master
+   chain `delay` (stereo delay) → `reverb` (plate) → `limiter` →
+   output. Every preset in `index.json` carries `effects` with the reverb
+   and delay parameters, written by the converter from one table of
+   defaults and per-preset overrides; the engine applies them with a ramp
+   after a preset loaded and restores them with the previous preset.
+   `sound_numbers_test.dart` measures the chain: render time with and
+   without the effects, xruns, the output peak with dense chords on every
+   preset (≤ 1.0), the latency of the limiter.
+
+Out of scope: a reverb or delay switch in the app's settings, sends per
+channel, per-node render time in the engine (`aud_audio_graph`), a
+look-ahead that changes after `prepare` (the engine reads the latency
+once), the reference devices (S29b), the oscillators, filters, dynamics,
+modulation and distortion of S10b.
+
+## Affected repos
+
+- `aud_dsp_effects`: the nodes, the package around them, tests, bench,
+  example; 0.2.0 (minor: the Dart API of the spike breaks).
+- `audanika_app`: the master chain, the effects per preset, the converter,
+  tests and numbers; a minor version.
+- `aud_audio_pm`: this plan, process-004 and process-005, the decisions of
+  the findings, `issues.md`.
+- `aud_midi_windows`: joined on 2026-10-13 with the user's consent, because
+  `flutter run --release` of the app failed on Android and on a hardware
+  iPad (see Findings); 0.1.2 (patch). `aud_midi` and `aud_audio_midi` came
+  with it, as gg keeps the repos between it and the app; they carry only
+  gg's own changes (references, DNA, the helix dev dependency).
+- `aud_dsp_sampler`: joined on 2026-10-13 with the user's consent after
+  the app crashed in the measurement: thread safety of the shared state
+  (sampler-005) and, on the user's request, a faster MIDI flush,
+  compressor and gain with the same output (sampler-006); 0.3.1 (patch).
+  The app requires it.
+
+`aud_audio`, `aud_audio_graph` and `aud_audio_core` stay unchanged and out
+of the ticket (family-002).
+
+## Constraints
+
+The standing rules of process-005 hold: no Dart on the audio thread and no
+allocation there; permissive licenses with notices and the check;
+Node.js scripts with the license header; independent versions; commits
+with `gg one do commit -m`, first word "Add", "- " bullets, no
+Co-Authored-By trailer, no name of a repo of `audanika-legacy` or
+`audanika-private` in commit, merge or changelog lines; publish configs
+before `gg do review`. Model and effort: Claude Opus 5.5 at extra high
+effort for the lead and every agent (process-004); Fable only after
+asking the user.
+
+## Defaults for the open questions
+
+1. **Master reverb: the plate.** Denser than Freeverb's combs with fewer
+   filters per sample; Freeverb stays available as a node.
+2. **Master delay: the stereo delay in seconds.** The app has no tempo;
+   the tempo-synced delay serves apps with a transport.
+3. **Chain order: delay before reverb**, so that the echoes are
+   reverberated; the limiter last.
+4. **Moderate defaults after the legacy "medium" settings:** reverb mix
+   0.15, decay for about 2 s, pre-delay 20 ms; delay 0.4 s, feedback 0.15,
+   mix 0.06, ping-pong. Per preset: Strings more and longer reverb, the
+   E-Piano more delay, the organ less of both — starting values to be
+   tuned by ear on the reference devices in S29b.
+5. **Per-preset values live in `index.json`**, written by the converter,
+   so that a new conversion keeps them; a missing field falls back to the
+   defaults in the app.
+6. **Limiter: ceiling −1 dBFS, release 100 ms, look-ahead 1.5 ms.** The
+   ceiling keeps room for inter-sample peaks; 1.5 ms (72 frames at
+   48 kHz) is small against the output latency of the devices.
+7. **The per-node limiters and the gain effect stay** in the SFZ files,
+   as the user asked; whether they can go is open work of app-001. Later
+   in the ticket the user removed them (app-004).
+
+## Steps
+
+1. Plan, process-004, process-005, `issues.md` (this file).
+2. `aud_dsp_effects`: package on ABI 0.4, the five nodes, notices,
+   native and Dart tests, goldens, bench, README.
+3. `audanika_app`, in parallel with step 2: effects per preset in the
+   converter, `index.json` and the content model.
+4. `aud_dsp_effects` example and its integration test; the app's master
+   chain and its numbers test.
+5. Measure on the iOS simulator and the Android emulator.
+6. Findings into decisions and this plan; `/code-review` at high effort;
+   publish configs; `gg do review`; review-light per repo; fixes.
+
+## Findings
+
+- **A data race in the sampler crashed the app.** sfizz keeps the curves
+  of flex envelopes in a process-wide map (`FlexEGs::getShapeCurve`,
+  `clearUnusedCurves`) without a lock. The engine loads the app's four
+  sampler nodes on parallel workers (lifecycle-002), so every preset
+  change can corrupt the heap; the measurement's preset changes hit it on
+  the iOS simulator (`pointer being freed was not allocated`). It dates
+  from ticket 27, whose flex envelopes first reached that map. The audit
+  of all state the process shares found five more races — the silence
+  wavetable (a second crash candidate at the start), the Faust table of
+  the distortion, the CRC table of stb_vorbis, the CPU detection of
+  dr_flac and dr_mp3. All are fixed in `aud_dsp_sampler` 0.3.1 with tests
+  that fail under ThreadSanitizer, or crash, without the fixes
+  (sampler-005).
+- **Release builds of the app failed** on Android and iOS, since ticket
+  27 already: the AOT snapshotter stopped with "Unexpected object (Class
+  with illegal cid, full-aot) … win32 … DNS_SERVICE_INSTANCE" (Dart
+  3.13.4). `aud_midi_windows` 0.1.1 names win32's struct in the signature
+  of the DNS-SD completion callback (`NativeCallable`), which the app
+  reaches only as an unused tear-off through `aud_midi`'s lazy advertiser;
+  AOT then drops the struct class but keeps the signature. 0.1.2 passes
+  void pointers and casts in Dart; a test compiles the backend with
+  `dart compile exe` and failed before the fix. The release builds then
+  ran on the Galaxy Tab S4 and on the user's iPad (`flutter run
+  --release`, 2026-10-14). A bug report for the Dart SDK is open work.
+- **DunneAudioKit's StereoDelay mixes inverted:** `(1 - mix) * wet +
+  mix * dry`, so mix 1 is dry. The port renders 0 dry, 1 wet (dsp-002).
+- **Denormals.** Freeverb's `undenormalise` reads a float through an
+  integer pointer, undefined behaviour under strict aliasing; the
+  add-and-subtract trick kept the plate's feedback cycling at about 1e-25
+  for ever. Every feedback path flushes values below 1e-15 to zero.
+- **The engine reads a node's latency once, after `prepare`.** The
+  look-ahead is therefore fixed at 1.5 ms (dsp-003); a look-ahead the app
+  can choose is open work. Live notes sound 1.5 ms later; scheduled
+  events are pre-delivered.
+- **The engine has no per-node render time.** `AudEffectsBench` measures
+  a node on the calling thread. On the simulators the chain costs about
+  8 times the bench sum on the audio thread (113 µs against 14 µs per
+  512 frames on iOS): the bench runs warm on the test's thread, the audio
+  thread meets cold caches between callbacks. Devices decide (S29b).
+- **The iOS simulator renders 512-frame blocks** while it reports a
+  buffer of 256; the example computes shares from the frames it rendered.
+- **Dense chords reach +7.1 to +7.6 dBFS on the sum** without the chain,
+  although every node is limited at −0.5 dBFS; the master limiter holds
+  −1 dBFS exactly on every preset.
+- **The app did not build for Android:** `permission_handler_android`
+  14.1.0 in the lock of ticket 27 is compiled against SDK 37, the app
+  against 36. The app compiles against SDK 37 now; targetSdk is unchanged.
+- **`gg do add` commits uncommitted work** of every repo with the ticket
+  title as the message. The three commits were redone with proper
+  messages; process-005 now asks to commit before adding a repo.
+- The delay time is a float parameter: 0.1 s is 4800.00007 frames, an
+  interpolated echo of 0.99993. The engine caps tails at 10 s; the
+  reverbs report up to 30 s.
+
+## Code review
+
+`/code-review` at high effort (2026-10-13) over `aud_dsp_effects`,
+`aud_dsp_sampler` and the app found six points. Fixed: the app plays
+without effects when the master chain cannot be created (a refused
+effects package no longer silences it, a half-built chain is removed);
+the tempo delay's 4 s limit is documented. Wrong: the point that the
+race fix changed the sample-rate constants of the sampler's distortion —
+the original set them already; the note written for it was corrected in
+review-light, but the changelog line of that commit (owned by gg) still
+says otherwise and the next line corrects it. Left as they are, for a
+gain below a microsecond each: the delays set their parameters every
+frame, the nodes flush their output mix and not only their feedback, and
+a loader waiting for stb_vorbis's CRC table spins without a pause.
+
+## Review
+
+`gg do review` opened the pull requests on 2026-10-13; review-light ran
+with one reviewer per repo, each fixing what it found:
+
+- `aud_dsp_effects`: one interpolated read for the plate's delays, the
+  stereo delay's longest time from its descriptor, the bench split into
+  smaller functions, the comment landmarks of the code guide, the Dart
+  API in both READMEs, a test of the tempo delay's 4 s limit.
+- `aud_dsp_sampler`: the corrected distortion notes, named states of the
+  once guards, a redundant flag of dr_flac dropped, the TSan symbolizer
+  and the shared-state audit in both READMEs.
+- The app: the parameter ids of `SfzEffects.defaults` from the effects
+  package, the fallback documented, the converter's options documented.
+- `aud_audio_pm`: this status, the numbers of the peak without the chain,
+  the back links of the refined decisions, the steps S10a and S29a in the
+  plan of ticket 17.
+
+Left: the effect defaults live in the converter and in the app, tied
+together by a test; a spinning wait in dr_flac as in stb_vorbis; the
+experimental `record_use` package, as in the sampler.
+
+## Measurements
+
+Debug builds on the iOS simulator (iPhone 17 Pro) and the Android emulator
+(API 36.1, arm64), 48 kHz.
+
+Render time per node (`AudEffectsBench` on the device's thread, mean per
+block; p99 in brackets):
+
+| Node | iOS, 512 frames | iOS, 256 | Android, 540 frames | Android, 256 |
+| --- | --- | --- | --- | --- |
+| freeverb | 8.2 µs (10.5) | 4.1 µs | 9.3 µs (24.8) | 4.4 µs |
+| plate | 7.4 µs (12.3) | 3.6 µs | 7.8 µs (23.4) | 3.6 µs |
+| stereo_delay | 3.8 µs (4.3) | 2.0 µs | 4.7 µs (6.0) | 2.3 µs |
+| tempo_delay | 3.9 µs (4.9) | 1.9 µs | 4.8 µs (11.3) | 2.4 µs |
+| limiter | 2.3 µs (2.9) | 1.2 µs | 2.6 µs (3.3) | 1.3 µs |
+| tremolo | 1.2 µs (1.6) | 0.6 µs | 1.3 µs (1.6) | 0.6 µs |
+
+Every node takes less than 0.1 % of its block.
+
+The example: an eight-voice saw chord through delay → plate → limiter at
++12 dB drive against the chord straight to the output, 60 s each:
+
+| | iOS simulator | Android emulator |
+| --- | --- | --- |
+| Output peak, effects (ceiling 0.891251) | 0.891251 | 0.891251 |
+| Output peak, dry | 0.937 | 0.937 |
+| Xruns, effects / dry | 0 / 0 | 0 / 0 |
+| Late callbacks, effects / dry | 0 / 0 | 1041 / 1032 |
+| Render mean, effects / dry | 187 / 73 µs | 137 / 51 µs |
+| Render max, effects / dry | 279 / 118 µs | 7956 / 2857 µs |
+| Limiter latency (reported, impulse offline) | 72 / 72 frames, 1.5 ms | 72 / 72 frames, 1.5 ms |
+| Device output latency | 517 frames | 5142 frames |
+
+The app on the fixed sampler (0.3.1): dense chords (bass, an eight-note
+chord, melody at velocity 127, sustain part of the time) for 30 s per
+preset, then without the chain:
+
+| | iOS simulator | Android emulator |
+| --- | --- | --- |
+| Output peak, every preset | 0.891251 (−1.0 dBFS) | 0.891251 (−1.0 dBFS) |
+| Output peak without the chain | 2.409 (+7.6 dBFS) | 2.256 (+7.1 dBFS) |
+| Xruns, every preset | 0 | 0 |
+| Late callbacks per preset | 0 (0 without the chain) | 346 to 414 (331 without the chain) |
+| Render mean per preset | 1.46 to 2.50 ms | 1.54 to 2.22 ms |
+| Render max per preset | 3.76 to 4.05 ms | 7.15 to 9.61 ms |
+| Render mean, Welcome_Combi with / without the chain | 2.12 / 2.49 ms | 2.21 / 2.28 ms |
+| Limiter latency | 72 frames, 1.5 ms | 72 frames, 1.5 ms |
+| Block, device output latency | 256 (512 rendered), 10.8 ms | 1920 frames, 119.8 ms |
+
+The chain's share — about 0.1 ms per block by the example — is below the
+spread of the sampler's render time between two runs, so the difference
+with and without the chain is noise on both platforms.
+
+The emulator's late callbacks come with and without the effects, as in
+tickets 22 to 27.
+
+### Galaxy Tab S4
+
+On 2026-10-13 the user connected a Samsung Galaxy Tab S4 (SM-T830,
+Snapdragon 835, Android 10, arm64; debug builds, the native code
+optimized). Oboe opened 48 kHz with a buffer of 384 frames and blocks of
+about 180 frames; the device reports an output latency of 21.5 ms.
+
+Render time per node (`AudEffectsBench` on the test's thread, mean per
+block; p99 in brackets) — about ten times the simulators:
+
+| Node | 180 frames | 256 frames | Share of the block |
+| --- | --- | --- | --- |
+| freeverb | 32.1 µs (39.1) | 45.4 µs (53.0) | 0.86 % |
+| plate | 27.9 µs (34.0) | 39.6 µs (46.9) | 0.74 % |
+| stereo_delay | 15.5 µs (21.1) | 22.1 µs (28.6) | 0.41 % |
+| tempo_delay | 15.6 µs (21.6) | 22.0 µs (28.0) | 0.41 % |
+| limiter | 10.4 µs (11.4) | 14.8 µs (19.9) | 0.28 % |
+| tremolo | 1.9 µs (2.0) | 2.6 µs (2.8) | 0.05 % |
+
+The example, 60 s each: the chord through delay → plate → limiter at
++12 dB peaks at 0.891251 with 0 xruns (581 late callbacks, 538 dry); the
+render mean is 735 µs against 152 µs dry, so the chain costs 583 µs per
+block on the audio thread — 15.5 % of a 3.75 ms block, ten times its
+bench. The limiter's latency is 72 frames, the offline impulse 72.
+
+The app, dense chords for 60 s per preset (bass, an eight-note chord and
+melody at velocity 127 with sustain — a stress test):
+
+| | With the chain, per preset | Without the chain |
+| --- | --- | --- |
+| Output peak | 0.891251 (−1.0 dBFS) | 2.386 (+7.6 dBFS) |
+| Xruns | 1068 to 3674 | 3572 |
+| Late callbacks | 1971 to 7940 | 7779 |
+| Render mean, max | 3.65 to 6.63 ms, 8.2 to 10.5 ms | 6.44 ms, 9.97 ms |
+
+The limiter holds the ceiling, and the chain adds 0.19 ms to the mean; the
+tablet cannot render the stress test on four sampler nodes with or
+without it. A profile of the audio thread (`simpleperf`, the debuggable
+app, first preset) shows where the time goes: 68 % in the sampler, of it
+about a third in `sfz::MidiState::flushEvents` (the controller events of
+every node, every block); 17 to 25 % in libm — `powf`, `exp2f` and
+`log10f`, the per-sample `pow(10, …)` and `log10` of sfizz's compressor
+(`effects/gen/compressor.hxx`), which every SFZ file of the app runs as
+its limiter per node, on idle nodes too (app-001); 5.8 % in the effects.
+The audio thread (`AudioTrack`, SCHED_FIFO 2, cpuset top-app) ran on the
+small cores 0 to 3 in every sample.
+
+On the user's request (2026-10-13) the two hot spots were optimized in
+the sfizz fork, with the same output bit for bit (sampler-006):
+`flushEvents` flushes only the event vectors that received events; the
+compressor calls `log10` only above its threshold and `pow` only for a
+gain other than 0 dB, passes silence through at rest, and a silent bus
+whose effects are at rest skips them; the gain effect, a voice's pitch
+ratio and its volume modulation convert once per run of equal values
+instead of per sample (the source of `exp2f`). Micro-benchmarks against
+0.3.0 on the Mac: `flushEvents` without events 2551 times faster, with
+one 251 times; the compressor on silence 165 times, active 1.5 to 2.5
+times (its oversampling filters are sample-serial); an idle synth 16
+times; four synths 1.4 times. On the tablet `flushEvents` left the
+profile (24 % before) and libm fell from 17 % to 1.6 % of the audio
+thread. The same 60 s test again:
+
+| Preset | Xruns before, after | Late callbacks before, after | Render mean before, after |
+| --- | --- | --- | --- |
+| E-Piano | 1101, 17 | 2013, 286 | 3.65, 2.68 ms |
+| Welcome_Combi | 3595, 2602 | 7940, 3111 | 6.63, 4.55 ms |
+| Organ_Combi | 1068, 6 | 1971, 274 | 3.66, 2.83 ms |
+| Strings | 3674, 519 | 6146, 339 | 5.82, 3.27 ms |
+| Vibraphone | 3618, 2117 | 7579, 1792 | 6.45, 4.18 ms |
+| Without the chain | 3572, 2265 | 7779, 2823 | 6.44, 4.33 ms |
+
+The peak stays at 0.891251 on every preset; the chain adds 0.22 ms to
+the mean. The three-sound presets still overload the tablet under the
+stress test: the voices themselves — interpolation, flex envelopes,
+panning, `Voice::isFree` over all voices (6.8 %) — on the small cores.
+
+Then, on the user's instruction, the per-node limiters left the SFZ files
+(app-004): no compressor and no gain effect; `global_volume` rises by the
+7.35 dB the gain effect restored, to −0.3422 dB, which keeps every note's
+level within 0.0055 dB (the piano at velocity 76 peaks at −15.884 dBFS as
+before). The same 60 s test a third time:
+
+| Preset | Xruns: first, optimized, no node limiters | Render mean | Render max |
+| --- | --- | --- | --- |
+| E-Piano | 1101, 17, 6 | 3.65, 2.68, 2.53 ms | 8.56, 5.22, 4.99 ms |
+| Welcome_Combi | 3595, 2602, 2328 | 6.63, 4.55, 4.35 ms | 10.52, 8.10, 8.24 ms |
+| Organ_Combi | 1068, 6, 0 | 3.66, 2.83, 2.72 ms | 8.17, 5.92, 6.32 ms |
+| Strings | 3674, 519, 182 | 5.82, 3.27, 3.12 ms | 9.11, 5.77, 6.73 ms |
+| Vibraphone | 3618, 2117, 2039 | 6.45, 4.18, 4.09 ms | 9.61, 7.60, 7.52 ms |
+| Without the chain | 3572, 2265, 2036 | 6.44, 4.33, 4.12 ms | 9.97, 7.67, 7.56 ms |
+
+The master limiter holds 0.891251 on every preset; without the chain the
+sum now peaks at 4.461 (+13.0 dBFS), since no node is limited. Removing
+the limiters saved another 0.1 to 0.2 ms per block: the optimization had
+already made the compressor cheap below its threshold. Under the stress
+test the three-sound presets still overload the tablet.
+
+Open work of S29b and S24: the voice loop of the fork and the audio
+thread's placement on the small cores (io-002) are the next costs; the
+other reference devices follow in S29b.
+
+## Open questions
+
+None open; see the defaults above. The findings went into dsp-002,
+dsp-003, app-003, app-004, sampler-005 and sampler-006; open work is
+listed there.
+
+## Rests on
+
+dsp-001, license-001, license-002, license-003, app-001, app-002,
+graph-001, graph-002, graph-003, abi-001, time-001, interop-001,
+lifecycle-002, sampler-002, family-002, process-003, process-004,
+process-005.
