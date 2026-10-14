@@ -6,6 +6,9 @@
   (questions 3 and 6, Findings; Gabriel Gatzsche confirmed the deviations
   of the Findings at the review, 2026-10-12)
 - Refines: [sampler-001](sampler-001.md) — loads and the node
+- Refined by: [sampler-008](sampler-008.md) — `max_voices` and the voice
+  budget apply at the next block without a load; the polyphony still
+  loads (ticket 29)
 - Open work: per-note pitch bend and the other per-note controllers of
   MIDI 2.0 with the note expressions of S18 and S19; a retuning that keeps
   the notes that sound; disk streaming through a small ring buffer per

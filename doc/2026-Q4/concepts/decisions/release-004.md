@@ -8,7 +8,8 @@
   reference devices (open question 6 of the plan of ticket 17); the Pixel
   that io-002, sampler-001, midi-002 and midi-003 name as the Android
   reference is replaced by the Galaxy Tab S4
-- Open work: confirm the iPhone model at the first measurement on it
+- Open work: none; the iPhone model was confirmed as iPhone17,2 (iPhone 16
+  Pro Max) by `AudDeviceClass` in ticket 29
 
 ## Decision
 
