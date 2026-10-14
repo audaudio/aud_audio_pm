@@ -370,6 +370,21 @@ roughly 22 to 32 engineer-weeks.
   loop that visits only the sounding voices, and the audio thread on the
   big cores of Android devices (io-002). Depends on S9; raises the budget
   of S9b.
+- S29c (L, M2, planned as ticket 31) SoundPrism Link Edition in the
+  Audanika app: the 23 combis rebuilt once as SFZ, their JavaScript LFOs
+  run unchanged in `aud.script.modulator` of the new optional package
+  `aud_audio_script` (QuickJS-ng on a worker that computes once per audio
+  buffer, never on the audio thread; apps add it explicitly, the engine
+  never depends on it); samples as FLAC, 120 BPM until S29e. Depends on
+  S29a, S10a and, for its converter, S29d.
+- S29d (S, M2, planned as ticket 32) Shared sample sets: the SFZ presets
+  of the app include the regions and loop points of their sample set
+  with `#include` instead of copying them; the converters write that
+  layout. Depends on S29a.
+- S29e (S, M2, planned as ticket 33) Tempo control: players set the tempo
+  of the Audanika app; the scripted combis of S29c and the master delay
+  follow it; ready to show and set the Link tempo once S15 exists.
+  Depends on S29c.
 
 ### Milestone M3: AUv3 on iOS
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.12.0 - 2026-10-14
+
+### Added
+
+- Add the plans of tickets 31 to 33 (S29c, S29d, S29e)
+- Plan the SoundPrism Link Edition combis with a JavaScript modulator in an optional package
+- QuickJS-ng in the C++ backend, one tick per audio buffer, measured on the reference devices
+- Add the topic soundprism-link-edition
+- Plan ticket 32: presets include the regions of their sample set; FLAC samples
+- Plan ticket 33: a tempo control in the app
+- Add tickets 31 to 33 to doc/issues.md, the ticket list and the plan of ticket 17
+- Add the link from answer 5 to answer 18 in plan 31
+
 ## 0.11.0 - 2026-10-14
 
 ### Added

@@ -46,3 +46,13 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md](2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md)
   — ticket 30 (planned): a faster voice loop with SIMD on ARM, and the
   audio thread on the big cores (step S9c)
+- [2026-10-14-31-port-soundprism-js-lfo-presets.md](2026-10-14-31-port-soundprism-js-lfo-presets.md)
+  — ticket 31 (planned): the combis of SoundPrism Link Edition in the
+  Audanika app, their JavaScript LFOs in an optional script package (step
+  S29c)
+- [2026-10-14-32-share-sample-sets-between-sfz-presets.md](2026-10-14-32-share-sample-sets-between-sfz-presets.md)
+  — ticket 32 (planned): presets include the regions and loop points of
+  their sample set instead of copying them (step S29d)
+- [2026-10-14-33-add-a-tempo-control-to-the-app.md](2026-10-14-33-add-a-tempo-control-to-the-app.md)
+  — ticket 33 (planned): a tempo control that the scripted combis and the
+  master delay follow (step S29e)
