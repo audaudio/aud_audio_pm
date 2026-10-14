@@ -5,7 +5,7 @@ The tickets of the aud_audio family are numbered here, not on GitHub
 counter, appends its row and links its plan file once it exists; the
 number is the gg ticket ID and the name of the ticket branches.
 
-Next number: 31
+Next number: 34
 
 | Number | Title | Status | Plan |
 | --- | --- | --- | --- |
@@ -25,6 +25,9 @@ Next number: 31
 | 28 | S10a: Build reverb, delay and a master limiter in aud_dsp_effects for iOS and Android | implemented | [2026-10-13-28-build-reverb-delay-and-a-master-limiter.md](2026-Q4/tickets/2026-10-13-28-build-reverb-delay-and-a-master-limiter.md) |
 | 29 | S9b: Limit the voices of the sampler by the CPU power of the device | planned | [2026-10-13-29-limit-the-voices-by-the-cpu-power-of-the-device.md](2026-Q4/tickets/2026-10-13-29-limit-the-voices-by-the-cpu-power-of-the-device.md) |
 | 30 | S9c: Render the sampler voices faster and on the big cores | planned | [2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md](2026-Q4/tickets/2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md) |
+| 31 | S29c: Port the SoundPrism Link Edition combis and their JavaScript LFOs | planned | [2026-10-14-31-port-soundprism-js-lfo-presets.md](2026-Q4/tickets/2026-10-14-31-port-soundprism-js-lfo-presets.md) |
+| 32 | S29d: Share the sample sets between the SFZ presets with #include | planned | [2026-10-14-32-share-sample-sets-between-sfz-presets.md](2026-Q4/tickets/2026-10-14-32-share-sample-sets-between-sfz-presets.md) |
+| 33 | S29e: Add a tempo control to the Audanika app | planned | [2026-10-14-33-add-a-tempo-control-to-the-app.md](2026-Q4/tickets/2026-10-14-33-add-a-tempo-control-to-the-app.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the

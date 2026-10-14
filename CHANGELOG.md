@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add the plans of tickets 31 to 33 (S29c, S29d, S29e)
+- Plan the SoundPrism Link Edition combis with a JavaScript modulator in an optional package
+- QuickJS-ng in the C++ backend, one tick per audio buffer, measured on the reference devices
+- Add the topic soundprism-link-edition
+- Plan ticket 32: presets include the regions of their sample set; FLAC samples
+- Plan ticket 33: a tempo control in the app
+- Add tickets 31 to 33 to doc/issues.md, the ticket list and the plan of ticket 17
+
 ## 0.11.0 - 2026-10-14
 
 ### Added
@@ -116,6 +128,7 @@
 
 - Add family-002: every package has a version of its own
 
+
 ## 0.8.0 - 2026-10-12
 
 ### Added
@@ -172,6 +185,7 @@
 
 - The plan: questions 8 and 9 answered, none open
 
+
 ## 0.7.0 - 2026-10-11
 
 ### Added
@@ -210,6 +224,7 @@
 - Mark ticket 24 as done
 
 - The embedding checklist in REAPER and Live and the cycles in Live stay open
+
 
 ## 0.6.0 - 2026-10-09
 
@@ -250,6 +265,7 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
+
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -267,6 +283,7 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
+
 
 ## 0.1.0 - 2026-10-08
 
