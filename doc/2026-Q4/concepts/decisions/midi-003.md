@@ -7,8 +7,11 @@
 - Refines: [graph-001](graph-001.md) — "live events are delivered as early
   as possible" holds for `immediate`; timestamped external input waits for
   its constant latency
+- Refined by: [release-004](release-004.md) — the Galaxy Tab S4 replaces
+  the Pixel as the Android reference device (2026-10-13)
 - Open work: the margin m and the late share on the reference devices
-  (ticket 26, step 5 and 8); the Pixel and the iPad Pro M5
+  (ticket 26, step 5 and 8); the Galaxy Tab S4 and the iPad Pro M5
+  (release-004)
 
 ## Decision
 

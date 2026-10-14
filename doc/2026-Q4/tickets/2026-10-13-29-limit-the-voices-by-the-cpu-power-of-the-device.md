@@ -29,8 +29,9 @@ process).
 - The app plays four sampler nodes (three channels and `external`), each
   with 64 voices: up to 256 voices on one audio thread.
 - Ticket 28 measured on the Galaxy Tab S4 (Snapdragon 835, Android 10):
-  dense chords at velocity 127 with sustain overload two presets even after
-  the optimization of sampler-006 — 2328 xruns in 60 s on Welcome_Combi,
+  dense chords at velocity 127 with sustain still overload four of five
+  presets after the optimization of sampler-006 and without the per-node
+  limiters (app-004) — 6 to 2328 xruns in 60 s, on Welcome_Combi 2328 and
   a render mean of 4.35 ms in blocks of about 3.75 ms. The audio thread ran
   on the small cores. The voices themselves dominate: interpolation, flex
   envelopes, panning, `Voice::isFree`.
@@ -71,13 +72,16 @@ process).
 5. **The app** turns the governor on, keeps the per-node polyphony at 64
    and shows nothing new; a developer setting shows the budget and the
    stolen voices.
-6. **Measurements** on the Galaxy Tab S4, the iOS simulator and the
-   Android emulator, the reference devices when named: the stress test of
-   ticket 28 with zero xruns after the governor settles, the time it takes
-   to settle, the budget it reaches per device, voices stolen per minute,
-   and a listening check that stealing is not audible as clicks.
+6. **Measurements** on the iOS simulator, the Android emulator and the
+   reference devices of release-004 (the Galaxy Tab S4, the iPad Pro (M5),
+   the iPhone 16 Pro Max): the stress test of ticket 28 with zero xruns
+   after the governor settles, the time it takes to settle, the budget it
+   reaches per device, voices stolen per minute, and a listening check
+   that stealing is not audible as clicks.
 
-## Affected repos (expected)
+## Affected repos
+
+Expected; the plan review confirms them.
 
 - `aud_dsp_sampler`: `max_voices`, the process-wide budget and count,
   stealing with a fade, the diagnostics; a minor version.
@@ -129,5 +133,5 @@ process-005.
 ## Rests on
 
 lifecycle-001, lifecycle-002, sampler-002, sampler-003, sampler-006,
-interop-001, graph-002, process-004, process-005; the measurements of
-ticket 28.
+app-004, release-004, interop-001, graph-002, process-004, process-005;
+the measurements of ticket 28.

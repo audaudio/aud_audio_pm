@@ -1,8 +1,10 @@
 # 28: S10a — Build reverb, delay and a master limiter in aud_dsp_effects for iOS and Android
 
 Status: implemented 2026-10-13 without a plan review, as the user asked
-(the defaults below answer the open questions); findings, code review and
-numbers below.
+(the defaults below answer the open questions); continued on the user's
+requests until 2026-10-14 with the Galaxy Tab S4, the optimized sampler,
+the removal of the per-node limiters, the release-build fix and the plans
+of tickets 29 and 30; findings, code reviews and numbers below.
 
 ## Goal
 
@@ -15,7 +17,8 @@ the nodes. The Audanika app routes its sampler nodes through a master
 delay, a master reverb and the master limiter, with moderate defaults that
 each of its presets can adjust; the limiter works in addition to the
 per-node limiters and the +7.35 dB gain effect of its SFZ files (open
-work of app-001). Findings go back into the contracts as decisions.
+work of app-001); later in the ticket it replaced them (app-004). Findings
+go back into the contracts as decisions.
 Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 ## What the code base gives
@@ -123,11 +126,14 @@ modulation and distortion of S10b.
 ## Affected repos
 
 - `aud_dsp_effects`: the nodes, the package around them, tests, bench,
-  example; 0.2.0 (minor: the Dart API of the spike breaks).
+  example; 0.2.0 (minor: the Dart API of the spike breaks), published on
+  2026-10-14.
 - `audanika_app`: the master chain, the effects per preset, the converter,
   tests and numbers; a minor version.
 - `aud_audio_pm`: this plan, process-004 and process-005, the decisions of
-  the findings, `issues.md`.
+  the findings, release-004 and sampler-007, the plans of tickets 29 and
+  30, `issues.md`; 0.11.0, published on 2026-10-14; the second review
+  follows as a patch.
 - `aud_midi_windows`: joined on 2026-10-13 with the user's consent, because
   `flutter run --release` of the app failed on Android and on a hardware
   iPad (see Findings); 0.1.2 (patch). `aud_midi` and `aud_audio_midi` came
@@ -136,8 +142,8 @@ modulation and distortion of S10b.
 - `aud_dsp_sampler`: joined on 2026-10-13 with the user's consent after
   the app crashed in the measurement: thread safety of the shared state
   (sampler-005) and, on the user's request, a faster MIDI flush,
-  compressor and gain with the same output (sampler-006); 0.3.1 (patch).
-  The app requires it.
+  compressor and gain with the same output (sampler-006); 0.3.1 (patch),
+  published on 2026-10-14. The app requires it.
 
 `aud_audio`, `aud_audio_graph` and `aud_audio_core` stay unchanged and out
 of the ticket (family-002).
@@ -189,6 +195,10 @@ asking the user.
 5. Measure on the iOS simulator and the Android emulator.
 6. Findings into decisions and this plan; `/code-review` at high effort;
    publish configs; `gg do review`; review-light per repo; fixes.
+7. On the user's requests: the Galaxy Tab S4, the optimized sampler
+   (sampler-006), the per-node limiters removed (app-004), the release
+   builds fixed in `aud_midi_windows`, the plans of tickets 29 and 30; a
+   second `/code-review` and review-light over these commits.
 
 ## Findings
 
@@ -235,7 +245,8 @@ asking the user.
   buffer of 256; the example computes shares from the frames it rendered.
 - **Dense chords reach +7.1 to +7.6 dBFS on the sum** without the chain,
   although every node is limited at −0.5 dBFS; the master limiter holds
-  −1 dBFS exactly on every preset.
+  −1 dBFS exactly on every preset. Without the per-node limiters (app-004)
+  the sum reaches +13.0 dBFS on the Galaxy Tab S4.
 - **The app did not build for Android:** `permission_handler_android`
   14.1.0 in the lock of ticket 27 is compiled against SDK 37, the app
   against 36. The app compiles against SDK 37 now; targetSdk is unchanged.
@@ -260,6 +271,35 @@ says otherwise and the next line corrects it. Left as they are, for a
 gain below a microsecond each: the delays set their parameters every
 frame, the nodes flush their output mix and not only their feedback, and
 a loader waiting for stb_vorbis's CRC table spins without a pause.
+
+Second review: `/code-review` at high effort ran again on 2026-10-14 over
+the commits since the first review and found six points. Fixed: the app's
+fallback without the chain played unlimited once the nodes carried no
+limiter (app-004); it now falls back to the limiter alone and plays
+unlimited only when no limiter can be created. A comment of the converter
+cited app-003 instead of app-004. The AOT test of `aud_midi_windows`
+compiled an executable in every `dart test`; it runs `dart compile
+aot-snapshot` now, which needs nothing beyond the Dart SDK (3.4 s for the
+whole suite) and still fails on the old binding. In the published
+`aud_dsp_sampler` 0.3.1, whether a patch follows is open: the
+compressor's `isAtRest` needs states of exactly zero, so the app's former
+limiter came to rest only 4.4 s after a loud burst (a flush of the tiny
+states during silent blocks brings it to about 1 s, within 1.2e-7 of the
+output); `markForFlush` checks out-of-range controller numbers only in
+debug builds, though no path of the node reaches it — only upstream's
+`set_cc512` in an SFZ file, which wrote out of bounds before; the gain
+effect's `isAtRest` computes a `pow` every block.
+
+Review-light of the second round, one reviewer per repo: the app — the
+limiter-only fallback in the README, one helper for the engine on the app
+content; `aud_midi_windows` — a code example in both READMEs, the
+example's notes through the encoder of `aud_midi_standard`, the inputs
+opened side by side; `aud_audio_pm` — the status lines, the numbers of the
+peak without the chain, the profile cited by ticket 30, the back links of
+release-004; `aud_dsp_sampler` — reported only (published): tests of the
+gain, the effect bus and `SameArgumentCache` belong in the files named
+after their code, and two README sentences overstate when the compressor
+calls `log10` and `pow`.
 
 ## Review
 
@@ -436,15 +476,17 @@ the limiters saved another 0.1 to 0.2 ms per block: the optimization had
 already made the compressor cheap below its threshold. Under the stress
 test the three-sound presets still overload the tablet.
 
-Open work of S29b and S24: the voice loop of the fork and the audio
-thread's placement on the small cores (io-002) are the next costs; the
-other reference devices follow in S29b.
+Open work: ticket 29 (S9b) limits the voices to what the device renders;
+ticket 30 (S9c) plans the voice loop of the fork and the audio thread on
+the big cores (io-002); the other reference devices (release-004) follow
+in S29b.
 
 ## Open questions
 
 None open; see the defaults above. The findings went into dsp-002,
 dsp-003, app-003, app-004, sampler-005 and sampler-006; open work is
-listed there.
+listed there. sampler-007 and release-004 came from the planning of
+tickets 29 and 30.
 
 ## Rests on
 

@@ -25,8 +25,8 @@ Four milestones, all on iOS and Android (release-003):
   `aud_dsp_sampler` on the new engine — S00 (all repos), S0-mobile, S1,
   S2, S3, S4, S8, S9, a minimal S22 and S24, S29a
   (release-002).
-- M2, reverb and delay: the first effects ticket S10a and the app
-  migration S29b.
+- M2, reverb and delay: the first effects ticket S10a, the voice budget
+  S9b, the faster voices S9c and the app migration S29b.
 - M3, AUv3 on iOS: `aud_audio_auv3` (S20) over the headless host, so
   the instruments run inside AUv3 hosts.
 - M4, the backing player with time stretching: `aud_audio_file` (S23),
@@ -319,7 +319,8 @@ roughly 22 to 32 engineer-weeks.
   per device; results as JSON published on the docs site; its numbers
   gate the parallel scheduler's default (sched-001); it takes the Galaxy
   Tab S4 numbers of ticket 25 with the question of scheduling on big and
-  little cores. Depends on S4 (minimal), S22 (publishing).
+  little cores (the audio thread on the big cores is planned in S9c).
+  Depends on S4 (minimal), S22 (publishing).
 - S9 (L, built 2026-10-11 in ticket 25 for iOS and Android; the numbers of
   the reference devices are open) `aud_dsp_sampler`: sfizz node, loaders,
   SFZ presets as node presets, the message API on routes. No backward
@@ -342,17 +343,20 @@ roughly 22 to 32 engineer-weeks.
 
 ### Milestone M2: reverb and delay in the Audanika app
 
-- S10a (M, M2, built 2026-10-13 in ticket 28 for iOS and Android; the
-  numbers of the reference devices are open) `aud_dsp_effects`, first
-  ticket — reverb and delay: a Freeverb-based reverb (public domain) and
-  a plate reverb re-implemented from the literature (dsp-001),
-  DunneAudioKit's StereoDelay (MIT) and a tempo-synced delay. Depends on
-  S4. Result: dsp-002 (the reverbs and delays as independent nodes),
-  dsp-003 (a master limiter with a look-ahead of 1.5 ms), app-003 (the
-  Audanika app plays through a master delay, plate reverb and limiter,
-  ahead of S29b, which keeps the tuning by ear and the reference devices)
-  and sampler-005 (the state all synths of a process share is
-  thread-safe).
+- S10a (M, M2, built 2026-10-13 in ticket 28 for iOS and Android; measured
+  on the Galaxy Tab S4, the numbers of the iPad Pro (M5) and the iPhone 16
+  Pro Max are open) `aud_dsp_effects`, first ticket — reverb and delay: a
+  Freeverb-based reverb (public domain) and a plate reverb re-implemented
+  from the literature (dsp-001), DunneAudioKit's StereoDelay (MIT) and a
+  tempo-synced delay. Depends on S4. Result: dsp-002 (the reverbs and
+  delays as independent nodes), dsp-003 (a master limiter with a
+  look-ahead of 1.5 ms), app-003 (the Audanika app plays through a master
+  delay, plate reverb and limiter, ahead of S29b, which keeps the tuning
+  by ear and the reference devices),
+  sampler-005 (the state all synths of a process share is thread-safe),
+  sampler-006 (optimizations of the fork, superseded by sampler-007:
+  output within the golden tolerance), app-004 (the master limiter alone
+  limits the app) and release-004 (the reference devices).
 - S29b (L, M2) App migration: `aud_app` replaces the legacy
   `audio_engine` with `aud_audio`, `aud_audio_midi` over the `aud_midi`
   ports and `aud_dsp_sampler` with the reverb and
@@ -360,7 +364,6 @@ roughly 22 to 32 engineer-weeks.
   the legacy presets are neither converted nor emulated (scope-002); the
   instrument reference suite of the new instruments passes on the
   reference devices (release-001, release-002). Depends on S29a, S10a.
-
 - S9b (M, M2, planned as ticket 29) Voice budget: a voice limit of the
   sampler that changes in real time, one voice budget per process and a
   governor that sets it from the measured load, so that playing hard never
@@ -540,19 +543,22 @@ and effort followed the class of the ticket (process-002):
 - Every package: unit tests, `dart analyze`, format, the DNA test, and
   golden-file offline renders. Goldens are bit-exact on one target per
   CI job; across architectures a tolerance per node class applies
-  (default: maximum absolute difference below 1e-5 full scale).
+  (default: maximum absolute difference below 1e-5 full scale). The
+  sampler's optimizations may change its renders within that tolerance
+  (sampler-007).
 - Engine contracts: stress tests prove the queue policies (overflow,
   late events, note-off recovery), click-free graph transactions under
   load (a click detector on the golden renders), the route-change
   sequence, and the acknowledgement of revisions and lifecycle
   transitions.
-- Budgets on the reference devices (open question 6; defaults below
-  until named): 64 sampler voices at 48 kHz and 128-frame blocks with
-  the callback at most 50 % of the block budget; an instrument loads
-  in at most two seconds within the sample cache budget; command-to-
-  sound latency at most one block plus the output latency; zero xruns
-  over ten minutes of playing with UI animation and under thermal load
-  after a twenty-minute warm-up at the default buffer size.
+- Budgets on the reference devices (release-004: a Galaxy Tab S4, an iPad
+  Pro (M5) and an iPhone 16 Pro Max): 64 sampler voices at 48 kHz and
+  128-frame blocks with the callback at most 50 % of the block budget;
+  an instrument loads in at most two seconds within the sample cache
+  budget; command-to-sound latency at most one block plus the output
+  latency; zero xruns over ten minutes of playing with UI animation and
+  under thermal load after a twenty-minute warm-up at the default buffer
+  size.
 - Recovery: after each lifecycle case — interruption, route change,
   disconnect, sample-rate change — the engine resumes within 500 ms
   with the transport position preserved and no stuck notes.

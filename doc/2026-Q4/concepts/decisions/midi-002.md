@@ -5,9 +5,11 @@
 - Canonical source: tickets/2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md
   (scope 4, the rule of the plan review; Measurements)
 - Refines: [midi-001](midi-001.md) — how `aud_audio_midi` bridges the ports
-- Open work: the numbers of the iPad Pro M5 and a Pixel; USB and Bluetooth
-  hardware on the reference devices; native taps of the desktop backends
-  with S3b
+- Refined by: [release-004](release-004.md) — the Galaxy Tab S4 replaces
+  the Pixel as the Android reference device (2026-10-13)
+- Open work: the numbers of the iPad Pro M5 and the Galaxy Tab S4
+  (release-004); USB and Bluetooth hardware on the reference devices;
+  native taps of the desktop backends with S3b
 
 ## Decision
 

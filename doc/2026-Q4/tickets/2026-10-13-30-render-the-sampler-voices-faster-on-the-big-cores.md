@@ -17,7 +17,8 @@ voices to what the device renders.
 
 From the profile of the audio thread on the Galaxy Tab S4 (ticket 28,
 `simpleperf`, dense chords at velocity 127 on four sampler nodes, after
-sampler-006 and app-004):
+the optimization of sampler-006; app-004 then removed the per-node
+compressors):
 
 - **The voices dominate.** Their hot spots are
   `Voice::Impl::fillInterpolatedWithQuality` (interpolation),
@@ -63,18 +64,19 @@ sampler-006 and app-004):
    backend): on Android 12 and later the performance hint of Oboe (ADPF)
    with the work of each callback reported; on Android 10 and 11 (accepted
    by the user on 2026-10-13) an affinity of the callback thread to the
-   fastest cluster, found from
-   `cpuinfo_max_freq` of every core and set once from inside the first
-   callback, with a fallback when the system refuses it; measured against
-   battery and heat. On iOS the audio workgroup of the stream, if the
-   thread is not already scheduled well. A decision io-003 records what
-   each Android version gets.
+   fastest cluster, found from `cpuinfo_max_freq` of every core and set
+   once from inside the first callback, with a fallback when the system
+   refuses it; measured against battery and heat. On iOS the audio
+   workgroup of the stream, if the thread is not already scheduled well.
+   A decision io-003 records what each Android version gets.
 5. **Measurements**: the stress test of ticket 28 on the tablet before and
    after each step, the render time per voice, the cores the audio thread
-   runs on, the battery drain over ten minutes, and the reference devices
-   once named.
+   runs on, the battery drain over ten minutes, and the other reference
+   devices of release-004 (the iPad Pro (M5), the iPhone 16 Pro Max).
 
-## Affected repos (expected)
+## Affected repos
+
+Expected; the plan review confirms them.
 
 - `aud_dsp_sampler`: SIMD, the voice loop, benches and tests; a patch or
   minor version.
@@ -89,25 +91,25 @@ sampler-006 and app-004):
 
 1. Plan review; settle the open questions.
 2. The symbolized baseline and the benches.
-3. SIMD on ARM; the tolerance decision.
+3. SIMD on ARM, within the tolerance of sampler-007.
 4. The voice loop, step by step, each measured.
 5. The audio thread on the big cores; the battery and heat check.
 6. Decisions, review, publish.
 
 ## Open questions
 
-1. Answered on 2026-10-13: SIMD and the other changes may change the
-   output within 1e-5 of full scale (sampler-007).
-2. Answered on 2026-10-13: pinning the audio thread to the big cores is
-   accepted on Android 10 and 11, where the performance hint does not
-   exist; Android 12 and later use the performance hint (to be recorded in
-   io-003).
-3. Answered on 2026-10-13: more battery drain on the big cores while the
-   app plays is accepted.
-4. Decided on 2026-10-13 (the user left it to Claude): ticket 29 first —
-   the voice budget ends the drop-outs on every device — then this ticket,
+None open; answered on 2026-10-13:
+
+1. SIMD and the other changes may change the output within 1e-5 of full
+   scale (sampler-007).
+2. Pinning the audio thread to the big cores is accepted on Android 10
+   and 11, where the performance hint does not exist; Android 12 and later
+   use the performance hint (to be recorded in io-003).
+3. More battery drain on the big cores while the app plays is accepted.
+4. Decided by Claude, as the user left it open: ticket 29 first — the
+   voice budget ends the drop-outs on every device — then this ticket,
    whose faster voices the governor of ticket 29 turns into more voices.
-5. Answered on 2026-10-13: the Galaxy Tab S4, the iPad Pro (M5) and the
+5. The reference devices are the Galaxy Tab S4, the iPad Pro (M5) and the
    iPhone 16 Pro Max (release-004).
 
 ## Model and rules
@@ -118,5 +120,6 @@ The standing rules of process-005.
 
 ## Rests on
 
-io-001, io-002, sampler-002, sampler-006, sampler-007, lifecycle-001, interop-001,
-process-004, process-005; the measurements of ticket 28.
+io-001, io-002, sampler-002, sampler-006, sampler-007, app-004,
+release-004, lifecycle-001, interop-001, process-004, process-005; the
+measurements of ticket 28.
