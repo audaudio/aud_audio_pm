@@ -12,7 +12,9 @@
 - Open work: the start budgets of the device classes after ticket 30; the
   cut after an xrun takes the units of that moment, which a pattern of
   bursts can make low (the Galaxy Tab S4 fell from 51 to 13 and rose back
-  in 20 s); the iPad Pro (M5) was not measured
+  in 20 s); the iPad Pro (M5) was not measured; the 50 % of the block that
+  release-004 asks of the callback: the governor aims the mean at 75 %, the
+  Galaxy Tab S4 played at 0.67 to 0.82 (ticket 30)
 
 ## Decision
 
@@ -36,11 +38,12 @@ renders after it. It raises the budget by a unit per period only while the
 mean stays below 72 %, the budget limits the units and no lowering happened
 for 2 s. The p99 — per render and over the runs of renders that fill the
 device buffer — goes along for the record but steers nothing; late
-callbacks and renders longer than their block do not count. The floor is 8 units, the
-ceiling 256. It starts from the budget the app learned on the device or
-from `AudDeviceClass.startUnits`: the iOS model and its performance cores;
-on Android the clocks of the cores, the SoC and the media performance
-class, read from the system through the C library. It has settled when the
+callbacks and renders longer than their block do not count. The floor is
+8 units, the ceiling 256. It starts from the budget the app learned on the
+device or from `AudDeviceClass.startUnits`: the performance cores on iOS,
+the media performance class and the clock of the fastest cores on Android,
+64 on a simulator or emulator, read from the system through the C library.
+It has settled when the
 budget has not fallen for 10 s. Players see and set nothing (decision 4).
 
 ## Why

@@ -13,8 +13,10 @@ below that number: voices beyond it are stolen with a short fade instead
 of overloading the audio thread. The budget starts from the device's class
 and follows the measured load, so a fast iPad plays more voices than a
 Galaxy Tab S4. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md)
-and the budgets of the plan of ticket 17 (the callback at most 50 % of the
-block budget, zero xruns); refines lifecycle-001 ("instrument nodes bound
+and the zero xruns of the plan of ticket 17; its callback at most 50 % of
+the block budget (release-004) is not met on the Galaxy Tab S4, which the
+governor holds at a mean of 0.67 to 0.82 (open work of lifecycle-003);
+refines lifecycle-001 ("instrument nodes bound
 their polyphony and steal voices") and lifecycle-002 (one budget per
 process).
 
@@ -72,15 +74,16 @@ process).
 3. **Thresholds: a band of 40 to 70 % around the 50 % of ticket 17**,
    revised the same day after the sweeps on the Galaxy Tab S4 (Findings):
    **the mean share, down above 85 %, up below 72 %, aimed at 75 %**
-   (first 80 / 65 / 70 %, which held the tablet at 25 voices).
+   (first down above 80 %, up below 65 %, aimed at 70 %, which held the
+   tablet at 25 voices).
    Every 100 ms; down at once on an xrun or a mean share above 85 % of
    the block over the last second; up in small steps only while the mean
    stays below 72 % and the budget limits; a line through the shares over
    the voices aims the mean at 75 %. The p99 (first per render, then over
-   the device buffer, as the user chose in turn) stayed above 70 % at
-   every budget of the tablet and steers nothing now. Late callbacks do
-   not count: the emulator and the tablet report hundreds of them without
-   load.
+   the device buffer, as the user chose in turn) stayed at 0.69 or more at
+   every budget of the tablet, far above the 50 % it aimed at, and steers
+   nothing now. Late callbacks do not count: the emulator and the tablet
+   report hundreds of them without load.
 4. **Automatic only.** Players see and set nothing; a developer setting
    shows the budget, the voices, the stolen voices and the load.
 5. **Voices only.** The sample quality stays at 2 (Hermite); ticket 30
@@ -152,9 +155,11 @@ The packages take patch versions, as family-002 asks for additions in
 ^0.4.1`, and a minor version (0.6.0, 0.5.0) would leave that range and
 break the app's resolution. `AudGraph.renderLoad` is a new member of an
 interface that nothing outside `aud_audio_graph` implements, as
-`AudGraph.timing` was in 0.5.1. gg added `aud_audio_io` and
-`aud_audio_web` to the ticket as dependencies; they leave it unless they
-change (family-002).
+`AudGraph.timing` was in 0.5.1. gg added `aud_audio_core`,
+`aud_audio_io`, `aud_audio_midi`, `aud_audio_web` and `aud_dsp_effects` to
+the ticket as dependencies; they carry only tooling changes (helix ^1.12.0,
+example locks of the current version) and leave it unless they change
+(family-002).
 
 ## Steps
 
@@ -247,7 +252,13 @@ default preset without the master chain on a new engine, without the
 governor (the load before this ticket) and from the budget it reached (a
 learned start). Debug builds with the native code optimized, 48 kHz.
 "Settled" is the time of the last lowering of the budget from the start of
-the preset; the xruns after it are the acceptance of the ticket.
+the preset; the xruns after it are the acceptance of the ticket. A time in
+parentheses: the budget fell less than 10 s before the end of the preset,
+so the governor had not settled. The mean voices count every voice that
+renders — the ones the budget steals and the ones sfizz's own limits turn
+off, while they fade —; the most counts the sounding voices at the end of
+each period, so the mean can exceed it even where nothing is stolen. The
+p99 of a render is the median of the periods' p99 over the last second.
 
 ### Galaxy Tab S4
 
@@ -265,8 +276,7 @@ class 32 (the fastest cores at 2.36 GHz, no media performance class).
 | Without the governor | 2318 | — | — | — | — | 0 | 1.16 |
 | Learned start (34) | 0 | 0 | 0 s | 34 → 37 | 33 / 37 | 1929 | 0.76 |
 
-The mean voices count the stolen ones while they fade, so the mean can
-exceed the most that sounded together. The render share fell from 1.16 of
+The render share fell from 1.16 of
 the block (4.38 ms in 3.75 ms, 2318 xruns per minute) to 0.67 to 0.82; the
 p99 of a render stayed at 1.25 to 1.34, which the buffer absorbs. On the
 first preset the budget rose from 32 to 51 in 13 s; an xrun at 18.8 s cut
@@ -302,21 +312,21 @@ iPhone 17 Pro simulator (renders of 512 frames, 10.7 ms) and an Android 16
 emulator (arm64, a device buffer of 1920 frames in renders of about 500),
 both virtual, start budget 64:
 
-| Run | Xruns, simulator / emulator | Budget | Stolen / min | Mean share | p99 of a render |
+| Run | Xruns, simulator / emulator | Budget | Stolen / min | Mean share | p99 of a render (median) |
 | --- | --- | --- | --- | --- | --- |
 | E-Piano (start 64) | 0 / 0 | 64 → 87 | 55 / 54 | 0.06 / 0.08 | 0.12 / 0.45 |
 | Welcome_Combi | 0 / 0 | 87 → 90 | 0 / 0 | 0.11 / 0.13 | 0.21 / 0.61 |
 | Organ_Combi | 0 / 0 | 90 | 0 / 0 | 0.07 / 0.09 | 0.15 / 0.38 |
 | Strings | 0 / 0 | 90 → 94 | 0 / 0 | 0.11 / 0.14 | 0.22 / 0.52 |
 | Vibraphone | 0 / 0 | 94 | 0 / 0 | 0.11 / 0.14 | 0.20 / 0.52 |
-| Without the chain (start 64) | 0 / 0 | 64 → 89, 90 | 60 / 60 | 0.11 / 0.14 | 0.20 / 0.53 |
+| Without the chain (start 64) | 0 / 0 | 64 → 89 / 90 | 60 / 60 | 0.11 / 0.14 | 0.20 / 0.53 |
 | Without the governor | 0 / 0 | — | 0 / 0 | 0.12 / 0.15 | — |
 | Learned start (94) | 0 / 0 | 94 | 0 / 0 | 0.13 / 0.14 | 0.22 / 0.59 |
 
 The budget rises from the class's 64 while it limits the first chords and
 stops where the stress test asks for no more (88 voices at most); the
-emulator's long renders (up to 16 ms in blocks of 10 ms, a p99 of up to 2.0)
-move nothing, as the mean stays at 0.08 to 0.14.
+emulator's long renders (up to 16 ms in blocks of 10 ms, the p99 of a
+second up to 2.0) move nothing, as the mean stays at 0.08 to 0.14.
 
 ### iPad Pro (M5)
 
@@ -326,7 +336,8 @@ Not measured: the iPad was not reachable on 2026-10-14 (open work).
 
 None. Questions 1 to 5 were answered in the plan review on 2026-10-14
 (above); question 6 on 2026-10-13: the Galaxy Tab S4, the iPad Pro (M5)
-and the iPhone 16 Pro Max (release-004).
+and the iPhone 16 Pro Max (release-004). The answers and the findings went
+into sampler-008, graph-004, lifecycle-003 and app-005.
 
 ## Out of scope
 
@@ -343,5 +354,6 @@ process-005.
 ## Rests on
 
 lifecycle-001, lifecycle-002, sampler-002, sampler-003, sampler-006,
-sampler-007, interop-001, graph-002, process-004, process-005,
+sampler-007, interop-001, graph-002, app-002, family-002, process-004,
+process-005,
 release-004; the measurements of ticket 28.

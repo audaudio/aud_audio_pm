@@ -21,10 +21,9 @@ since the graph was created, and the p99, the maximum and the overloads of
 the runs of renders that fill the device buffer: a render and the older
 ones before it whose frames reach the buffer, since a stream whose buffer
 holds several renders drops out only when such a run takes longer than it
-lasts. Offline renders are not recorded. The gauge
-is apart from the statistics: `resetStats` does not touch it, so
-measurements that reset the stats and a governor that reads the gauge do
-not disturb each other.
+lasts. Offline renders are not recorded. The gauge is apart from the
+statistics: `resetStats` does not touch it, so measurements that reset the
+stats and a governor that reads the gauge do not disturb each other.
 
 ## Why
 
