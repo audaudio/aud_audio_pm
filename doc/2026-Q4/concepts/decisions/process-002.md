@@ -1,11 +1,12 @@
 # process-002: Claude model and effort per ticket class
 
-- Status: accepted
+- Status: superseded
 - Date: 2026-10-08
 - Canonical source: Gabriel Gatzsche's decision at the plan review on
   2026-10-08, on the recommendation given there
-- Open work: revisit when new models ship; record deviations in the
-  ticket plans
+- Superseded by: [process-004](process-004.md) on 2026-10-13 — Opus 5.5
+  at extra high effort for every ticket, Fable only on request
+- Open work: none
 
 ## Decision
 

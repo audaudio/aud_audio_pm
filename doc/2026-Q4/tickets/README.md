@@ -37,3 +37,12 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md](2026-10-12-27-play-an-sfz-instrument-from-audanika-app-on-the-new-engine.md)
   — ticket 27: audanika_app plays its sounds as SFZ on the new engine on
   iOS and Android (step S29a)
+- [2026-10-13-28-build-reverb-delay-and-a-master-limiter.md](2026-10-13-28-build-reverb-delay-and-a-master-limiter.md)
+  — ticket 28: reverbs, delays and a master limiter in `aud_dsp_effects`,
+  and the master chain of the Audanika app on iOS and Android (step S10a)
+- [2026-10-13-29-limit-the-voices-by-the-cpu-power-of-the-device.md](2026-10-13-29-limit-the-voices-by-the-cpu-power-of-the-device.md)
+  — ticket 29 (planned): a voice budget per device that follows the load,
+  so that playing hard never drops out (step S9b)
+- [2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md](2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md)
+  — ticket 30 (planned): a faster voice loop with SIMD on ARM, and the
+  audio thread on the big cores (step S9c)

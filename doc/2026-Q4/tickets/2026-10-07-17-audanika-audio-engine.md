@@ -329,18 +329,30 @@ roughly 22 to 32 engineer-weeks.
   (the one-line Faust helpers are exempt), lifecycle-002 (workers, loads
   and one sample cache budget per process) and osc-002 (messages to
   nodes).
-- S29a (M, M1) Early app integration: an integration branch of `aud_app`
-  plays one SFZ instrument through `aud_audio` and `aud_dsp_sampler` from
-  the app's MIDI stream on iOS and Android as soon as S4 and S9 exist,
-  and feeds its findings back into the contracts. The code repo lives in
-  `audanika-private`; the plan file lives here. Depends on S4, S9.
+- S29a (M, M1, built 2026-10-13 in ticket 27 for iOS and Android, in
+  `audanika_app` of `audanika-legacy` instead of `aud_app`, with the
+  legacy engine removed there) Early app integration: an integration
+  branch of `aud_app` plays one SFZ instrument through `aud_audio` and
+  `aud_dsp_sampler` from the app's MIDI stream on iOS and Android as soon
+  as S4 and S9 exist, and feeds its findings back into the contracts. The
+  code repo lives in `audanika-private`; the plan file lives here.
+  Depends on S4, S9. Result: app-001 (the sounds rebuilt once as SFZ),
+  app-002 (one sampler node per MIDI channel) and sampler-004 (`apk:/`
+  paths on Android).
 
 ### Milestone M2: reverb and delay in the Audanika app
 
-- S10a (M, M2) `aud_dsp_effects`, first ticket — reverb and delay: a
-  Freeverb-based reverb (public domain) and a plate reverb re-implemented
-  from the literature (dsp-001), DunneAudioKit's StereoDelay (MIT) and a
-  tempo-synced delay. Depends on S4.
+- S10a (M, M2, built 2026-10-13 in ticket 28 for iOS and Android; the
+  numbers of the reference devices are open) `aud_dsp_effects`, first
+  ticket — reverb and delay: a Freeverb-based reverb (public domain) and
+  a plate reverb re-implemented from the literature (dsp-001),
+  DunneAudioKit's StereoDelay (MIT) and a tempo-synced delay. Depends on
+  S4. Result: dsp-002 (the reverbs and delays as independent nodes),
+  dsp-003 (a master limiter with a look-ahead of 1.5 ms), app-003 (the
+  Audanika app plays through a master delay, plate reverb and limiter,
+  ahead of S29b, which keeps the tuning by ear and the reference devices)
+  and sampler-005 (the state all synths of a process share is
+  thread-safe).
 - S29b (L, M2) App migration: `aud_app` replaces the legacy
   `audio_engine` with `aud_audio`, `aud_audio_midi` over the `aud_midi`
   ports and `aud_dsp_sampler` with the reverb and
@@ -348,6 +360,16 @@ roughly 22 to 32 engineer-weeks.
   the legacy presets are neither converted nor emulated (scope-002); the
   instrument reference suite of the new instruments passes on the
   reference devices (release-001, release-002). Depends on S29a, S10a.
+
+- S9b (M, M2, planned as ticket 29) Voice budget: a voice limit of the
+  sampler that changes in real time, one voice budget per process and a
+  governor that sets it from the measured load, so that playing hard never
+  drops out (lifecycle-001: instrument nodes bound their polyphony).
+  Depends on S9, S10a.
+- S9c (M, M2, planned as ticket 30) Faster voices: SIMD on ARM, a voice
+  loop that visits only the sounding voices, and the audio thread on the
+  big cores of Android devices (io-002). Depends on S9; raises the budget
+  of S9b.
 
 ### Milestone M3: AUv3 on iOS
 
@@ -497,8 +519,13 @@ roughly 22 to 32 engineer-weeks.
 
 ## Model and effort for the implementation
 
-The implementation tickets are worked with Claude Code; model and
-effort follow the class of the ticket (process-002):
+Since 2026-10-13 every ticket runs on Claude Opus 5.5 at extra high
+effort, the agents included; Fable 5.1 joins only after the user agrees
+(process-004, which supersedes process-002). The standing rules of an
+implementation ticket are in process-005.
+
+Until then the implementation tickets were worked with Claude Code; model
+and effort followed the class of the ticket (process-002):
 
 | Ticket class | Model | Effort |
 | --- | --- | --- |
@@ -574,7 +601,9 @@ effort follow the class of the ticket (process-002):
    The size estimates become a schedule and the steps get owners only
    with this answer.
 6. Reference devices for the budgets: which iPhone and which Android
-   device define the lower bound?
+   device define the lower bound? Answered on 2026-10-13: a Samsung
+   Galaxy Tab S4, an iPad Pro (M5) and the user's iPhone 16 Pro Max
+   (release-004).
 
 ## Answered at plan review
 

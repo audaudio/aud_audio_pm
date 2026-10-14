@@ -7,6 +7,9 @@
   of the Findings at the review, 2026-10-12)
 - Supersedes in part: [lifecycle-001](lifecycle-001.md) — one sample cache
   budget per process instead of per engine
+- Refined by: [sampler-005](sampler-005.md) — the state all synths of a
+  process share is thread-safe, since loads run on several workers at
+  once (ticket 28)
 - Open work: the defaults against the numbers of S24 (budget, workers,
   preload); a share of the budget per cache if packages compete; a
   capacity rule that also counts the heads of the other instruments, but

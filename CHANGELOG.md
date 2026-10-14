@@ -1,5 +1,64 @@
 # Changelog
 
+## 0.11.0 - 2026-10-14
+
+### Added
+
+- Add the plan of ticket 28 (S10a, reverb, delay and a master limiter)
+- Plan the effect nodes, the master chain of an app and the numbers
+- Add ticket 28 to doc/issues.md and raise the counter to 29
+- process-004: Opus 5.5 at extra high effort, Fable only on request
+- process-005: the standing rules of an implementation ticket
+- Add the decisions of the effects and the master chain of ticket 28
+- dsp-002: the reverbs and delays of aud_dsp_effects as independent nodes, their sources and the license audit
+- dsp-003: the master limiter looks ahead 1.5 ms and never exceeds its ceiling
+- app-003: an app plays through a master delay, reverb and limiter with effects per preset
+- The open work of dsp-001, license-003 and app-001 points to the new decisions
+- Add the findings and numbers of ticket 28
+- The measurements of the effects and the master chain on the iOS simulator and the Android emulator
+- sampler-005: the state all synths of a process share is thread-safe
+- aud_dsp_sampler joined the ticket for the race that crashed the measurement
+- process-005: commit every repo before gg do add adds another one
+- Add the results of the code review of ticket 28
+- Three findings fixed, three left with their reasons
+- Add the review-light fixes of ticket 28
+- Mark ticket 28 as implemented in its plan and in doc/issues.md
+- Correct the peak of the sum without the chain to +7.1 to +7.6 dBFS in the plan and app-003
+- Point the plan to dsp-002, dsp-003, app-003 and sampler-005; add lifecycle-002 and sampler-002 to Rests on
+- Match the index rows of dsp-002, app-003, process-005 and sampler-005 with their files
+- Link the refined decisions back: dsp-001, license-003, graph-001, app-001, app-002, lifecycle-002, sampler-002, process-003, family-002, process-004
+- Record S10a (ticket 28) and S29a (ticket 27) as built in the plan of ticket 17, with their results
+- Wrap a line of app-003 at 80 characters
+- Correct the code review in the plan and add the results of review-light
+- Add the numbers of the Galaxy Tab S4 to ticket 28
+- The render time of every node, the effects example and the app's dense chords on a real tablet
+- A profile of the audio thread: the sampler's controller events and per-node compressors dominate, the effects take 5.8 %
+- app-003 and io-002 name the cost of the per-node limiters and the audio thread on the small cores
+- Add the optimized sampler and its numbers to ticket 28
+- The MIDI flush and the compressor of the sfizz fork are 100 to 2500 times faster where they were hot, with the same output
+- The Galaxy Tab S4 before and after: xruns and render time per preset
+- sampler-006: performance changes to the fork keep its output bit for bit
+- Add the removal of the per-node limiters to ticket 28
+- app-004: the master limiter alone limits the app; the SFZ files carry no effect, global_volume keeps the level
+- app-001 and app-003 are superseded in part
+- The Galaxy Tab S4 without the per-node limiters: xruns and render time per preset
+- Add the plans of tickets 29 and 30 (S9b, S9c)
+- Ticket 29: a voice budget per device that follows the load, so that playing hard never drops out
+- Ticket 30: faster sampler voices with SIMD on ARM, a voice loop over the sounding voices only, and the audio thread on the big cores
+- Add both to doc/issues.md and raise the counter to 31; S9b and S9c in the plan of ticket 17
+- Add sampler-007: the sfizz fork may change its output within the golden tolerance
+- Optimizations of the fork may change the samples by up to 1e-5 of full scale; the bit-exact rule of sampler-006 is superseded
+- The plan of ticket 30 takes the tolerance; its first open question is answered
+- Add the answers to the open questions of ticket 30
+- SIMD may change the output within the tolerance of sampler-007
+- The audio thread may be pinned to the big cores on Android 10 and 11
+- Add the reference devices and the answers for tickets 29 and 30
+- release-004: Galaxy Tab S4, iPad Pro (M5) and iPhone 16 Pro Max are the reference devices
+- Ticket 29 first, then ticket 30; more battery drain on the big cores is accepted
+- Add the release-build fix of the app to ticket 28
+- aud_midi_windows joined the ticket: void pointers in the DNS-SD callback, so that AOT release builds compile
+- The release builds ran on the Galaxy Tab S4 and on the user's iPad
+
 ## 0.10.0 - 2026-10-13
 
 ### Added

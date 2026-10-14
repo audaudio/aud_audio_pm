@@ -4,8 +4,9 @@
 - Date: 2026-10-08
 - Canonical source: topics/review-2026-10-08-plan-scope.md (point 1);
   decisions/release-001.md
+- Refined by: [release-004](release-004.md) — the reference devices
 - Open work: owners and capacity per step (open question 5); the
-  reference devices for the budgets (open question 6). The minimal MIDI
+  reference devices are named by release-004 (2026-10-13). The minimal MIDI
   bridge held in reserve below is void: the `aud_midi` family is
   available, S8 builds on its ports (2026-10-08, ticket 19)
 
