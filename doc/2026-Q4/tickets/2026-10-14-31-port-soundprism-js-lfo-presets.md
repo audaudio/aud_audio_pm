@@ -262,7 +262,8 @@ Approaches not taken:
 3. `audanika-host.js` lives in the app's content.
 4. The tick follows the buffer size of the operating system: new values
    every buffer, in step with the audio callback.
-5. Fidelity as in SoundPrism: one step per buffer, no smoothing.
+5. Fidelity as in SoundPrism: one value per buffer, no smoothing; how it
+   enters the buffer, ramp or step, is answer 18.
 6. The filter is sfizz's, per voice, driven by controls.
 7. The reduced sample sets (every sixth semitone) as FLAC; the WAVs of
    the app's other sounds switch to FLAC too (ticket 32).
