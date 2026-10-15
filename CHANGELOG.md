@@ -21,8 +21,14 @@
 - Add the fixes of the review of ticket 30
 
 - sampler-009 numbers its six steps as they were committed
+
 - lifecycle-004 and io-003 take the numbers of the measurements; the mean and the most of the voices are explained
+
 - release-004 and lifecycle-003 say how the 50 % is met; plan 17 and the ticket list show S9c as built
+
+- Add the placement of io-003 as the code sets it
+
+- Below Android 12 the affinity binds; one cluster keeps the system placement only below Android 12
 
 ## 0.12.1 - 2026-10-14
 
