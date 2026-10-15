@@ -5,7 +5,7 @@ The tickets of the aud_audio family are numbered here, not on GitHub
 counter, appends its row and links its plan file once it exists; the
 number is the gg ticket ID and the name of the ticket branches.
 
-Next number: 34
+Next number: 35
 
 | Number | Title | Status | Plan |
 | --- | --- | --- | --- |
@@ -28,6 +28,7 @@ Next number: 34
 | 31 | S29c: Port the SoundPrism Link Edition combis and their JavaScript LFOs | planned | [2026-10-14-31-port-soundprism-js-lfo-presets.md](2026-Q4/tickets/2026-10-14-31-port-soundprism-js-lfo-presets.md) |
 | 32 | S29d: Share the sample sets between the SFZ presets with #include | planned | [2026-10-14-32-share-sample-sets-between-sfz-presets.md](2026-Q4/tickets/2026-10-14-32-share-sample-sets-between-sfz-presets.md) |
 | 33 | S29e: Add a tempo control to the Audanika app | planned | [2026-10-14-33-add-a-tempo-control-to-the-app.md](2026-Q4/tickets/2026-10-14-33-add-a-tempo-control-to-the-app.md) |
+| 34 | S9d: Move the voice stealing and the governor into aud_audio_voice_allocator | planned | [2026-10-15-34-move-voice-stealing-and-the-governor-into-aud-audio-voice-allocator.md](2026-Q4/tickets/2026-10-15-34-move-voice-stealing-and-the-governor-into-aud-audio-voice-allocator.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the

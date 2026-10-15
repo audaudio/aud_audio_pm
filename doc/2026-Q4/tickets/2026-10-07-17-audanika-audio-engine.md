@@ -370,6 +370,11 @@ roughly 22 to 32 engineer-weeks.
   loop that visits only the sounding voices, and the audio thread on the
   big cores of Android devices (io-002). Depends on S9; raises the budget
   of S9b.
+- S9d (M, M2, planned as ticket 34) The voice allocator: the voice
+  stealing and the load governor of S9b move from `aud_dsp_sampler` and
+  `aud_audio` into `aud_audio_voice_allocator`, which hooks into the
+  callbacks the instrument nodes offer through a contract in
+  `aud_audio_core`; no audible change. Depends on S9b, S9c.
 - S29c (L, M2, planned as ticket 31) SoundPrism Link Edition in the
   Audanika app: the 23 combis rebuilt once as SFZ, their JavaScript LFOs
   run unchanged in `aud.script.modulator` of the new optional package

@@ -5,6 +5,7 @@
 ### Added
 
 - Add the plan review of ticket 30 (S9c, faster sampler voices on the big cores)
+- Add decision io-003 of ticket 30, the audio thread on the fast cores of Android devices
 
 ## 0.12.1 - 2026-10-14
 

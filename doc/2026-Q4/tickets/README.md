@@ -56,3 +56,7 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-14-33-add-a-tempo-control-to-the-app.md](2026-10-14-33-add-a-tempo-control-to-the-app.md)
   — ticket 33 (planned): a tempo control that the scripted combis and the
   master delay follow (step S29e)
+- [2026-10-15-34-move-voice-stealing-and-the-governor-into-aud-audio-voice-allocator.md](2026-10-15-34-move-voice-stealing-and-the-governor-into-aud-audio-voice-allocator.md)
+  — ticket 34 (planned): the voice stealing and the load governor in
+  `aud_audio_voice_allocator`, which hooks into the instrument nodes
+  (step S9d)
