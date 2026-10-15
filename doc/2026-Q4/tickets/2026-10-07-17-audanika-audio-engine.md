@@ -374,7 +374,9 @@ roughly 22 to 32 engineer-weeks.
   stealing and the load governor of S9b move from `aud_dsp_sampler` and
   `aud_audio` into `aud_audio_voice_allocator`, which hooks into the
   callbacks the instrument nodes offer through a contract in
-  `aud_audio_core`; no audible change. Depends on S9b, S9c.
+  `aud_audio_core` and depends on nothing else; the app binds the
+  governor to the engine; no audible change. Depends on S9b, S9c; runs
+  after the tickets 30 to 39.
 - S29c (L, M2, planned as ticket 31) SoundPrism Link Edition in the
   Audanika app: the 23 combis rebuilt once as SFZ, their JavaScript LFOs
   run unchanged in `aud.script.modulator` of the new optional package

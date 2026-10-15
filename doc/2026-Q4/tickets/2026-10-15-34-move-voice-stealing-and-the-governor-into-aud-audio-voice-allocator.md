@@ -2,7 +2,8 @@
 
 Status: planned 2026-10-15 during ticket 30, on the user's request ("plan
 a ticket that moves the voice stealing and the governor to a separate
-package & repo"). Plan review started 2026-10-15; not started.
+package & repo"). Plan review on 2026-10-15; not started. Runs after the
+last of the tickets 30 to 39 (answer 7).
 
 ## Goal
 
@@ -14,7 +15,8 @@ node, which voices go — and the instruments only offer their voices
 through callbacks and fade out what the allocator picks. The sampler
 today, the synthesizer of `aud_dsp_synth` and other voice-based nodes
 later share the one budget of the process and steal by the same rules;
-the allocator knows no instrument and no instrument knows the allocator.
+the allocator knows no instrument and no instrument knows the allocator,
+and it depends on `aud_audio_core` only.
 Players hear and see no change: the governor reaches the budgets of
 tickets 29 and 30 and the stress test keeps zero xruns after settling.
 Serves [flutter-audio-kit](../goals/flutter-audio-kit.md) and
@@ -84,6 +86,12 @@ Ticket 29 built the pieces in three repos (sampler `6fbaf9f`, `aud_audio`
 3. The order of stealing moves too: the allocator picks the voices.
 4. The old members leave `aud_dsp_sampler` and `aud_audio` at once, with
    minor versions; the app is their only user.
+5. The allocator depends on `aud_audio_core` only: the governor reads an
+   interface of its own instead of `AudEngine`, and the app writes the
+   adapter to the engine.
+6. A node without an allocator steals nothing beyond sfizz's own
+   polyphony; `max_voices` takes effect through the allocator.
+7. The ticket runs after the last of the tickets 30 to 39.
 
 ## Proposal
 
@@ -95,11 +103,11 @@ flowchart TB
   audio["aud_audio"]
   app["audanika_app"]
   alloc --> core
-  alloc --> audio
   sampler --> core
   audio --> core
   app --> alloc
   app --> sampler
+  app --> audio
   alloc -. hooks into .-> sampler
 ```
 
@@ -118,19 +126,28 @@ flowchart TB
   and the order of `VoiceManager::stealVoices` — released first, then the
   oldest, all voices of a note together. Its Dart API `AudVoiceAllocator`
   (limit, reserve, `AudVoiceStats`, `hookInto`) is an `AudLoadBudget`
-  itself, so the app's adapter goes away. The governor, the policy, the
-  configuration, the state and `AudDeviceClass` move from `aud_audio`
-  with their names and tests.
+  itself, so the app's adapter to the sampler goes away.
+- **The governor** moves with the policy, the configuration, the state
+  and `AudDeviceClass`, with their names. It no longer knows the engine:
+  it reads an `AudLoadSource` of the package — the mean, p99 and maximum
+  share of the block over a window, the overloads, the xruns, the block
+  and the sample rate — and is started, stopped and told of new timing by
+  whoever owns it. `AudLoadGovernorState` carries the package's own
+  `AudLoadReading` in place of `AudGraphLoad`. The policy runs without
+  timers as before, so recorded samples still replay through it.
 - **The sampler** offers its voices: the node implements
   `AudVoiceSourceApi` over its active and its fading synth and calls the
   hook it was given. It keeps the parameter `max_voices`, which the
   allocator reads, and the fade of a stolen voice in the fork.
   `AudDspSampler.voiceHook` is the address of its C function that installs
-  an allocator; without one the node steals nothing (question 2).
+  an allocator; without one the node steals nothing (answer 6).
 - **The app** connects them before the engine starts
-  (`AudVoiceAllocator.process.hookInto(AudDspSampler.voiceHook)`) and adds
-  the governor over `AudVoiceAllocator.process`. Neither the sampler nor
-  `aud_audio` knows the allocator; the allocator knows no instrument.
+  (`AudVoiceAllocator.process.hookInto(AudDspSampler.voiceHook)`) and
+  writes the adapter of the governor: an `AudEngineExtension` that starts,
+  stops and retimes the governor with the engine and an `AudLoadSource`
+  over `AudGraph.renderLoad`, the stream's xruns and its format, about 40
+  lines. Neither the sampler nor `aud_audio` knows the allocator; the
+  allocator knows no instrument and no engine.
 
 ## Scope
 
@@ -158,16 +175,19 @@ flowchart TB
    with the allocator compiled from its sources, as
    `scripts/test-native.js` compiles the graph today (a dev dependency).
    The goldens of the fork stay bit for bit.
-5. **The governor moved**: the six files of `aud_audio` and their tests
-   (the governor's test runs `AudEngineFfi` on the null device), the web
-   fixture, the README sections. `aud_audio` drops them and its exact pins
-   become caret constraints (family-002); otherwise the app could not
-   resolve `aud_audio_core` 0.5.3. `aud_audio_midi` widens its constraint
-   to the next minor of `aud_audio`.
-6. **The app**: the imports, the hook, `_govern` over
-   `AudVoiceAllocator.process`, `SamplerVoiceBudget` removed,
-   `VoiceBudgetMemory`, the panel and the tests on the new package; the
-   integration tests and `tool/measure-voices.js` on `AudVoiceAllocator`.
+5. **The governor moved**: the six files of `aud_audio` on
+   `AudLoadSource` instead of `AudEngine`; their tests on a fake source
+   (today the governor's test runs `AudEngineFfi` on the null device);
+   the web fixture, the README sections. `aud_audio` drops them and its
+   exact pins become caret constraints (family-002); otherwise the app
+   could not resolve `aud_audio_core` 0.5.3. `aud_audio_midi` widens its
+   constraint to the next minor of `aud_audio`.
+6. **The app**: the adapter of the governor to `AudEngine` with the test
+   that ran in `aud_audio` (the null device); the imports, the hook,
+   `_govern` over `AudVoiceAllocator.process`, `SamplerVoiceBudget`
+   removed, `VoiceBudgetMemory`, the panel on `AudLoadReading` and the
+   tests on the new package; the integration tests and
+   `tool/measure-voices.js` on `AudVoiceAllocator`.
 7. **Acceptance**: every test of ticket 29 passes at its new place; the
    voice sweep and the stress test on the Galaxy Tab S4 and the iOS
    simulator give the budgets, the stolen voices and the zero xruns after
@@ -183,7 +203,8 @@ flowchart TB
   out; a minor, since public members leave.
 - `aud_audio`: the governor out, the pins as carets; a minor (0.4 → 0.5).
 - `aud_audio_midi`: the constraint on `aud_audio`; a patch.
-- `audanika_app`: the wiring, the tests, the measurements.
+- `audanika_app`: the adapter of the governor, the wiring, the tests,
+  the measurements.
 - `aud_audio_pm`: this plan; a decision lifecycle-004 that supersedes the
   place of the budget and the order in sampler-008 and of the governor in
   lifecycle-003; the package in `packages.jsonc` and `architecture.md`;
@@ -191,8 +212,8 @@ flowchart TB
 
 ## Steps
 
-1. Plan review; settle the open questions.
-2. After ticket 30 is published (question 3): the package in
+1. Plan review (done 2026-10-15).
+2. After the last of the tickets 30 to 39 is published: the package in
    `packages.jsonc` and `architecture.md`; create the repo
    `aud_audio_voice_allocator` with the user
    (`scripts/create-family-repos.js`, `scripts/setup-github-repo.js`),
@@ -205,30 +226,12 @@ flowchart TB
 7. The app; the sweep and the stress test on the tablet and the
    simulator.
 8. Decision lifecycle-004, review, publish in the order of the
-   dependencies: core, sampler, `aud_audio`, `aud_audio_midi`, the
-   allocator, the app.
+   dependencies: core, the allocator, the sampler (whose tests use the
+   allocator), `aud_audio`, `aud_audio_midi`, the app.
 
 ## Open questions
 
-Each with the answer Claude recommends.
-
-1. **The governor and `aud_audio`.** The governor is an
-   `AudEngineExtension` and needs `aud_audio`.
-   - It moves as it is and the allocator depends on `aud_audio`
-     (recommended: neither the sampler nor `aud_audio` depends on the
-     allocator, so the arrows still point one way; the governor keeps its
-     tests on the engine).
-   - The governor reads an interface of its own (load, xruns, block, start
-     and stop) and the allocator depends on `aud_audio_core` only; every
-     app writes the adapter to `AudEngine`, about 40 lines.
-2. **`max_voices` without an allocator.** The allocator applies each
-   node's `max_voices` with the budget; a sampler without an allocator
-   steals nothing beyond sfizz's own polyphony, as before ticket 29
-   (recommended: one place decides). Alternative: the sampler keeps a
-   fallback for `max_voices` alone, with the order in two places.
-3. **When.** After ticket 30 is published (recommended), since it changes
-   `VoiceManager` and the start budgets of `AudDeviceClass`; independent
-   of tickets 31 to 33.
+None. The plan review on 2026-10-15 answered them (above).
 
 ## Out of scope
 
