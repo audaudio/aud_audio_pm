@@ -9,7 +9,10 @@
   that io-002, sampler-001, midi-002 and midi-003 name as the Android
   reference is replaced by the Galaxy Tab S4
 - Open work: none; the iPhone model was confirmed as iPhone17,2 (iPhone 16
-  Pro Max) by `AudDeviceClass` in ticket 29
+  Pro Max) by `AudDeviceClass` in ticket 29; after ticket 30 the Galaxy Tab
+  S4 renders the stress test at a mean of 0.19 to 0.46 of its block, within
+  the 50 % in the mean, as decision 8 of the plan review of ticket 30 reads
+  it; the p99 of a render reaches up to 0.75 on the dense presets
 
 ## Decision
 

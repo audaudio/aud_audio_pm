@@ -366,10 +366,17 @@ roughly 22 to 32 engineer-weeks.
   governor that sets it from the measured load, so that playing hard never
   drops out (lifecycle-001: instrument nodes bound their polyphony).
   Depends on S9, S10a.
-- S9c (M, M2, planned as ticket 30) Faster voices: SIMD on ARM, a voice
-  loop that visits only the sounding voices, and the audio thread on the
-  big cores of Android devices (io-002). Depends on S9; raises the budget
-  of S9b.
+- S9c (M, M2, built 2026-10-15 in ticket 30) Faster voices: a voice loop
+  that visits only the busy voices and renders bit for bit, and the audio
+  thread on the fast cores of Android devices. Result: sampler-009,
+  io-003, lifecycle-004. Depends on S9; raises the budget of S9b.
+- S9d (M, M2, planned as ticket 34) The voice allocator: the voice
+  stealing and the load governor of S9b move from `aud_dsp_sampler` and
+  `aud_audio` into `aud_audio_voice_allocator`, which hooks into the
+  callbacks the instrument nodes offer through a contract in
+  `aud_audio_core` and depends on nothing else; the app binds the
+  governor to the engine; no audible change. Depends on S9b, S9c; runs
+  after the tickets 30 to 39.
 - S29c (L, M2, planned as ticket 31) SoundPrism Link Edition in the
   Audanika app: the 23 combis rebuilt once as SFZ, their JavaScript LFOs
   run unchanged in `aud.script.modulator` of the new optional package
