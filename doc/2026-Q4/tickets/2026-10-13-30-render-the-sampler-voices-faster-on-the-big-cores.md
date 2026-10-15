@@ -197,12 +197,12 @@ measurements asked for it.
   bench renders, and a differential driver over 48 instruments and 3000
   blocks of random events).
 - **The fixed cost was mostly the small cores and the walks**: 36 % of the
-  block without voices while the stress test plays. The big cores halved
-  it (17.8 %), the busy-voice walk and the fused passes took it to 10 %, the
-  rest of the loop to 7.4 %. The master chain is 8 to 14 % of the audio
-  thread on every device and stays in `aud_dsp_effects` (decision 6 of the
-  plan review); `aud_dsp_effects` joined the ticket only as a dependency gg
-  added.
+  block without voices while the stress test plays. The big cores halved it
+  (17.8 %), the busy-voice walk and the fused passes took it to 10 %, the
+  rest of the loop to 7.2 % (7.4 % in the final measurement set). The master
+  chain is 8 to 14 % of the audio thread on every device and stays in
+  `aud_dsp_effects` (decision 6 of the plan review); `aud_dsp_effects`
+  joined the ticket only as a dependency gg added.
 - **The governor no longer limits the stress test on any device**: the
   Galaxy Tab S4 plays it at a mean of 0.19 to 0.46 of its block from the new
   start budget of 96 without stealing a voice and without an xrun, also
@@ -291,10 +291,13 @@ preset under the governor (`integration_test/effects_numbers_test.dart`).
 
 After the ticket no preset of any device made an xrun under the governor
 (the Galaxy Tab S4 made one on E-Piano before), and the governor settled
-at once: the stress test asks for at most about 90 voices, below every new
-start budget less the reserve. The voices that sound are the same before
-and after on the iOS devices and the virtual ones; on the tablet more of
-them sound now, since nothing is stolen.
+at once: the stress test keeps at most about 90 voices sounding, below
+every new start budget less the reserve. The mean voices count every voice
+that renders, also the ones sfizz's own limits fade out (up to 120 when
+nothing limits them), the most only the sounding voices at the end of each
+period of the governor, so the mean can exceed the most. The voices that
+sound are the same before and after on the iOS devices and the virtual
+ones; on the tablet more of them sound now, since nothing is stolen.
 
 ### Galaxy Tab S4, the stress test
 
@@ -358,7 +361,7 @@ as before (sampler-009), so the presets sound the same by construction.
    output within 1e-5 of full scale (sampler-007).
 2. Answered on 2026-10-13: pinning the audio thread to the big cores is
    accepted on Android 10 and 11, where the performance hint does not
-   exist; Android 12 and later use the performance hint (to be recorded in
+   exist; Android 12 and later use the performance hint (recorded in
    io-003).
 3. Answered on 2026-10-13: more battery drain on the big cores while the
    app plays is accepted.

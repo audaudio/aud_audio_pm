@@ -17,7 +17,8 @@
   on); the governor lets a denser play than the stress test rise to a
   mean of 75 %, above the 50 % of release-004. Done in ticket 30: the start
   budgets (lifecycle-004); the iPad Pro (M5) measured; the Galaxy Tab S4
-  plays the stress test at a mean of 0.19 to 0.46 instead of 0.67 to 0.82
+  plays the stress test at a mean of 0.19 to 0.46 instead of 0.60 to 0.83
+  (0.67 to 0.82 in ticket 29)
 
 ## Decision
 

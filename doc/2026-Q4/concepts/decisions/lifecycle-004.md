@@ -36,16 +36,17 @@ an xrun or a mean above 85 % and raises it below 72 %.
 
 ## Why
 
-- After ticket 30 the stress test of tickets 28 and 29 asks for at most about
-  90 voices, and every reference device renders them well within its block:
-  the Galaxy Tab S4 at a mean of 0.19 to 0.46 from a start of 96, without an
-  xrun and without a stolen voice (before, from 32: budgets of 32 to 66, up to
-  1582 stolen voices per minute); its voice sweep puts 174 voices at a mean of
-  75 % (46 before). The iPad Pro (M5) plays it at a mean of 0.01 to 0.04 from
-  192, the iPhone 16 Pro Max at 0.07 to 0.13 from 128 (0.13 to 0.22 before).
-  The iOS simulator and the Android emulator play it at a mean of 0.04 to 0.07
-  from 128 without the stealing of their first chords (before 43 to 71 per
-  minute from 64).
+- After ticket 30 the stress test of tickets 28 and 29 keeps at most about 90
+  voices sounding (up to 120 render, with the voices sfizz's own limits fade
+  out), and every reference device renders them well within its block: the
+  Galaxy Tab S4 at a mean of 0.19 to 0.46 from a start of 96, without an xrun
+  and without a stolen voice (before, from 32: budgets of 32 to 66, up to 1582
+  stolen voices per minute); its voice sweep puts 174 voices at a mean of 75 %
+  (46 before). The iPad Pro (M5) plays it at a mean of 0.01 to 0.04 from 192,
+  the iPhone 16 Pro Max at 0.07 to 0.13 from 128 (0.13 to 0.22 before). The
+  iOS simulator and the Android emulator play it at a mean of 0.04 to 0.06
+  from 128 without the stealing of their first chords (before 43 and 49 per
+  minute on the presets from 64).
 - A start below what the device renders makes the governor steal voices
   until it has risen; a start above it costs a cut at the first xrun. The
   learned budget replaces the start on the second launch.

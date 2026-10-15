@@ -44,8 +44,8 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 29 (planned): a voice budget per device that follows the load,
   so that playing hard never drops out (step S9b)
 - [2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md](2026-10-13-30-render-the-sampler-voices-faster-on-the-big-cores.md)
-  — ticket 30 (planned): a faster voice loop with SIMD on ARM, and the
-  audio thread on the big cores (step S9c)
+  — ticket 30: a faster voice loop that renders bit for bit, and the
+  audio thread on the big cores of Android (step S9c)
 - [2026-10-14-31-port-soundprism-js-lfo-presets.md](2026-10-14-31-port-soundprism-js-lfo-presets.md)
   — ticket 31 (planned): the combis of SoundPrism Link Edition in the
   Audanika app, their JavaScript LFOs in an optional script package (step

@@ -26,22 +26,24 @@ that stay the same bit for bit against the fork of release 0.3.2:
    controllers skips the crossfade; the power follower runs only for the
    stealer that reads it; a modulation target with a single source at depth
    1 hands out the source's buffer, unless a cycle reads it while it
-   computes.
+   computes; the stages of a voice are no longer timed.
 3. **Positions and interpolation.** A pitch that holds converts once; the
    positions are summed and split in one pass; a block that ends before its
    loop or sample end skips the walks that wrap and end; on arm64 the
    Hermite interpolation computes four frames in a vector with the products
    and sums of a frame.
-4. **Envelopes.** A flex-EG sustain past its stage time fills its level; the
-   other stages sum their times first (`stepSum()`, bit for bit the serial
-   sum) and take their levels four frames at once on arm64; the ADSR sustain
-   fills its level.
+4. **Whole envelope stages.** A flex-EG sustain past its stage time fills
+   its level; the other stages sum their times first (`stepSum()`, bit for
+   bit the serial sum) and then take their levels; the ADSR sustain fills
+   its level.
 5. **Voice start.** A polyphony check over fewer candidates than its limit
    steals nothing without a walk; a layer keeps the modulation targets of
-   its region; a file identifier hashes its name once.
-6. **No clock reads per voice.** The stages of a voice are no longer timed,
-   and the callback breakdown times blocks and events only once it was
-   asked for — the node never asks.
+   its region; a file identifier hashes its name once; the callback
+   breakdown times blocks and events only once it was asked for — the node
+   never asks.
+6. **Four frames of envelope.** On arm64 the levels of a timed flex-EG stage
+   are computed four frames at once; a block that ends before its stage
+   skips the search for the end.
 
 sfizz's NEON detection was already on (`SIMDConfig.h` reads `__ARM_NEON`);
 on arm64 clang vectorizes the scalar gain operations itself, so the

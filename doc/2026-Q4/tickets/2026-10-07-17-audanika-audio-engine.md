@@ -366,10 +366,10 @@ roughly 22 to 32 engineer-weeks.
   governor that sets it from the measured load, so that playing hard never
   drops out (lifecycle-001: instrument nodes bound their polyphony).
   Depends on S9, S10a.
-- S9c (M, M2, planned as ticket 30) Faster voices: SIMD on ARM, a voice
-  loop that visits only the sounding voices, and the audio thread on the
-  big cores of Android devices (io-002). Depends on S9; raises the budget
-  of S9b.
+- S9c (M, M2, built 2026-10-15 in ticket 30) Faster voices: a voice loop
+  that visits only the busy voices and renders bit for bit, and the audio
+  thread on the fast cores of Android devices. Result: sampler-009,
+  io-003, lifecycle-004. Depends on S9; raises the budget of S9b.
 - S9d (M, M2, planned as ticket 34) The voice allocator: the voice
   stealing and the load governor of S9b move from `aud_dsp_sampler` and
   `aud_audio` into `aud_audio_voice_allocator`, which hooks into the
