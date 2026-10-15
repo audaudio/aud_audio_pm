@@ -6,6 +6,8 @@
   of sampler-006" on 2026-10-13, at the planning of ticket 30
 - Supersedes: [sampler-006](sampler-006.md) — the rule that performance
   changes keep the output bit for bit; the optimizations of ticket 28 stay
+- Refined by: [sampler-009](sampler-009.md) — the voice loop of ticket 30
+  kept the renders bit for bit, below the tolerance
 - Open work: none
 
 ## Decision

@@ -7,6 +7,11 @@
 - Add the plan review of ticket 30 (S9c, faster sampler voices on the big cores)
 - Add decision io-003 of ticket 30, the audio thread on the fast cores of Android devices
 - Add the plan review of ticket 34
+- Add the results and decisions of ticket 30
+
+- The findings and measurements of the plan of ticket 30 on five devices, before and after
+- io-003 (the audio thread on the fast cores of Android), sampler-009 (the faster voice loop) and lifecycle-004 (the start budgets)
+- The open work of io-002, sampler-007, lifecycle-003 and release-004; ticket 30 implemented in doc/issues.md
 
 ## 0.12.1 - 2026-10-14
 

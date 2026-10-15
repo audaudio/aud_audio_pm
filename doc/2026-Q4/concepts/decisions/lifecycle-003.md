@@ -9,12 +9,15 @@
   share", then the band 75 / 72 / 85 %; Findings)
 - Refines: [lifecycle-001](lifecycle-001.md) — resources have budgets and
   policies; [interop-001](interop-001.md) — no Dart on the audio thread
-- Open work: the start budgets of the device classes after ticket 30; the
-  cut after an xrun takes the units of that moment, which a pattern of
-  bursts can make low (the Galaxy Tab S4 fell from 51 to 13 and rose back
-  in 20 s); the iPad Pro (M5) was not measured; the 50 % of the block that
-  release-004 asks of the callback: the governor aims the mean at 75 %, the
-  Galaxy Tab S4 played at 0.67 to 0.82 (ticket 30)
+- Refined by: [lifecycle-004](lifecycle-004.md) — the start budgets after
+  ticket 30
+- Open work: the cut after an xrun takes the units of that moment, which a
+  pattern of bursts can make low (the Galaxy Tab S4 fell from 51 to 13 and
+  rose back in 20 s; after ticket 30 the stress test made no xrun to cut
+  on); the governor lets a denser play than the stress test rise to a
+  mean of 75 %, above the 50 % of release-004. Done in ticket 30: the start
+  budgets (lifecycle-004); the iPad Pro (M5) measured; the Galaxy Tab S4
+  plays the stress test at a mean of 0.19 to 0.46 instead of 0.67 to 0.82
 
 ## Decision
 
