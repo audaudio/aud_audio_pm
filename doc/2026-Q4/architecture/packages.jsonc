@@ -163,6 +163,24 @@
       ]
     },
     {
+      "name": "aud_audio_script",
+      "template": "ffi",
+      "description": "Script modulation of the Audanika Audio Engine: the node aud.script.modulator runs JavaScript on QuickJS-ng in a worker of its own and sends controls once per audio buffer; optional, apps add it explicitly",
+      "platforms": [
+        "ios",
+        "android",
+        "macos",
+        "windows",
+        "linux"
+      ],
+      "deps": [
+        "aud_audio_core"
+      ],
+      "depVersions": {
+        "aud_audio_core": "^0.5.2"
+      }
+    },
+    {
       "name": "aud_dsp_sampler",
       "template": "ffi",
       "description": "SFZ sampler node of the Audanika Audio Engine on the sfizz fork",

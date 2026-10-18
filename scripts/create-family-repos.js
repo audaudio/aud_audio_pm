@@ -126,10 +126,12 @@ const templateCommand = (p) => {
   }
 };
 const pubTool = (p) => (p.template === 'flutter' || p.template === 'app' ? 'flutter' : 'dart');
-const depDescriptor = (dep) => {
+// A package created after the first release of its dependencies names their
+// ranges in `depVersions`; the family's first version fits only the start.
+const depDescriptor = (p, dep) => {
   const ext = manifest.external[dep];
-  const url = ext ? ext.git : `https://github.com/${org}/${dep}.git`;
-  const range = ext ? ext.version : `^${version}`;
+  const url = ext ? ext.git : `git@github.com:${org}/${dep}.git`;
+  const range = ext ? ext.version : (p.depVersions?.[dep] ?? `^${version}`);
   return JSON.stringify({ git: { url, tag_pattern: '{{version}}' }, version: range });
 };
 
@@ -261,7 +263,12 @@ const createOne = (p) => {
     run('gg dna add dna_audanika', dir);
     patchPubspec(p, dir);
     const tool = pubTool(p);
-    for (const d of p.deps) run(`${tool} pub add '${d}:${depDescriptor(d)}'`, dir);
+    // The template's native packages may lag behind the family's; the
+    // solver picks them again once the family's dependencies are in.
+    const nativePackages = 'code_assets hooks native_toolchain_c';
+    if (p.template === 'ffi') run(`${tool} pub remove ${nativePackages}`, dir);
+    for (const d of p.deps) run(`${tool} pub add '${d}:${depDescriptor(p, d)}'`, dir);
+    if (p.template === 'ffi') run(`${tool} pub add ${nativePackages}`, dir);
     writeBoilerplate(p, dir);
     run(`${tool} pub get`, dir);
     run('dart format .', dir);

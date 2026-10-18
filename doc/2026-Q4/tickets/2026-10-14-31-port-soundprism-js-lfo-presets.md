@@ -2,7 +2,9 @@
 
 Status: planned 2026-10-14 on the user's request ("create a concept for
 taking these presets over into Audanika"), on top of ticket 28; the open
-questions of the plan review were answered the same day. Not started.
+questions of the plan review were answered the same day. Plan check
+against tickets 29, 30 and 32 on 2026-10-18; implementation started the
+same day.
 
 ## Goal
 
@@ -130,13 +132,10 @@ flowchart LR
   resonance, amplitude and pan. The controls use numbers from 300 on,
   clear of the MIDI controllers (0 to 127) and of sfizz's extended ones
   (128 to 137: pitch bend, aftertouch, velocity, note number and more).
-- **The play-mode variants** of the edition are converted too, into the
-  app's play-mode model (selection strategies with their MIDI channels
-  and the channel of the highest pitch). The app uses only the default
-  variant, `AUD002030_1_allPlayMode_threeToneModeWithChordalLead` (the
-  first variant button of Link Edition), and only while a Link Edition
-  combi plays: it changes which notes and channels a touch plays, nothing
-  on the interface.
+- **The play modes stay as they are** (the user, 2026-10-18): the app
+  keeps its own play modes and its channels — bass on MIDI channel 1,
+  chord on 2, melody on 3, the channels the combis' presets expect. The
+  play-mode variants of the edition are not converted.
 - **The app** creates the modulator next to the three sampler nodes,
   connects its outputs, loads the scripts of a combi with its SFZ files,
   runs the transport at 120 BPM from the start of the engine — beat 0 —
@@ -202,15 +201,12 @@ Approaches not taken:
      stored as FLAC, in the layout of ticket 32;
    - the channel SFZ files of the 69 channel presets of the 23 combis;
    - the scripts, the two default scripts and `audanika-host.js`;
-   - the 12 play-mode variants in the app's play-mode model;
    - the combis in `index.json`: channels, scripts, the start value of CC
      74, delay and reverb from `AUD002021_3_HighReverb`.
    It shares the sample rules of `convert-content-bundle.js`.
 5. **The app**: the modulator in `AudSoundEngine`, the event connections,
    the transport at 120 BPM from the start of the engine, CC 74 from
-   external MIDI to the modulator, the default variant while a Link
-   Edition combi plays (no change of the interface), the combis in the
-   sound list.
+   external MIDI to the modulator, the combis in the sound list.
 6. **Measurements** in the app on the same devices: the CPU time of the
    worker and of the node on the audio thread, late ticks, memory per
    script context, load time of a combi (FLAC decoding included), app
@@ -226,9 +222,7 @@ Approaches not taken:
 - `aud_audio_script` (new): the package, QuickJS-ng, the node, the
   synthetic benchmark; 0.1.0.
 - `audanika_app`: the reference, the measurements of the real combis, the
-  converter, the content, the wiring, the default variant.
-- `sml`, only if the variants need a rule its selection strategies lack
-  (e.g. the highest pitch on the melody channel).
+  converter, the content, the wiring.
 - `aud_dsp_sampler`, only if a finding needs it: controls that arrive
   over event connections, a resonance of −10 dB (one preset) below
   sfizz's range.
@@ -249,7 +243,7 @@ Approaches not taken:
 6. The measurements of QuickJS-ng on all devices with JavaScriptCore and
    Node beside it; the table goes to the user, who decides the budget.
 7. The converter, after ticket 32: samples as FLAC, channel SFZ, per-key
-   pan, mappings, variants, `index.json`; level matched as in app-001.
+   pan, mappings, `index.json`; level matched as in app-001.
 8. The app; first combi end to end on both platforms, then all 23.
 9. Measurements and listening; decisions from the findings; code review,
    review, publish.
@@ -271,7 +265,8 @@ Approaches not taken:
 9. 120 BPM; a tempo control is planned as ticket 33.
 10. The slider of the app comes later; until then CC 74.
 11. The play-mode variants are migrated too; only the default variant is
-    used for now.
+    used for now. Superseded on 2026-10-18: the play modes stay as they
+    are, the variants are not converted (plan check, 9).
 12. The samples and patches of SoundPrism Link Edition ship with the
     Audanika app.
 13. Delay and reverb come from SoundPrism's reverb preset, on the app's
@@ -284,9 +279,66 @@ Approaches not taken:
 16. Beat 0 is the start of the engine; the transport runs for as long as
     the engine runs.
 17. The default variant applies only while a Link Edition combi plays;
-    it changes the sound, nothing on the interface.
+    it changes the sound, nothing on the interface. Superseded on
+    2026-10-18 with answer 11.
 18. A ramp over the buffer, if it is not too expensive; otherwise the
     step (answer 5 then holds).
+
+## Plan check against tickets 29, 30 and 32 (2026-10-18)
+
+Confirmed by the user on 2026-10-18; point 9 was changed by the user.
+
+1. **The filter per voice is a new cost.** With a filter, mono regions
+   leave the fused pass of sampler-009; sfizz's filter designs its
+   coefficients every 16 frames and computes a `pow` per sample even
+   when nothing moves. The voice costs of ticket 30, the start budgets
+   of lifecycle-004 and the budgets the app learned (app-005) come from
+   presets without filters, so a combi may overload briefly after it
+   loads; the governor lowers the budget. Measured; a hold check in
+   sfizz's filter is the finding that would bring `aud_dsp_sampler` in.
+2. **Ramp and step.** Cutoff and resonance cost the same either way. Gain
+   goes to `amplitude_onccN` (linear, like SoundPrism's mixer volume),
+   not `volume_onccN` (dB, a `pow` per sample on a ramp); then only pan
+   costs a few passes more on a ramp. sfizz turns an event at offset k > 0
+   into a ramp over the frames before it, so the step sends the old value
+   at k − 1 and the new one at k, as planned. Measured (answer 18).
+3. **The worker on the fast cores.** Since io-003 the Android audio thread
+   runs on the fast cores; the worker would land where the system puts
+   it, on the Galaxy Tab S4 likely the small cores. It binds itself to the
+   fast cores with an audio priority on Android (the core detection of
+   `aud_audio_io` is not exported, so the package keeps a copy) and asks
+   for the user-interactive class on Apple platforms; measured.
+4. **The node owns its worker.** interop-001 says the engine owns every
+   worker thread; the tasks of lifecycle-002 do not fit (two shared
+   workers without order, shared with the sampler's reads). script-001
+   records the node's own worker next to the semaphore signal.
+5. **Offline renders.** A node learns per block that it renders offline
+   (`AUD_PROCESS_OFFLINE`); then it waits for its worker inside
+   `process`, with the RealtimeSanitizer off around that wait.
+6. **Gauge and governor** time the audio thread only; the worker's CPU
+   time is measured on its own.
+7. **Transport.** Nothing starts it, and a stopped graph keeps its beat:
+   the app seeks to 0 and starts it at every start of the engine.
+8. **CC 74.** External MIDI reaches only the `external` node; the app
+   connects every external input to the modulator too. The slider reads
+   CC 74 of the first MIDI channel, as in SoundPrism.
+9. **Play modes** (changed by the user): no `sml`; the app's channels stay
+   as they are — bass 1, chord 2, melody 3 — and the variants are not
+   converted.
+10. **The content.** All reduced sample sets are m4a, 25 of the 46 at
+    22 kHz without `sampleInfo.xml`; the app's converter rejects them.
+    The new converter decodes and encodes with macOS's `afconvert` (no
+    `flac` or `ffmpeg` on the Mac) and runs on macOS. Android's
+    `noCompress` gets flac (sampler-004 inflates compressed assets).
+11. **Ticket 32** is planned, not started; the package, the reference and
+    the measurements do not wait for it; the user is asked when the
+    converter is due.
+12. **Numbers and setup.** The app decision is app-006 (ticket 29 took
+    app-005). `create-family-repos.js` takes the dependency ranges of the
+    new package from its entry. `aud_dsp_effects` is the pattern of the
+    package (hooks, `test-native.js` with ASan, RTSan and TSan, a C bench
+    entry). One tick runs per render call, the audio callback: 180 frames
+    on the Galaxy Tab S4, 256 on the iPhone, 512 on the simulator.
 
 ## Open questions
 
@@ -300,9 +352,8 @@ Approaches not taken:
 Ableton Link (S15) — the modulator follows any transport provider, so
 Link plugs in without changes; the tempo control (ticket 33); the slider
 of the app; an editor for scripts, scripts written by users and scripts
-loaded from outside the app; the other SoundPrism editions; the variants
-other than the default one, and any change of the app's interface for
-them; the web, where the browser's own JavaScript could run scripts in
+loaded from outside the app; the other SoundPrism editions; the play-mode
+variants of the edition (plan check, 9); the web, where the browser's own JavaScript could run scripts in
 the worklet later.
 
 ## Decisions this plan proposes
@@ -312,8 +363,9 @@ the worklet later.
   behind an engine interface and called directly by a worker of the node
   that computes once per audio buffer — never from Dart, never on the
   audio thread; the audio thread only signals the worker without
-  blocking. The engine and the umbrella never depend on the package.
-- app-005: the SoundPrism Link Edition combis are rebuilt once as SFZ
+  blocking. The worker is the node's own thread, an exception to
+  interop-001. The engine and the umbrella never depend on the package.
+- app-006 (app-005 went to ticket 29): the SoundPrism Link Edition combis are rebuilt once as SFZ
   with FLAC samples; their scripts ship unchanged and run in
   `aud.script.modulator` behind the host layer `audanika-host.js` — the
   one legacy format the app reads at run time (refines scope-002 and
