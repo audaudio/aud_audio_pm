@@ -19,6 +19,7 @@ flowchart BT
   osc[aud_audio_osc<br/>address router, UDP server] --> graphpkg
   seq[aud_audio_sequencer<br/>transport, tracks, clips] --> graphpkg
   linkpkg[aud_audio_link<br/>Ableton Link, own license] --> seq
+  script[aud_audio_script<br/>JavaScript modulator on QuickJS-ng, optional] --> core
   ui_graph[aud_audio_ui_graph_edit] --> umbrella
   ui_roll[aud_audio_ui_piano_roll] --> seq
   ui_controls[aud_audio_ui_controls] --> umbrella

@@ -7,8 +7,15 @@
 - Add the plan check of ticket 31 and the package aud_audio_script
 
 - Record the plan check against tickets 29, 30 and 32 in the plan
+
 - Add aud_audio_script to packages.jsonc
+
 - Let create-family-repos.js take dependency ranges per package and let the solver pick the native packages of the template
+
+- Add aud_audio_script to the architecture and fold ticket 32 into ticket 31
+
+- Add the package and its worker to architecture.md, the package graph and the plan of ticket 17
+- Record that ticket 32 is done as part of ticket 31 and that the simulators come before the performance tests
 
 ## 0.12.2 - 2026-10-15
 

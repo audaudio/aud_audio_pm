@@ -4,7 +4,9 @@ Status: planned 2026-10-14 on the user's request ("create a concept for
 taking these presets over into Audanika"), on top of ticket 28; the open
 questions of the plan review were answered the same day. Plan check
 against tickets 29, 30 and 32 on 2026-10-18; implementation started the
-same day.
+same day. On 2026-10-18 the user decided to do ticket 32 as part of this
+ticket and to test everything in the simulators before the performance
+tests.
 
 ## Goal
 
@@ -223,9 +225,9 @@ Approaches not taken:
   synthetic benchmark; 0.1.0.
 - `audanika_app`: the reference, the measurements of the real combis, the
   converter, the content, the wiring.
-- `aud_dsp_sampler`, only if a finding needs it: controls that arrive
-  over event connections, a resonance of −10 dB (one preset) below
-  sfizz's range.
+- `aud_dsp_sampler`: the tests of ticket 32 (includes, `$` variables,
+  `default_path` and `note_offset` over virtual paths and text loads, a
+  missing include); more only if a finding needs it.
 - `aud_audio_pm`: this plan, the topic, the decisions, the new package in
   `architecture.md` and `packages.jsonc`, the step in the plan of ticket
   17.
@@ -242,11 +244,16 @@ Approaches not taken:
    render.
 6. The measurements of QuickJS-ng on all devices with JavaScriptCore and
    Node beside it; the table goes to the user, who decides the budget.
-7. The converter, after ticket 32: samples as FLAC, channel SFZ, per-key
-   pan, mappings, `index.json`; level matched as in app-001.
+   Moved after step 9 on 2026-10-18.
+7. The converter with ticket 32's scope (decided 2026-10-18): the shared
+   layout and FLAC for the app's existing sounds and the combis, channel
+   SFZ, per-key pan, mappings, `index.json`; level matched as in app-001;
+   the include tests in `aud_dsp_sampler`.
 8. The app; first combi end to end on both platforms, then all 23.
-9. Measurements and listening; decisions from the findings; code review,
-   review, publish.
+9. The user tests everything in the iOS simulator and the Android
+   emulator (asked on 2026-10-18), before the performance tests.
+10. Measurements (step 6 moves here) and listening; decisions from the
+    findings; code review, review, publish.
 
 ## Answers of the plan review (2026-10-14)
 
@@ -332,7 +339,10 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
     `noCompress` gets flac (sampler-004 inflates compressed assets).
 11. **Ticket 32** is planned, not started; the package, the reference and
     the measurements do not wait for it; the user is asked when the
-    converter is due.
+    converter is due. Asked on 2026-10-18: ticket 32 is done as part of
+    this ticket — the app's existing sounds and the combis are written in
+    its shared layout with FLAC, `aud_dsp_sampler` joins with the tests of
+    its scope 7.
 12. **Numbers and setup.** The app decision is app-006 (ticket 29 took
     app-005). `create-family-repos.js` takes the dependency ranges of the
     new package from its entry. `aud_dsp_effects` is the pattern of the
