@@ -43,7 +43,8 @@ requirements. Bug tickets are the exception, they name their bug file.
    current quarter's topics, ux files, decisions and architecture
 2. Goals: if there is no active goal, find one first — the outcome, for
    whom, and how we know it is reached — and write it to `doc/goals`. Ask
-   which goals the session serves
+   which goals the session serves, and whether `proposed` goals are
+   confirmed
 3. People: who uses the product, who operates it, who pays, who else is
    affected. Confirm the list
 4. Scenarios: walk through the main scenarios of each goal with the user,

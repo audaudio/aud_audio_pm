@@ -99,8 +99,9 @@ root
 ## Requirements
 ```
 
-- `Status` — `active`, `reached` or `dropped`, plus the quarters the goal
-  was worked on, e.g. `active since 2026-Q3`
+- `Status` — `proposed`, `active`, `reached` or `dropped`, plus the
+  quarters the goal was worked on, e.g. `active since 2026-Q3`. A goal is
+  `proposed` until the team confirms it
 - `Outcome` — one paragraph: what changes, for whom, and why it matters
 - `Measure` — how we know the goal is reached
 - `Requirements` — links to the requirements derived from the goal
