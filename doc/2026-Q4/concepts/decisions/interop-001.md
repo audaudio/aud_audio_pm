@@ -5,7 +5,8 @@
 - Canonical source: topics/dart-interop-and-web.md
 - Refined by: [lifecycle-003](lifecycle-003.md) — the load governor ticks
   on the control thread and reads the audio thread's numbers through
-  atomics (ticket 29)
+  atomics (ticket 29); [script-001](script-001.md) — the node
+  `aud.script.modulator` owns a worker thread of its own (ticket 31)
 - Open work: measure command-queue and event latency in the spike
   ticket; ticket 22 measures command to sound in `AudEngine` (iOS
   simulator, Android emulator, iPad), the reference devices are open;

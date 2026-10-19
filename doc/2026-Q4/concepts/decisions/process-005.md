@@ -8,6 +8,9 @@
 - Refines: [process-003](process-003.md) — the ticket number;
   [family-002](family-002.md) — which repos a ticket publishes;
   [process-004](process-004.md) — model and effort
+- Refined by: [script-001](script-001.md) — a semaphore signal that does
+  not block wakes the worker of `aud.script.modulator` from the audio
+  thread (ticket 31)
 - Open work: none
 
 ## Decision

@@ -4,6 +4,10 @@
 - Date: 2026-10-08
 - Canonical source: Gabriel Gatzsche's instruction during ticket 19;
   topics/legacy-audio-engine.md
+- Refined by: [app-001](app-001.md) — the instruments are rebuilt as SFZ
+  by a one-time converter (ticket 27); [app-006](app-006.md) — the
+  scripts of the SoundPrism Link Edition combis are the one legacy format
+  the app reads at run time (ticket 31)
 - Open work: none
 
 ## Decision

@@ -114,6 +114,7 @@ The target picture is in
 | `aud_audio_osc` | all | OSC 1.1 codec, address router, pattern matching, replies and notifications, optional UDP and WebSocket server | optional (tinyosc) | graph |
 | `aud_audio_sequencer` | all | render-thread sequencer: tracks, clips, events, loops, transport commands; Dart model `Sequence`, `Track`, `Clip`, `Event` | C++ via hooks | graph |
 | `aud_audio_link` | macOS, Windows, Linux, Android, iOS | transport provider on Ableton Link / LinkKit, multicast lock shim, settings UI; fetches Link and LinkKit at build time, app publishers need their own Ableton license | C++ (Link), LinkKit, JNI shim | graph |
+| `aud_audio_script` | macOS, Windows, Linux, Android, iOS | the node `aud.script.modulator`: JavaScript on QuickJS-ng in a worker of the node, one tick per audio buffer, controls on event outputs; optional, apps add it explicitly (script-001) | C/C++ via hooks | core |
 | `aud_dsp_sampler` | all | SFZ sampler node on the sfizz fork, dr_libs loaders, message API on routes | C++ via hooks | core |
 | `aud_dsp_effects` | all | oscillators, filters, delays, dynamics, modulation, distortion, reverbs, analysis taps | C++ via hooks | core |
 | `aud_dsp_stk` | all | STK physical models (clarinet, flute, mandolin, Rhodes, shakers, bells and more) | C++ via hooks | core |
@@ -377,17 +378,20 @@ roughly 22 to 32 engineer-weeks.
   `aud_audio_core` and depends on nothing else; the app binds the
   governor to the engine; no audible change. Depends on S9b, S9c; runs
   after the tickets 30 to 39.
-- S29c (L, M2, planned as ticket 31) SoundPrism Link Edition in the
-  Audanika app: the 23 combis rebuilt once as SFZ, their JavaScript LFOs
-  run unchanged in `aud.script.modulator` of the new optional package
+- S29c (L, M2, built 2026-10-19 in ticket 31) SoundPrism Link Edition in
+  the Audanika app: the 23 combis rebuilt once as SFZ, their JavaScript
+  LFOs run unchanged in `aud.script.modulator` of the new optional package
   `aud_audio_script` (QuickJS-ng on a worker that computes once per audio
   buffer, never on the audio thread; apps add it explicitly, the engine
-  never depends on it); samples as FLAC, 120 BPM until S29e. Depends on
-  S29a, S10a and, for its converter, S29d.
-- S29d (S, M2, planned as ticket 32) Shared sample sets: the SFZ presets
-  of the app include the regions and loop points of their sample set
-  with `#include` instead of copying them; the converters write that
-  layout. Depends on S29a.
+  never depends on it); samples as FLAC, 120 BPM until S29e. Result:
+  script-001, app-006. Depends on S29a, S10a and, for its converter,
+  S29d. Started 2026-10-18; the repo `aud_audio_script` was created the
+  same day.
+- S29d (S, M2, built 2026-10-19 in ticket 31, planned as ticket 32)
+  Shared sample sets: the SFZ presets of the app include the regions and
+  loop points of their sample set with `#include` instead of copying
+  them; the converters write that layout. Result: app-007, sampler-010.
+  Depends on S29a.
 - S29e (S, M2, planned as ticket 33) Tempo control: players set the tempo
   of the Audanika app; the scripted combis of S29c and the master delay
   follow it; ready to show and set the Link tempo once S15 exists.

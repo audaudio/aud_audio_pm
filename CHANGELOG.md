@@ -1,5 +1,79 @@
 # Changelog
 
+## 0.13.0 - 2026-10-19
+
+### Added
+
+- Add the plan check of ticket 31 and the package aud_audio_script
+
+- Record the plan check against tickets 29, 30 and 32 in the plan
+
+- Add aud_audio_script to packages.jsonc
+
+- Let create-family-repos.js take dependency ranges per package and let the solver pick the native packages of the template
+
+- Add aud_audio_script to the architecture and fold ticket 32 into ticket 31
+
+- Add the package and its worker to architecture.md, the package graph and the plan of ticket 17
+
+- Record that ticket 32 is done as part of ticket 31 and that the simulators come before the performance tests
+
+- Add decision script-001: JavaScript in an optional node with a worker of its own
+
+- Record that aud.script.modulator runs QuickJS-ng on a worker of the node, woken by a non-blocking semaphore signal, once per audio buffer
+
+- List it in the decision index
+
+- Add decisions app-006, app-007 and sampler-010
+
+- app-006: the app plays the SoundPrism Link Edition combis with their scripts behind audanika-host.js
+
+- app-007: a sample set exists once in the content, as FLAC, and presets include it
+
+- sampler-010: a missing include fails the load; note_offset_open_bounds keeps the outer keys
+
+- Add the findings of ticket 31 so far and QuickJS-ng as the only engine
+
+- Record the exact port, the lookahead of the worker, the engine comparison, the content and the mappings in the plan
+
+- script-001: QuickJS-ng only, JavaScriptCore measured and dropped; the worker computes two blocks ahead
+
+- Add the measurements of ticket 31 and the budget of a tick
+
+- Record QuickJS-ng per device, the late ticks of 10 minutes on the Galaxy Tab S4, loads, memory, app size and ramp against step
+
+- Answer open question 1: p99 at most 10 % of the device buffer, no late tick in 10 minutes; the worker on any core with a lookahead of 3
+
+- Answer 18: the ramp
+
+- script-001 and app-006 take the decisions
+
+- Add the review fixes of ticket 31 to plans and decisions
+
+- Ticket 31: implemented; channels 0 to 2 as in app-002; the first lookahead default named as such; aud_dsp_sampler's changes and app-007 and sampler-010 listed; long lines wrapped
+
+- architecture.md: the worker computes three blocks ahead and the node sends the values in that block
+
+- Ticket 17: aud_audio_script runs QuickJS-ng only; S29c and S29d built in ticket 31 with their decisions
+
+- doc/issues.md: ticket 31 implemented, ticket 32 implemented in 31; ticket 32 names its decisions
+
+- sampler-010: the chord section reaches the keys 116 to 125; script-001 and app-006 name the Findings as a source
+
+- Link the refined decisions back: scope-002, interop-001, process-005, app-001, app-002, sampler-002, sampler-003
+
+- packages.jsonc documents depVersions
+
+- Add ticket 35: QuickJS-ng from the pub.dev package gg_quickjs
+
+- Add the plan of ticket 35, done as part of ticket 31; gg_quickjs 0.1.0 came from ggsuite ticket 144
+
+- Add decision build-002: a library several packages need may come from a published source package with a hook helper
+
+- build-001 and script-001 point to it; packages.jsonc lists gg_quickjs as an external pub.dev dependency
+
+- create-family-repos.js takes external pub.dev dependencies as plain version ranges
+
 ## 0.12.2 - 2026-10-15
 
 ### Added

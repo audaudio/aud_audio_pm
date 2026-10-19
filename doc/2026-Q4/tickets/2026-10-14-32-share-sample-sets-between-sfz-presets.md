@@ -3,7 +3,9 @@
 Status: planned 2026-10-14 during ticket 31, on the user's request ("The
 SoundPrism sample concept distinguishes between sample sets and presets
 … plan a ticket where some kind of #include directive is added to SFZ
-files to include the loop points of sample sets"). Not started.
+files to include the loop points of sample sets"). On 2026-10-18 the user
+decided to do it as part of ticket 31; its results are recorded there and
+in app-007 and sampler-010; implemented.
 
 ## Goal
 

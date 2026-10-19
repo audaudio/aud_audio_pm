@@ -4,10 +4,12 @@
 - Date: 2026-10-08
 - Canonical source: ticket 5 (tickets/2026-10-08-5-spike-the-mobile-foundation.md)
 - Refined by: [sampler-002](sampler-002.md) — sfizz is no longer refreshed
-  as a subset; it is a fork changed in place
+  as a subset; it is a fork changed in place;
+  [build-002](build-002.md) — a library several packages need may come
+  from a published source package with a hook helper
 - Open work: a build-time fetch instead of vendoring where a license asks
   for it (link-002); the per-file compiler flags the hooks cannot express
-  (sfizz's `-mavx` on x86 objects); a shared hook helper package
+  (sfizz's `-mavx` on x86 objects)
 
 ## Decision
 

@@ -15,8 +15,8 @@ Apps, plugin shells, docs cookbook
             ▲
             └─ aud_dsp_*     DSP packages: C++ nodes + Dart descriptors
 Integration: aud_audio_midi, aud_audio_osc, aud_audio_sequencer,
-             aud_audio_link, aud_audio_web, aud_audio_file,
-             aud_audio_backing
+             aud_audio_link, aud_audio_script, aud_audio_web,
+             aud_audio_file, aud_audio_backing
 UI:          aud_audio_ui_graph_edit, aud_audio_ui_piano_roll,
              aud_audio_ui_controls, aud_audio_ui_keyboard,
              aud_audio_ui_waveform
@@ -53,6 +53,18 @@ swaps; every edit is a transaction with a revision the engine
 acknowledges (graph-003). Every DSP package compiles its
 C++ with a build hook and registers its node types through the C ABI of
 `aud_audio_core` at engine start.
+
+One node owns a thread of its own: `aud.script.modulator` of the optional
+package `aud_audio_script` runs JavaScript on QuickJS-ng in a worker
+created on the control thread. At the end of each block the audio thread
+hands the worker the predicted transport position of the block three
+blocks ahead (`lookahead`) and the input events through a lock-free ring
+and wakes it with a semaphore signal that does not block; the worker
+computes one tick per block and returns the values through a second ring,
+which the node sends as controls in that block. Offline, the node waits
+for its worker, so renders stay deterministic (script-001).
+Neither the engine nor the umbrella depends on the package; an app that runs
+scripts adds it.
 
 ## Runtime on the web
 
