@@ -130,6 +130,8 @@ const pubTool = (p) => (p.template === 'flutter' || p.template === 'app' ? 'flut
 // ranges in `depVersions`; the family's first version fits only the start.
 const depDescriptor = (p, dep) => {
   const ext = manifest.external[dep];
+  // An external package from pub.dev is a plain version range.
+  if (ext?.pub) return JSON.stringify(ext.version);
   const url = ext ? ext.git : `git@github.com:${org}/${dep}.git`;
   const range = ext ? ext.version : (p.depVersions?.[dep] ?? `^${version}`);
   return JSON.stringify({ git: { url, tag_pattern: '{{version}}' }, version: range });

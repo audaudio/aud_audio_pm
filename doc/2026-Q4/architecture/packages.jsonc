@@ -16,6 +16,10 @@
     "aud_midi": {
       "git": "https://github.com/audmidi/aud_midi.git",
       "version": "^0.1.0"
+    },
+    "gg_quickjs": {
+      "pub": "https://pub.dev/packages/gg_quickjs",
+      "version": "^0.1.0"
     }
   },
   "packages": [
@@ -174,7 +178,8 @@
         "linux"
       ],
       "deps": [
-        "aud_audio_core"
+        "aud_audio_core",
+        "gg_quickjs"
       ],
       "depVersions": {
         "aud_audio_core": "^0.5.2"

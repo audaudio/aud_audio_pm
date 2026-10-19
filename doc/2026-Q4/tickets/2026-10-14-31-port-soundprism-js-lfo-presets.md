@@ -223,7 +223,8 @@ Approaches not taken:
 ## Affected repos (expected)
 
 - `aud_audio_script` (new): the package, QuickJS-ng, the node, the
-  synthetic benchmark; 0.1.0.
+  synthetic benchmark; 0.1.0. QuickJS-ng comes from the pub.dev package
+  `gg_quickjs` (ticket 35, done here, build-002).
 - `audanika_app`: the reference, the measurements of the real combis, the
   converter, the content, the wiring.
 - `aud_dsp_sampler`: the tests of ticket 32 (includes, `$` variables,
@@ -380,6 +381,11 @@ measurements asked for it.
   for several blocks (3.5 % late ticks in 10 minutes). On any core, with
   the raised priority, it moves to a free small core: a tick takes three
   times as long there, and with a lookahead of 3 no tick came late.
+- **QuickJS-ng from `gg_quickjs`** (ticket 35, build-002): the user asked
+  for QuickJS-ng as a Dart dependency; the generic pub.dev package
+  `gg_quickjs` of the ggsuite (ticket 144 there) now carries its sources and
+  a hook helper, and `aud_audio_script` builds QuickJS-ng with it before its
+  first release instead of vendoring it.
 - **QuickJS-ng only** (the user, 2026-10-19). The real combis on the
   modulator's worker thread, one tick per block of 256 frames (5.33 ms),
   1000 ticks each, the engines in turns:

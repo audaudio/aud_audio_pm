@@ -51,12 +51,25 @@
 - Add the review fixes of ticket 31 to plans and decisions
 
 - Ticket 31: implemented; channels 0 to 2 as in app-002; the first lookahead default named as such; aud_dsp_sampler's changes and app-007 and sampler-010 listed; long lines wrapped
+
 - architecture.md: the worker computes three blocks ahead and the node sends the values in that block
+
 - Ticket 17: aud_audio_script runs QuickJS-ng only; S29c and S29d built in ticket 31 with their decisions
+
 - doc/issues.md: ticket 31 implemented, ticket 32 implemented in 31; ticket 32 names its decisions
+
 - sampler-010: the chord section reaches the keys 116 to 125; script-001 and app-006 name the Findings as a source
+
 - Link the refined decisions back: scope-002, interop-001, process-005, app-001, app-002, sampler-002, sampler-003
+
 - packages.jsonc documents depVersions
+
+- Add ticket 35: QuickJS-ng from the pub.dev package gg_quickjs
+
+- Add the plan of ticket 35, done as part of ticket 31; gg_quickjs 0.1.0 came from ggsuite ticket 144
+- Add decision build-002: a library several packages need may come from a published source package with a hook helper
+- build-001 and script-001 point to it; packages.jsonc lists gg_quickjs as an external pub.dev dependency
+- create-family-repos.js takes external pub.dev dependencies as plain version ranges
 
 ## 0.12.2 - 2026-10-15
 

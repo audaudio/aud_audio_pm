@@ -5,6 +5,7 @@
 - Canonical source: tickets/2026-10-14-31-port-soundprism-js-lfo-presets.md
   (Concept, answers 1, 2, 4, 5, 14 and 18 of the plan review, points 3 to 6
   of the plan check, Findings, Measurements, Open questions)
+- Refined by: [build-002](build-002.md) — QuickJS-ng from `gg_quickjs`
 - Refines: [interop-001](interop-001.md) — the engine owns every worker
   thread; [process-005](process-005.md) — no lock on the audio thread
 - Open work: Linux and Windows are written but not built; the late
@@ -16,14 +17,15 @@
 JavaScript runs only in the optional package `aud_audio_script`, in the node
 `aud.script.modulator`. Neither the engine nor the umbrella `aud_audio`
 depends on the package; an app that runs scripts adds it. The node embeds
-QuickJS-ng (MIT) in its C++ backend, the one engine on every platform, behind
-a thin internal engine interface. JavaScriptCore was measured beside it and
-dropped (the user, 2026-10-19): in an iOS app it runs, apparently without its
-JIT, and took 32–42 µs per tick of the real combis on the iPad Pro (M5) where
-QuickJS-ng took 21–30 µs, it has no memory limit and no interruptible time
-budget in its public API, and Android has none. Dart only configures the node:
-it hands it the script as a string setting, once per load; no FFI call runs
-per tick.
+QuickJS-ng (MIT) in its C++ backend, the one engine on every platform, taken
+from the pub.dev package `gg_quickjs` and compiled into the node's library by
+its hook (build-002), behind a thin internal engine interface. JavaScriptCore
+was measured beside it and dropped (the user, 2026-10-19): in an iOS app it
+runs, apparently without its JIT, and took 32–42 µs per tick of the real
+combis on the iPad Pro (M5) where QuickJS-ng took 21–30 µs, it has no memory
+limit and no interruptible time budget in its public API, and Android has
+none. Dart only configures the node: it hands it the script as a string
+setting, once per load; no FFI call runs per tick.
 
 The node owns a worker thread, created on the control thread — an exception to
 interop-001, recorded here. At the end of each block the audio thread hands
