@@ -309,7 +309,8 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
    costs a few passes more on a ramp. sfizz turns an event at offset k > 0
    into a ramp over the frames before it, so the step sends the old value
    at k − 1 and the new one at k, as planned. Measured (answer 18).
-3. **The worker on the fast cores.** Since io-003 the Android audio thread
+3. **The worker on the fast cores** (revised by the measurements: any
+   core, Findings). Since io-003 the Android audio thread
    runs on the fast cores; the worker would land where the system puts
    it, on the Galaxy Tab S4 likely the small cores. It binds itself to the
    fast cores with an audio priority on Android (the core detection of
@@ -368,6 +369,14 @@ measurements asked for it.
   came late in the same runs; the rest falls, as far as measured, into the
   loads, which build the new context on the worker (6 to 12 ms on the
   tablet).
+- **The worker on any core** (script-001, revising plan check 3). Bound to
+  the fast cores, the worker sat on the core of the audio thread: the audio
+  thread wakes it, the kernel places the wakee on the waker's core, and
+  Qualcomm's core control keeps the idle big cores isolated, so the worker
+  waited behind the real-time audio thread, during back-to-back callbacks
+  for several blocks (3.5 % late ticks in 10 minutes). On any core, with
+  the raised priority, it moves to a free small core: a tick takes three
+  times as long there, and with a lookahead of 3 no tick came late.
 - **QuickJS-ng only** (the user, 2026-10-19). The real combis on the
   modulator's worker thread, one tick per block of 256 frames (5.33 ms),
   1000 ticks each, the engines in turns:
@@ -407,12 +416,83 @@ measurements asked for it.
   the iOS simulator, the Android emulator, the Galaxy Tab S4 and the iPad
   Pro (M5) load and play every combi, 0 xruns.
 
+## Measurements
+
+Debug builds with the native code optimized, 48 kHz, 2026-10-19. The
+bench (`integration_test/script_bench_test.dart`) times the 23 combis,
+composed as the app composes them, on a thread placed like the modulator's
+worker, one tick per block, 1000 ticks after 100 warm-up ticks, while the
+app's engine runs; the live numbers come from the modulator in the app
+(`integration_test/soundprism_combis_test.dart`).
+
+### QuickJS-ng per tick
+
+| Device | Block of a callback | Mean | p99 (highest combi) | Max | p99 of the block |
+| --- | --- | --- | --- | --- | --- |
+| Galaxy Tab S4, fast cores (bench) | 3.75 ms (device buffer 8 ms) | 89–121 µs | 343 µs | 475 µs | 9.1 % |
+| Galaxy Tab S4, any core (10 min live) | 3.75 ms (device buffer 8 ms) | 353–358 µs | 748 µs | 4.4 ms | 20 % (9.4 % of 8 ms) |
+| iPad Pro (M5) | 5.33 ms | 21–34 µs | 59 µs | 244 µs | 1.1 % |
+| iPhone 16 Pro Max | 5.33 ms | 31–63 µs | 160 µs | 5.7 ms (one tick) | 3.0 % |
+| iOS simulator | 10.7 ms | 44–73 µs | 160 µs | 432 µs | 1.5 % |
+| Android emulator | 10 ms | 28–95 µs | 401 µs | 2.9 ms | 4.0 % |
+| Mac (M5), unpaced | — | 2.0–3.5 µs | 5.8 µs | 46 µs | — |
+| Mac (M5), Node (V8) in the reference's `vm` | — | 3.1–4.6 µs | 10.5 µs | 606 µs | — |
+
+JavaScriptCore beside it on the iPad: 32–42 µs mean, p99 up to 79 µs
+(Findings). The tenfold synthetic stress script of `aud_audio_script`
+takes 749 µs mean on the tablet's fast cores, 246 µs on the iPad and
+324 µs on the iPhone.
+
+### Late ticks: 10 minutes of the densest combi on the Galaxy Tab S4
+
+`linkEditionDefault` (the highest tick time) with the dense chords of the
+stress test of ticket 28, about 159,000 ticks:
+
+| Worker | lookahead 2 | lookahead 3 |
+| --- | --- | --- |
+| Fast cores | 3.5 % | 1.2 % |
+| Any core | 0.007 % (11 ticks) | 0 |
+
+Each run had one xrun and about 6,600 late callbacks. Every combi for 2 s
+with a held chord: 0 late ticks on the iPad, the iPhone and the simulator,
+4 of 4,453 after the load on the emulator.
+
+### Loads, memory, size
+
+- The load of a combi with its FLAC samples: 45–161 ms on the Galaxy Tab
+  S4, 24–86 ms on the iPhone, 15–41 ms on the iPad, 10–30 ms on the
+  simulator; the scripts take 2 to 22 ms of it (context 0.1–2.4 ms).
+- Memory of a script context: 357–405 KB.
+- The release build grows by 88 MB: the arm64 APK from 59.3 to 147.1 MB
+  (`libaud_audio_script.so` 1.26 MB), the iOS app from 68.5 to 156.2 MB
+  (35.6 to 127.6 MB zipped; the framework 0.96 MB); the rest is the FLAC
+  samples of the combis.
+
+### Ramp against step
+
+The render time of the engine with `linkEditionDefault`, dense chords, the
+governor off at a fixed budget of 48 voices, three rounds of 20 s per mode
+in turns (`integration_test/script_ramp_step_test.dart`):
+
+| Device | Ramp | Step | Modulator idle |
+| --- | --- | --- | --- |
+| Galaxy Tab S4, lookahead 2 | 1108 µs | 1108 µs | 1102 µs |
+| Galaxy Tab S4, lookahead 3 | 1073 µs | 1108 µs | 1074 µs |
+| iPad Pro (M5) | 143 µs | 143 µs | 137 µs |
+| iPhone 16 Pro Max | 544 µs | 482 µs | 445 µs |
+
+The rounds of the tablet differ by up to 60 µs, so ramp and step cost the
+same there; the iPhone's rounds fell with its clocks (from 592 to 490 µs for
+the ramp, 530 to 276 µs idle) and decide nothing. The step showed the
+highest render peaks on the tablet in both runs (102 to 112 % of the block).
+
 ## Open questions
 
-1. Open until the measurements (answer 15): the budget for QuickJS-ng,
-   proposed as the p99 of a tick at most 10 % of the buffer duration and
-   no late tick in 10 minutes of the densest combi on the Galaxy Tab S4;
-   and what "too expensive" means for the ramp (answer 18).
+None. Question 1 was answered on 2026-10-19, after the measurements: the
+budget is the p99 of a tick at most 10 % of the device's buffer and no late
+tick in 10 minutes of the densest combi on the Galaxy Tab S4; QuickJS-ng
+meets it with the worker on any core and a lookahead of 3 blocks, which
+become the defaults. Answer 18: the ramp, which costs nothing measurable.
 
 ## Out of scope
 
@@ -420,8 +500,8 @@ Ableton Link (S15) — the modulator follows any transport provider, so
 Link plugs in without changes; the tempo control (ticket 33); the slider
 of the app; an editor for scripts, scripts written by users and scripts
 loaded from outside the app; the other SoundPrism editions; the play-mode
-variants of the edition (plan check, 9); the web, where the browser's own JavaScript could run scripts in
-the worklet later.
+variants of the edition (plan check, 9); the web, where the browser's own
+JavaScript could run scripts in the worklet later.
 
 ## Decisions this plan proposes
 

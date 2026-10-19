@@ -35,7 +35,15 @@
 - Add the findings of ticket 31 so far and QuickJS-ng as the only engine
 
 - Record the exact port, the lookahead of the worker, the engine comparison, the content and the mappings in the plan
+
 - script-001: QuickJS-ng only, JavaScriptCore measured and dropped; the worker computes two blocks ahead
+
+- Add the measurements of ticket 31 and the budget of a tick
+
+- Record QuickJS-ng per device, the late ticks of 10 minutes on the Galaxy Tab S4, loads, memory, app size and ramp against step
+- Answer open question 1: p99 at most 10 % of the device buffer, no late tick in 10 minutes; the worker on any core with a lookahead of 3
+- Answer 18: the ramp
+- script-001 and app-006 take the decisions
 
 ## 0.12.2 - 2026-10-15
 
