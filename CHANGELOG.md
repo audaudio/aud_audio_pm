@@ -23,7 +23,10 @@
 - Add decision app-008 on the release build keep rules
 
 - Name the goal, the requirements, the Kotlin keep rules and the done steps in the plan of ticket 36
+
 - Add app-008 to the decision index
+
+- Add the iOS purpose string and release notes to ticket 36
 
 ## 0.13.0 - 2026-10-19
 

@@ -26,7 +26,12 @@ no file in `bugs`; the Goal describes it.
 
 - `audanika_app`: R8 keep rules for the plugin's classes and the Kotlin
   classes that JNI names (`android/app/proguard-rules.pro`), applied to the
-  release build; a patch (4.4.0 → 4.4.1).
+  release build; a patch (4.4.0 → 4.4.1). The release of 4.4.0 to the
+  stores showed two more faults, fixed here too: App Store Connect
+  rejected build 166 (ITMS-90683) because `Info.plist` lacked
+  `NSMicrophoneUsageDescription` — `aud_audio_io` links the record
+  permission — and the release notes still described an Android 16 update,
+  in German for English too.
 - `aud_audio_pm`: this plan, decision app-008.
 
 ## Steps
@@ -40,7 +45,12 @@ no file in `bugs`; the Goal describes it.
    2026-10-19: the app starts and reads them, see Findings).
 3. If the rule does not suffice, pin `shared_preferences_android` below
    2.5.0 instead and report the cause upstream (not needed).
-4. Code review, review, publish.
+4. The microphone purpose string in `Info.plist` and the `InfoPlist.strings`
+   of en, de and zh-Hans — the microphone will be used for tone and chord
+   recognition (the user, 2026-10-19) — new release notes in
+   `ios/fastlane/metadata`, which the deploy script copies to Android, and
+   build 167 for the next upload (done 2026-10-19).
+5. Code review, review, publish.
 
 ## Findings
 
