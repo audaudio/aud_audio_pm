@@ -85,9 +85,9 @@
       "name": "dna-plan",
       "package": "dna_plan",
       "ecosystem": "pub",
-      "resolvedVersion": "0.3.0",
+      "resolvedVersion": "0.4.0",
       "via": null,
-      "hash": "0x78d3445b36b4f971"
+      "hash": "0x050c94df62fad03d"
     },
     {
       "name": "self",
@@ -283,7 +283,7 @@
     },
     {
       "path": "doc/guides/pm-repo-guide.md",
-      "hash": "0xfe33e8538098b0f3"
+      "hash": "0x7d6c2604b11e030f"
     },
     {
       "path": "doc/guides/readme-dna-guide.md",

@@ -50,8 +50,8 @@ root
   plus diagrams in `img` as mermaid `.mmd` files
 - `tickets` — one plan file per ticket
 - `bugs` — one file per bug; a bug turns into a ticket once it is planned
-- `blog` — one post per finished ticket; exists only if the repo has the
-  `dna_blog` layer, see below
+- `blog` — one post per finished ticket; exists only if the repo has
+  `doc/guides/blog-guide.md` from the `dna_blog` layer, see below
 
 ## Fill the concepts folder
 
@@ -69,10 +69,19 @@ root
 
 ## Write blog posts
 
-- Write a post only if the repo has the `dna_blog` layer; follow its blog
-  guide for content and template
+- Write a post only if `doc/guides/blog-guide.md` exists; it comes from the
+  `dna_blog` layer. Without it, write no post and skip the rest of this
+  section
+- Follow the blog guide for content and template
 - Put the post into `doc/blog/<yyyy>` of the PM repo, one folder per year
 - Name it `<yyyy>-<mm>-<dd>-<title>.md`, title in English kebab case
+- One post may cover all repos of the ticket that belong to the
+  organization of the PM repo
+- Write only knowledge of the organization of the PM repo
+- Leave out repos of other organizations in the ocean, even when they took
+  part in the ticket. Name them only as updated dependencies: public package
+  name, version and what the update means for this organization's repos;
+  never their tickets, plans or internals
 
 ## Name the files
 
