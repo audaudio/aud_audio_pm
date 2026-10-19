@@ -350,6 +350,63 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
     entry). One tick runs per render call, the audio callback: 180 frames
     on the Galaxy Tab S4, 256 on the iPhone, 512 on the simulator.
 
+## Findings
+
+The implementation deviates from the plan where the code or the
+measurements asked for it.
+
+- **The port is exact.** The Node reference (`tool/soundprism-reference.js`,
+  an independent re-implementation of SoundPrism's Objective-C interface)
+  and the modulator running `audanika-host.js` on QuickJS-ng agree on every
+  tick of all 23 combis at 180, 256 and 512 frames: the same grid points and
+  offsets, values within 2e-15.
+- **A lookahead of the worker** (script-001). On the Galaxy Tab S4 a tick of
+  the real scripts took about 0.1 ms of the 3.75 ms block, yet 6.7 % of the
+  ticks came late: after a late callback the stream calls back twice in a
+  row, and a worker that computes only the next block has no time between
+  them. With the request two blocks ahead (`lookahead` 2, the default) 0.67 %
+  came late in the same runs; the rest falls, as far as measured, into the
+  loads, which build the new context on the worker (6 to 12 ms on the
+  tablet).
+- **QuickJS-ng only** (the user, 2026-10-19). The real combis on the
+  modulator's worker thread, one tick per block of 256 frames (5.33 ms),
+  1000 ticks each, the engines in turns:
+
+  | | QuickJS-ng | JavaScriptCore |
+  | --- | --- | --- |
+  | iPad Pro (M5): tick mean | 20.7–30.3 µs | 31.7–41.6 µs |
+  | iPad Pro (M5): tick p99 / max | ≤ 54 / ≤ 105 µs | ≤ 79 / ≤ 103 µs |
+  | iPad Pro (M5): context, load | 0.3–1.1 ms, 1.8–3.7 ms | 1.1–7.0 ms, 2.9–3.8 ms |
+  | iPad Pro (M5): tenfold stress script, mean / max | 245 / 303 µs | 196 / 1344 µs |
+  | Mac (M5), unpaced: tick mean | 2.0–3.5 µs | 1.5–1.8 µs (JIT) |
+
+  Node (V8) takes 3.1 to 4.6 µs per tick on the Mac in the reference's
+  `vm` harness. JavaScriptCore was faster only where it may compile (the
+  Mac) or on the synthetic stress script; it has no memory limit and no
+  interruptible budget, and Android lacks it. The package keeps one engine
+  behind its internal interface.
+- **The content** (app-007, sampler-010): the old presets render the same
+  bit for bit from the shared FLAC sets; the combis' 44 sets, decoded from
+  AAC, take 105 MB as FLAC (content 29.7 → 115.8 MB, accepted by the user).
+  `note_offset` alone silenced the keys 116 to 125 that the chord section
+  reaches in presets transposed by +12; `note_offset_open_bounds` keeps them.
+  Sets without `sampleInfo.xml` loop over the whole sample with SoundPrism's
+  micro fade baked into the FLAC; the loop end is exclusive there.
+- **The mappings** (app-006): gain on `amplitude` (linear), the channel pan
+  on `position` and the pan per note on `pan`, so the two pans multiply as
+  SoundPrism's voice pan and mixer pan did; `cutoff_oncc` takes the 13500
+  cents from 10 Hz; sfizz caps the cutoff at 20 kHz.
+- **The scripts at their edges**, as SoundPrism ran them: negative times near
+  beat 0 log "Endless cycle" (13 combis, in their first ticks); 12 channels
+  ask for gains above 0 dB, which the range rule turns into 1; five ask for
+  cutoffs above Nyquist, which become sr/2 and so depend on the sample rate;
+  Oli10's melody pans notes to 1.3, clamped to 1 (SoundPrism inverted the
+  phase of the left channel); `rate()` envelopes run free and differ per
+  buffer size.
+- **Functional runs** of the 23 combis (`integration_test/soundprism_combis_test.dart`):
+  the iOS simulator, the Android emulator, the Galaxy Tab S4 and the iPad
+  Pro (M5) load and play every combi, 0 xruns.
+
 ## Open questions
 
 1. Open until the measurements (answer 15): the budget for QuickJS-ng,

@@ -27,8 +27,15 @@
 - Add decisions app-006, app-007 and sampler-010
 
 - app-006: the app plays the SoundPrism Link Edition combis with their scripts behind audanika-host.js
+
 - app-007: a sample set exists once in the content, as FLAC, and presets include it
+
 - sampler-010: a missing include fails the load; note_offset_open_bounds keeps the outer keys
+
+- Add the findings of ticket 31 so far and QuickJS-ng as the only engine
+
+- Record the exact port, the lookahead of the worker, the engine comparison, the content and the mappings in the plan
+- script-001: QuickJS-ng only, JavaScriptCore measured and dropped; the worker computes two blocks ahead
 
 ## 0.12.2 - 2026-10-15
 
