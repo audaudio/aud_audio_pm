@@ -21,7 +21,14 @@
 - Add decision script-001: JavaScript in an optional node with a worker of its own
 
 - Record that aud.script.modulator runs QuickJS-ng on a worker of the node, woken by a non-blocking semaphore signal, once per audio buffer
+
 - List it in the decision index
+
+- Add decisions app-006, app-007 and sampler-010
+
+- app-006: the app plays the SoundPrism Link Edition combis with their scripts behind audanika-host.js
+- app-007: a sample set exists once in the content, as FLAC, and presets include it
+- sampler-010: a missing include fails the load; note_offset_open_bounds keeps the outer keys
 
 ## 0.12.2 - 2026-10-15
 
