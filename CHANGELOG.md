@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.0 - 2026-10-19
 
 ### Added
 
@@ -67,8 +67,11 @@
 - Add ticket 35: QuickJS-ng from the pub.dev package gg_quickjs
 
 - Add the plan of ticket 35, done as part of ticket 31; gg_quickjs 0.1.0 came from ggsuite ticket 144
+
 - Add decision build-002: a library several packages need may come from a published source package with a hook helper
+
 - build-001 and script-001 point to it; packages.jsonc lists gg_quickjs as an external pub.dev dependency
+
 - create-family-repos.js takes external pub.dev dependencies as plain version ranges
 
 ## 0.12.2 - 2026-10-15
@@ -101,7 +104,6 @@
 
 - Below Android 12 the affinity binds; one cluster keeps the system placement only below Android 12
 
-
 ## 0.12.1 - 2026-10-14
 
 ### Added
@@ -127,7 +129,6 @@
 - The plan: the p99 at 0.69 or more, the counts of the voice columns, the unsettled Vibraphone, the dependency repos, the decisions it went into
 
 - lifecycle-003 names the inputs of the start budgets as the code uses them; the index matches the open work of sampler-008
-
 
 ## 0.12.0 - 2026-10-14
 
@@ -258,7 +259,6 @@
 
 - Add family-002: every package has a version of its own
 
-
 ## 0.8.0 - 2026-10-12
 
 ### Added
@@ -315,7 +315,6 @@
 
 - The plan: questions 8 and 9 answered, none open
 
-
 ## 0.7.0 - 2026-10-11
 
 ### Added
@@ -354,7 +353,6 @@
 - Mark ticket 24 as done
 
 - The embedding checklist in REAPER and Live and the cycles in Live stay open
-
 
 ## 0.6.0 - 2026-10-09
 
@@ -395,7 +393,6 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
-
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -413,7 +410,6 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
-
 
 ## 0.1.0 - 2026-10-08
 
