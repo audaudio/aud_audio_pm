@@ -1,0 +1,34 @@
+---
+name: plan-intro
+description: Lists the planning skills of the project management repo and says which one comes next. Use when the user says "/plan-intro", asks how to plan the project, or asks what comes before the tickets.
+---
+
+# The planning skills
+
+Print the list below, in this order — it is the order in which a project
+is planned.
+
+- `/plan-requirements` — engineers the goals and requirements together
+  with the user, one question at a time
+- `/plan-schedule` — cuts the requirements into tickets, estimates them
+  and draws the time plan as a Gantt chart, optionally against a target
+  date
+
+The tickets come after the requirements; the `gg` workflow creates them
+(`/gg-ticket`, if the repo has it).
+
+## Say which skill comes next
+
+Read `doc/goals`, `doc/requirements` and `doc/schedule.md` and name the
+next step:
+
+- No active goal or no accepted requirement → `/plan-requirements`
+- Requirements, but the work at hand is not covered by them →
+  `/plan-requirements`
+- Requirements, no schedule, and the user wants a time plan or names a
+  target date → `/plan-schedule`
+- Requirements accepted → plan the tickets
+
+## Important
+
+- Only list the skills, never run one of them unasked.

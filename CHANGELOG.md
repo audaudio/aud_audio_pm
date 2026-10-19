@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.13.1 - 2026-10-19
+
+### Added
+
+- Add the plan of ticket 36: Android release builds start again
+
+- shared_preferences_android 2.5.0 calls its Kotlin side through JNI; in a release build the call fails and the app waits on its splash screen
+
+- Plan an R8 keep rule in the app, checked by a release build on the Galaxy Tab S4
+
+- Add the findings of ticket 36
+
+- R8 renamed the Kotlin classes that shared_preferences_android 2.5.0 and package:jni 1.1.0 reach by name through JNI
+
+- A keep rule in the app fixes it; the gap belongs upstream
+
+- Add the open work of ticket 36
+
+- A release build smoke test belongs to the release checklist
+
+- Add decision app-008 on the release build keep rules
+
+- Name the goal, the requirements, the Kotlin keep rules and the done steps in the plan of ticket 36
+
+- Add app-008 to the decision index
+
+- Add the iOS purpose string and release notes to ticket 36
+
 ## 0.13.0 - 2026-10-19
 
 ### Added
