@@ -1,7 +1,8 @@
 # 36: Fix the start of Android release builds with shared_preferences_android 2.5.0
 
 Status: planned and started 2026-10-19 on the user's report ("Starting
-audanika on my samsung hangs on the launch screen").
+audanika on my samsung hangs on the launch screen"); implemented the
+same day.
 
 ## Goal
 
@@ -30,6 +31,25 @@ are not affected. App 4.4.0 carries the fault.
 3. If the rule does not suffice, pin `shared_preferences_android` below
    2.5.0 instead and report the cause upstream.
 4. Code review, review, publish.
+
+## Findings
+
+- The cause is R8, not the plugin's own classes: `SharedPreferencesApiRegistrar`
+  carries `@Keep`, but the JVM signature of its suspend function
+  `getAll(String, List, Continuation)` names `kotlin.coroutines.Continuation`,
+  which R8 renamed (`-> t9` in the mapping), so the JNI lookup failed.
+  With Continuation kept, the next lookup failed: package:jni 1.1.0 reaches
+  `kotlin/Result`, `kotlin/Result$Failure`, `kotlin/Unit`,
+  `kotlin/coroutines/intrinsics/CoroutineSingletons` and `IntrinsicsKt`,
+  `kotlin/enums/EnumEntries` and `DefaultConstructorMarker` by name, while
+  its consumer rules keep only `com.github.dart_lang.jni.**`.
+- `android/app/proguard-rules.pro` (Flutter's Gradle plugin applies it to
+  release builds by itself) keeps the plugin's classes and these Kotlin
+  classes. The R8 mapping keeps their names; a release build starts on the
+  Galaxy Tab S4 and reads its preferences.
+- Open work: the gap belongs upstream — shared_preferences_android 2.5.0
+  and package:jni 1.1.0 should ship consumer rules for the Kotlin classes
+  JNI names; the app's rule can go once they do.
 
 ## Open questions
 
