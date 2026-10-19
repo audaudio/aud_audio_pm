@@ -11,7 +11,8 @@
   across the process is made thread-safe in place (ticket 28);
   [sampler-006](sampler-006.md) — optimizations keep the output bit for
   bit (ticket 28), superseded by [sampler-007](sampler-007.md) — within
-  the golden tolerance
+  the golden tolerance; [sampler-010](sampler-010.md) — a missing include
+  fails the load, `note_offset_open_bounds` (ticket 31)
 - Open work: none; a branch in `audanika/sfizz` only if the fork is ever
   shared outside the package
 

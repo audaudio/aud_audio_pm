@@ -57,11 +57,12 @@ C++ with a build hook and registers its node types through the C ABI of
 One node owns a thread of its own: `aud.script.modulator` of the optional
 package `aud_audio_script` runs JavaScript on QuickJS-ng in a worker
 created on the control thread. At the end of each block the audio thread
-hands the worker the next block's transport position and the input events
-through a lock-free ring and wakes it with a semaphore signal that does not
-block; the worker computes one tick per block and returns the values through
-a second ring, which the node sends as controls in the next block. Offline,
-the node waits for its worker, so renders stay deterministic (script-001).
+hands the worker the predicted transport position of the block three
+blocks ahead (`lookahead`) and the input events through a lock-free ring
+and wakes it with a semaphore signal that does not block; the worker
+computes one tick per block and returns the values through a second ring,
+which the node sends as controls in that block. Offline, the node waits
+for its worker, so renders stay deterministic (script-001).
 Neither the engine nor the umbrella depends on the package; an app that runs
 scripts adds it.
 

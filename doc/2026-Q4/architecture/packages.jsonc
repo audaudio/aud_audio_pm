@@ -5,7 +5,7 @@
 // found in the LICENSE file in the root of this package.
 
 {
-  "_comment": "Package manifest of the aud_audio family: the machine-readable package graph of ticket 17. Read by scripts/create-family-repos.js. Templates: dart = dart create -t package; ffi = flutter create --template=package_ffi; flutter = flutter create -t package; app = flutter create; docs = copy of rljson.github.io.",
+  "_comment": "Package manifest of the aud_audio family: the machine-readable package graph of ticket 17. Read by scripts/create-family-repos.js. Templates: dart = dart create -t package; ffi = flutter create --template=package_ffi; flutter = flutter create -t package; app = flutter create; docs = copy of rljson.github.io. depVersions: the ranges of the family dependencies of a package created after their first release; the others take ^version.",
   "organization": "audaudio",
   "version": "0.0.1",
   "external": {

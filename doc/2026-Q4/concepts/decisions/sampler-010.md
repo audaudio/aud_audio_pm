@@ -26,5 +26,5 @@ bit. Version 0.3.4.
 - A sample set shared through `#include` must not fall silent unnoticed
   when its file moves.
 - `note_offset` clamps the keys it shifts, so a transposition of +12
-  silenced the keys 116 to 127, which the app's chord section reaches; the
-  legacy engine played its highest root there.
+  silenced the keys 116 to 127, of which the app's chord section reaches
+  116 to 125; the legacy engine played its highest root there.

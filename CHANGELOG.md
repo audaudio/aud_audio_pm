@@ -41,9 +41,22 @@
 - Add the measurements of ticket 31 and the budget of a tick
 
 - Record QuickJS-ng per device, the late ticks of 10 minutes on the Galaxy Tab S4, loads, memory, app size and ramp against step
+
 - Answer open question 1: p99 at most 10 % of the device buffer, no late tick in 10 minutes; the worker on any core with a lookahead of 3
+
 - Answer 18: the ramp
+
 - script-001 and app-006 take the decisions
+
+- Add the review fixes of ticket 31 to plans and decisions
+
+- Ticket 31: implemented; channels 0 to 2 as in app-002; the first lookahead default named as such; aud_dsp_sampler's changes and app-007 and sampler-010 listed; long lines wrapped
+- architecture.md: the worker computes three blocks ahead and the node sends the values in that block
+- Ticket 17: aud_audio_script runs QuickJS-ng only; S29c and S29d built in ticket 31 with their decisions
+- doc/issues.md: ticket 31 implemented, ticket 32 implemented in 31; ticket 32 names its decisions
+- sampler-010: the chord section reaches the keys 116 to 125; script-001 and app-006 name the Findings as a source
+- Link the refined decisions back: scope-002, interop-001, process-005, app-001, app-002, sampler-002, sampler-003
+- packages.jsonc documents depVersions
 
 ## 0.12.2 - 2026-10-15
 

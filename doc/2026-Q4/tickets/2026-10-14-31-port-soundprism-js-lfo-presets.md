@@ -6,7 +6,8 @@ questions of the plan review were answered the same day. Plan check
 against tickets 29, 30 and 32 on 2026-10-18; implementation started the
 same day. On 2026-10-18 the user decided to do ticket 32 as part of this
 ticket and to test everything in the simulators before the performance
-tests.
+tests. Implementation, tests and measurements on 2026-10-18 and
+2026-10-19; implemented.
 
 ## Goal
 
@@ -136,8 +137,8 @@ flowchart LR
   (128 to 137: pitch bend, aftertouch, velocity, note number and more).
 - **The play modes stay as they are** (the user, 2026-10-18): the app
   keeps its own play modes and its channels — bass on MIDI channel 1,
-  chord on 2, melody on 3, the channels the combis' presets expect. The
-  play-mode variants of the edition are not converted.
+  chord on 2, melody on 3 (the app's channels 0, 1 and 2, app-002), the
+  channels the combis' presets expect. The play-mode variants of the edition are not converted.
 - **The app** creates the modulator next to the three sampler nodes,
   connects its outputs, loads the scripts of a combi with its SFZ files,
   runs the transport at 120 BPM from the start of the engine — beat 0 —
@@ -227,10 +228,12 @@ Approaches not taken:
   converter, the content, the wiring.
 - `aud_dsp_sampler`: the tests of ticket 32 (includes, `$` variables,
   `default_path` and `note_offset` over virtual paths and text loads, a
-  missing include); more only if a finding needs it.
+  missing include); more only if a finding needs it. The findings added
+  a load that fails on a missing include and the opcode
+  `note_offset_open_bounds` (sampler-010); 0.3.4.
 - `aud_audio_pm`: this plan, the topic, the decisions, the new package in
   `architecture.md` and `packages.jsonc`, the step in the plan of ticket
-  17.
+  17, the dependency ranges in `scripts/create-family-repos.js`.
 
 ## Steps
 
@@ -310,10 +313,10 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
    into a ramp over the frames before it, so the step sends the old value
    at k − 1 and the new one at k, as planned. Measured (answer 18).
 3. **The worker on the fast cores** (revised by the measurements: any
-   core, Findings). Since io-003 the Android audio thread
-   runs on the fast cores; the worker would land where the system puts
-   it, on the Galaxy Tab S4 likely the small cores. It binds itself to the
-   fast cores with an audio priority on Android (the core detection of
+   core, Findings). Since io-003 the Android audio thread runs on the
+   fast cores; the worker would land where the system puts it, on the
+   Galaxy Tab S4 likely the small cores. It binds itself to the fast
+   cores with an audio priority on Android (the core detection of
    `aud_audio_io` is not exported, so the package keeps a copy) and asks
    for the user-interactive class on Apple platforms; measured.
 4. **The node owns its worker.** interop-001 says the engine owns every
@@ -331,8 +334,8 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
    connects every external input to the modulator too. The slider reads
    CC 74 of the first MIDI channel, as in SoundPrism.
 9. **Play modes** (changed by the user): no `sml`; the app's channels stay
-   as they are — bass 1, chord 2, melody 3 — and the variants are not
-   converted.
+   as they are — bass on MIDI channel 1, chord on 2, melody on 3 (the
+   app's channels 0 to 2, app-002) — and the variants are not converted.
 10. **The content.** All reduced sample sets are m4a, 25 of the 46 at
     22 kHz without `sampleInfo.xml`; the app's converter rejects them.
     The new converter decodes and encodes with macOS's `afconvert` (no
@@ -365,10 +368,10 @@ measurements asked for it.
   the real scripts took about 0.1 ms of the 3.75 ms block, yet 6.7 % of the
   ticks came late: after a late callback the stream calls back twice in a
   row, and a worker that computes only the next block has no time between
-  them. With the request two blocks ahead (`lookahead` 2, the default) 0.67 %
-  came late in the same runs; the rest falls, as far as measured, into the
-  loads, which build the new context on the worker (6 to 12 ms on the
-  tablet).
+  them. With the request two blocks ahead (`lookahead` 2, the first
+  default; 3 since the 10-minute runs) 0.67 % came late in the same runs;
+  the rest falls, as far as measured, into the loads, which build the new
+  context on the worker (6 to 12 ms on the tablet).
 - **The worker on any core** (script-001, revising plan check 3). Bound to
   the fast cores, the worker sat on the core of the audio thread: the audio
   thread wakes it, the kernel places the wakee on the waker's core, and
@@ -412,9 +415,10 @@ measurements asked for it.
   Oli10's melody pans notes to 1.3, clamped to 1 (SoundPrism inverted the
   phase of the left channel); `rate()` envelopes run free and differ per
   buffer size.
-- **Functional runs** of the 23 combis (`integration_test/soundprism_combis_test.dart`):
-  the iOS simulator, the Android emulator, the Galaxy Tab S4 and the iPad
-  Pro (M5) load and play every combi, 0 xruns.
+- **Functional runs** of the 23 combis
+  (`integration_test/soundprism_combis_test.dart`): the iOS simulator, the
+  Android emulator, the Galaxy Tab S4 and the iPad Pro (M5) load and play
+  every combi, 0 xruns.
 
 ## Measurements
 
@@ -512,11 +516,15 @@ JavaScript could run scripts in the worklet later.
   audio thread; the audio thread only signals the worker without
   blocking. The worker is the node's own thread, an exception to
   interop-001. The engine and the umbrella never depend on the package.
-- app-006 (app-005 went to ticket 29): the SoundPrism Link Edition combis are rebuilt once as SFZ
-  with FLAC samples; their scripts ship unchanged and run in
-  `aud.script.modulator` behind the host layer `audanika-host.js` — the
-  one legacy format the app reads at run time (refines scope-002 and
-  app-001).
+- app-006 (app-005 went to ticket 29): the SoundPrism Link Edition combis
+  are rebuilt once as SFZ with FLAC samples; their scripts ship unchanged
+  and run in `aud.script.modulator` behind the host layer
+  `audanika-host.js` — the one legacy format the app reads at run time
+  (refines scope-002 and app-001).
+- app-007 and sampler-010, the decisions of ticket 32, done here: a
+  sample set exists once as FLAC and presets include it; a missing
+  include fails the load, and `note_offset_open_bounds` keeps the outer
+  keys of a transposed set.
 
 ## Model and rules
 

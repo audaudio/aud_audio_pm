@@ -4,7 +4,7 @@
 - Date: 2026-10-18
 - Canonical source: tickets/2026-10-14-31-port-soundprism-js-lfo-presets.md
   (Concept, answers 1, 2, 4, 5, 14 and 18 of the plan review, points 3 to 6
-  of the plan check)
+  of the plan check, Findings, Measurements, Open questions)
 - Refines: [interop-001](interop-001.md) — the engine owns every worker
   thread; [process-005](process-005.md) — no lock on the audio thread
 - Open work: Linux and Windows are written but not built; the late
