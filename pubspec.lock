@@ -157,10 +157,10 @@ packages:
     dependency: "direct dev"
     description:
       name: dna_plan
-      sha256: b388ba00c66d9c6ca3264f9b2f07974e5f34d2673ce592f2fc1549b235cfbc1b
+      sha256: "13425639b2ca4e4d2a9d9391a705d681c9967f19b9e6845e0822d6031aaa5b88"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.1"
   dna_readme:
     dependency: transitive
     description:
