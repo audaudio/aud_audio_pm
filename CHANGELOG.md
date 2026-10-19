@@ -13,7 +13,12 @@
 - Add the findings of ticket 36
 
 - R8 renamed the Kotlin classes that shared_preferences_android 2.5.0 and package:jni 1.1.0 reach by name through JNI
+
 - A keep rule in the app fixes it; the gap belongs upstream
+
+- Add the open work of ticket 36
+
+- A release build smoke test belongs to the release checklist
 
 ## 0.13.0 - 2026-10-19
 

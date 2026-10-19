@@ -45,11 +45,16 @@ are not affected. App 4.4.0 carries the fault.
   its consumer rules keep only `com.github.dart_lang.jni.**`.
 - `android/app/proguard-rules.pro` (Flutter's Gradle plugin applies it to
   release builds by itself) keeps the plugin's classes and these Kotlin
-  classes. The R8 mapping keeps their names; a release build starts on the
+  classes, the coroutine classes as a whole. The R8 mapping keeps their
+  names; a release build starts on the
   Galaxy Tab S4 and reads its preferences.
 - Open work: the gap belongs upstream — shared_preferences_android 2.5.0
   and package:jni 1.1.0 should ship consumer rules for the Kotlin classes
   JNI names; the app's rule can go once they do.
+- Open work: no test builds the app with R8 — every test runs a debug
+  build, which is how the fault reached 4.4.0; a release build smoke test
+  on a device (the app starts and reads its preferences) belongs to the
+  release checklist.
 
 ## Open questions
 
