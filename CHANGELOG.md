@@ -5,6 +5,7 @@
 ### Added
 
 - Add the plan of ticket 37 (S18, the Audanika Mac app with its VST3 plugin inside), the requirements of the area mac and the decisions plugin-005 and release-005
+- Add the findings of step 2 and of the gate of ticket 37
 
 ## 0.13.1 - 2026-10-19
 

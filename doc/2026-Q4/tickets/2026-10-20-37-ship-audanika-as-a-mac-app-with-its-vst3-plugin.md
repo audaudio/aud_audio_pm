@@ -299,6 +299,29 @@ At the review:
 4. **Tickets:** one ticket, a commit per phase; phases D and E may still
    move to follow-up tickets if phase C takes longer.
 
+## Findings
+
+- **Step 2 (2026-10-20).** The macOS target builds with Flutter 3.47.5 and
+  Xcode 27.1: arm64 only, signed by the team with the hardened runtime,
+  sandboxed, 293 MB in debug of which 112 MB are the SFZ content in
+  `Contents/Resources/content/sfz`; every native asset of the family
+  (core, graph, io, midi, script, effects, sampler, `gg_quickjs`,
+  `aud_midi_apple`) builds for macOS. The app starts and shows the play
+  surface, still silent.
+- **Gate, the sandboxed editor's channels (2026-10-20).** A probe played the
+  plugin in an unsandboxed parent and spawned a helper app signed with the
+  App Sandbox and the app group `SAZSC68S46.com.audanika`: the helper runs in
+  its own container, looks up a Mach name with the group's prefix (0) but
+  not one without it (1100, not privileged), and reads and writes the end of
+  a socket pair it inherited as fd 3, also when it opens `/dev/fd/3` — which
+  is how `dart:io` reaches it. This carries plugin-006: a socket pair at
+  spawn and Mach names with the group's prefix, no file anywhere.
+- **Gate, the link (2026-10-20).** A spike plugin inside the app's
+  `Contents/PlugIns`, linked into `~/Library/Audio/Plug-Ins/VST3`, is
+  found by REAPER 7 through the link ("VST3i: Aud Spike D1 (no hygiene)
+  (Audanika)") and renders 2256 blocks without an overload. Cubase 15 and
+  the validation by App Store Connect are open (open question 1).
+
 ## Open questions
 
 1. **App Store Connect.** The app record 1547307555 needs the macOS
