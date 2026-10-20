@@ -482,6 +482,20 @@ At the review:
   editor ends. Test host: 150 live resize steps keep the editor and its
   frames (before: crash), a held note ends when the editor is killed.
   Open: the editor's state still lives only in the editor (app-010).
+- **Cubase, full screen (2026-10-20).** In full screen mode the grid did
+  not follow until the window moved. Two causes: macOS reported the
+  visible full screen window occluded, and the plugin paused the editor on
+  occlusion; and Flutter itself takes an app for hidden once macOS
+  reports all its windows occluded or on another Space - the editor's
+  transparent windows are, under the DAW's window or on the desktop's
+  Space - and then draws no frame while it still handles input, which
+  likely also froze the editor "after a while". Fixes: the plugin pauses
+  the editor only for an invisible or minimized window or another Space,
+  sends any change of position, size or scale within 0.1 s and follows
+  the full screen notifications; the editor's engine no longer follows the
+  app's occlusion, hide and unhide; its surface windows are not opaque.
+  Test host: a view resized without `onSize` and a covered window both
+  draw (before: neither).
 
 ## Open questions
 

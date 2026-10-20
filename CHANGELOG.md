@@ -61,7 +61,13 @@
 - Add the finding of the editor crash on a resize
 
 - Nested frame changes aborted the editor; places now wait
+
 - The plugin ends the notes of an editor that ended
+
+- Add the finding of the editor in full screen mode
+
+- Occlusion paused the editor, and Flutter stopped frames of a hidden app
+- The plugin no longer pauses on occlusion; the engine ignores app occlusion
 
 ## 0.13.1 - 2026-10-19
 
