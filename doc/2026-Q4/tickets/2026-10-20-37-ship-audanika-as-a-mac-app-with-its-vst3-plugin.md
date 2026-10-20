@@ -437,6 +437,13 @@ At the review:
   Connect, which settles that part of the gate. Still open: whether
   TestFlight takes the build with an editor without a profile (ITMS-90889
   comes only after an upload), and Cubase.
+- **Step 13, upload (2026-10-20).** On the user's go, `tool/release-mac.js
+  upload` delivered build 168 (delivery 9095f8f3-3bd6-4e7d-8583-c78620d8c61b,
+  178 MB in 1.1 min). App Store Connect processed it within minutes:
+  `VALID_BINARY`, `APP_STORE_ELIGIBLE`, minimum macOS 12.0, no non-exempt
+  encryption, expiring on 2027-01-18 - the 90 days of a TestFlight build.
+  Whether TestFlight offers it to internal testers without a warning for
+  the editor's missing profile is the user's look into App Store Connect.
 
 ## Open questions
 
