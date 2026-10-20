@@ -45,7 +45,12 @@
 - Add the TestFlight state of the Mac app build 168
 
 - Build 168 ready for internal testers, no warning on the nested editor
+
 - plugin-007 open work moves to App Review
+
+- Add the activation of the TestFlight build of the Mac app
+
+- The step Use in DAWs placed the link to the plugin in the app
 
 ## 0.13.1 - 2026-10-19
 

@@ -447,8 +447,13 @@ At the review:
   group "App Store Connect Users" with four testers, expiring in 90 days.
   The build metadata lists the entitlements of the app and of the nested
   editor (sandbox, app group); no warning about the editor's missing
-  provisioning profile (ITMS-90889). Open: the build installed from
-  TestFlight and tried in Cubase and REAPER.
+  provisioning profile (ITMS-90889). The user installed it from
+  TestFlight into `/Applications` and switched on "Use in DAWs": the open
+  panel took the VST3 folder, and the sandboxed app placed the link
+  `~/Library/Audio/Plug-Ins/VST3/Audanika.vst3` →
+  `/Applications/Audanika.app/Contents/PlugIns/Audanika.vst3`, replacing
+  the development link of before. Open: the TestFlight build in Cubase and
+  REAPER.
 
 ## Open questions
 
