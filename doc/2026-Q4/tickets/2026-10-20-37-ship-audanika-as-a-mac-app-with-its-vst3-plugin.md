@@ -321,6 +321,23 @@ At the review:
   found by REAPER 7 through the link ("VST3i: Aud Spike D1 (no hygiene)
   (Audanika)") and renders 2256 blocks without an overload. Cubase 15 and
   the validation by App Store Connect are open (open question 1).
+- **Step 4 (2026-10-20).** `aud_audio_io` plays on macOS
+  (`src/aud_io_macos.mm`, io-004): the devices of the HAL with route,
+  channels and rates — on the development Mac a Sennheiser USB headset as
+  the default, the built-in speakers and microphone, two virtual devices —
+  and the package's sine on the default output at 48 kHz and 256 frames,
+  283 callbacks in 1.5 s, no xrun. The 40 native tests and the 64 Dart
+  tests pass; `aud_audio_core` and `aud_audio_graph` joined the ticket,
+  which the example of `aud_audio_io` needs.
+- **Step 5 (2026-10-20).** The app plays on the Mac
+  (`integration_test/sound_numbers_test.dart -d macos`): content found in
+  `Contents/Resources` in 35 ms, the default preset loaded in 21 ms,
+  10.6 ms from command to sound (8.8 to 12.2), 100 notes in 5 s without an
+  xrun or a late callback, at most 0.14 ms of render time, 7.4 ms output
+  latency. StoreKit replaces the mock store on macOS; debug builds on the
+  Mac show every album, as the simulator does. The governor starts at 64
+  voices on macOS (the default class of `AudDeviceClass`) and rises with
+  the load.
 
 ## Open questions
 
