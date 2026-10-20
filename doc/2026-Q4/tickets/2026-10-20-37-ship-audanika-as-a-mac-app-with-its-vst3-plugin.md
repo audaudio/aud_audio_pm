@@ -339,6 +339,36 @@ At the review:
   voices on macOS (the default class of `AudDeviceClass`) and rises with
   the load.
 
+- **Step 6 (2026-10-20).** `aud_audio_vst3` is a shell (plugin-006): an
+  app's `plugin.json`, document and presets configure it, the node packages
+  it names are compiled in, the bundle exports only the three entry points.
+  The DAW's MIDI reaches the graph through IMidiMapping and the new
+  reference node `aud.graph.channel_split` of `aud_audio_graph`; the
+  transport runs free at the DAW's tempo while the DAW stands. A control
+  sends only once it moves: each combi sets its own start value of CC 74,
+  which a default sent at the start would override. The example plugin
+  passes the validator (47 tests) and the new test host; 66 native tests
+  of the shell and 132 of the graph pass in every sanitizer build.
+- **Step 7 (2026-10-20).** The app exports the plugin's document and its 28
+  presets from its own sound code (app-009); `tool/build-plugin.js` builds
+  `Audanika.vst3` (6.6 MB, 23 s from scratch) with the app's package
+  config. The test host plays all 28 presets offline with a note on each of
+  the MIDI channels 1 to 4: peaks from 0.21 to 0.89 (the limiter's
+  -1 dBFS), the state reads back the same, a realtime block of 128 frames
+  takes at most 0.03 ms; the validator passes 47 of 47. Deviations from
+  the app: a preset sets the effects at once, without the app's 50 ms
+  glide; the modulator loads a script under the name of the preset before.
+  The automatable parameters are preset, delay mix, reverb mix, volume (the
+  limiter's input gain) and the scripts' slider (CC 74 of channel 1)
+  instead of cutoff, resonance, gain and position, which the scripts
+  compute every block and a parameter would fight.
+- **Step 8, REAPER (2026-10-20).** `scripts/reaper-test.js` with the plugin
+  linked from the app into `~/Library/Audio/Plug-Ins/VST3`: REAPER finds
+  "VST3i: Audanika (Audanika)", renders a MIDI item with E-Piano, Machine
+  runs and Oli's Favorite Trance Pattern offline (peaks 0.37, 0.89, 0.89,
+  0.3 s each), plays it live (peak 0.89) and opens the saved project with
+  its preset. Cubase is the user's test.
+
 ## Open questions
 
 1. **App Store Connect.** The app record 1547307555 needs the macOS
