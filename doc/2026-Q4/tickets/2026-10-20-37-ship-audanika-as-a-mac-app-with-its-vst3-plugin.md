@@ -392,6 +392,39 @@ At the review:
   frame arrives 0.33 s after the view is attached; a tap on the chord
   button "C" sends C2 on channel 1 to the DAW, a tap into the row G sends B
   on channel 3 and D, G, B on channel 2.
+- **Step 12 (2026-10-20).** The app's build phase "Embed VST3 Plugin" puts
+  `build/plugin/Audanika.vst3` into `Contents/PlugIns` and signs it inside
+  out with the app's identity before Xcode signs the app: the editor's
+  frameworks, the editor with its release entitlements (sandbox and app
+  group; the development signature of the flavor had added
+  `get-task-allow`, which the App Store refuses), the plugin. A debug build
+  without the plugin warns, a release build fails. The debug app passes
+  `codesign --verify --deep --strict`, and the test host plays the
+  embedded plugin and its editor (28 presets, first frame after 0.67 s, a
+  tap sends melody and chord). The step "Use in DAWs" is a page "VST3
+  Plugin" in the app's main menu, only in the Mac app: a switch opens the
+  open panel at `~/Library/Audio/Plug-Ins/VST3` (the user's home, not the
+  container's), takes only a folder named VST3, places the link
+  `Audanika.vst3` to the plugin inside the app and keeps the folder's
+  security-scoped bookmark; at every start and whenever the page shows,
+  the app moves a link of an earlier place of the app along and notices a
+  link the user removed; switched off, it removes the link. A plugin it
+  did not place (the fallback package) stays untouched. The logic is Dart
+  (`PluginActivation`, tested on links in a temporary folder), the open
+  panel and the bookmarks are Swift (`PluginFolderChannel`). Not yet tried:
+  the open panel itself, which needs the user's click.
+- **Step 13, archive (2026-10-20).** `tool/release-mac.js archive` builds
+  the plugin, the release app and `build/macos/Audanika.xcarchive`: 4.4.1
+  (168), 201 MB with the plugin's 44 MB, signed by the team with the
+  hardened runtime; app, plugin and editor pass
+  `codesign --verify --deep --strict`, the editor runs sandboxed in the app
+  group without `get-task-allow`. `export` (distribution signing, which may
+  create certificates and profiles in the team's account), `validate` and
+  `upload` wait for the user's go and open question 1. A risk for
+  TestFlight: App Store Connect may expect a provisioning profile for the
+  nested editor app (ITMS-90889); the export with automatic signing is
+  expected to create one for `com.audanika.editor`, and the validation
+  shows it.
 
 ## Open questions
 

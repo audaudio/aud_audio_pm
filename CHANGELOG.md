@@ -5,15 +5,28 @@
 ### Added
 
 - Add the plan of ticket 37 (S18, the Audanika Mac app with its VST3 plugin inside), the requirements of the area mac and the decisions plugin-005 and release-005
+
 - Add the findings of step 2 and of the gate of ticket 37
+
 - Add the findings of the steps 4 and 5 of ticket 37 and the decision io-004
+
 - Add the findings of the steps 6 to 8 of ticket 37 and the decisions plugin-006 and app-009
+
 - Add the decisions recorded so far to the plan of ticket 37
+
 - Add the editor decisions plugin-007 and app-010 (ticket 37)
 
 - plugin-007: socket pair on fd 3, frames under app group Mach names
+
 - app-010: the editor plays through the plugin, notes go to the DAW
+
 - Findings of steps 9 and 10 in the plan of ticket 37
+
+- Add the findings of steps 12 and 13 of ticket 37
+
+- The plugin and its editor in the app, signed inside out
+- The step Use in DAWs in the main menu of the Mac app
+- The archive of the release lane; export and upload wait for the go
 
 ## 0.13.1 - 2026-10-19
 
