@@ -442,16 +442,20 @@ At the review:
   178 MB in 1.1 min). App Store Connect processed it within minutes:
   `VALID_BINARY`, `APP_STORE_ELIGIBLE`, minimum macOS 12.0, no non-exempt
   encryption, expiring on 2027-01-18 - the 90 days of a TestFlight build.
-  Whether TestFlight offers it to internal testers without a warning for
-  the editor's missing profile is the user's look into App Store Connect.
+  TestFlight takes it (App Store Connect, read the same day): macOS build
+  4.4.1 (168) is "ready to submit", its binary checked, in the internal
+  group "App Store Connect Users" with four testers, expiring in 90 days.
+  The build metadata lists the entitlements of the app and of the nested
+  editor (sandbox, app group); no warning about the editor's missing
+  provisioning profile (ITMS-90889). Open: the build installed from
+  TestFlight and tried in Cubase and REAPER.
 
 ## Open questions
 
 1. **App Store Connect.** Settled on 2026-10-20: the user added the macOS
    platform to the app record 1547307555, and the export signs with the
    team's cloud-managed distribution certificate; the package passes the
-   validation. Open: TestFlight with the nested editor (step 13, upload on
-   the user's go).
+   validation, and TestFlight offers build 168 to the internal testers.
 
 ## Out of scope
 

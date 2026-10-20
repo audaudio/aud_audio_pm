@@ -39,7 +39,13 @@
 - Add the upload of the Mac app build 168
 
 - Build 168 uploaded on the go of the user and processed as valid
+
 - TestFlight state of the nested editor still to be seen
+
+- Add the TestFlight state of the Mac app build 168
+
+- Build 168 ready for internal testers, no warning on the nested editor
+- plugin-007 open work moves to App Review
 
 ## 0.13.1 - 2026-10-19
 
