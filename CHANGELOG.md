@@ -52,6 +52,11 @@
 
 - The step Use in DAWs placed the link to the plugin in the app
 
+- Add the finding of the frozen editor in Cubase
+
+- Surfaces kept in use by another process stopped the frames
+- Replacement and renewal of surfaces, diagnostics in the unified log
+
 ## 0.13.1 - 2026-10-19
 
 ### Added

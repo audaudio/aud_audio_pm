@@ -454,6 +454,21 @@ At the review:
   `/Applications/Audanika.app/Contents/PlugIns/Audanika.vst3`, replacing
   the development link of before. Open: the TestFlight build in Cubase and
   REAPER.
+- **Cubase, frozen editor (2026-10-20).** In Cubase 15 the editor of build
+  168 stopped drawing after a while while its input still played. The
+  editor copies Flutter's frames into a pool of three IOSurfaces and takes
+  only a surface the plugin handed back that no process keeps in use; once
+  another process (the window server, or Cubase taking pictures of its
+  windows) kept the surfaces in use, the editor waited for good. The test
+  host reproduces it (`--hold-surfaces`: 8 clicks played, 1 redrawn). The
+  fix: a surface handed back 100 ms ago and still in use is replaced by a
+  new one, and without any surface handed back for 0.5 s the editor renews
+  its pool; with surfaces held for a second, 10 of 10 clicks play and
+  redraw. Editor and plugin now log stalls, pauses, visibility changes,
+  late frames and frame counts publicly in the unified log. Also found:
+  the editor flavor showed the empty main window of `MainMenu.xib` (now
+  closed), and the editor holds an activity against App Nap. To verify in
+  Cubase.
 
 ## Open questions
 
