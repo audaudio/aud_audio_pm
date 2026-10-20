@@ -67,7 +67,13 @@
 - Add the finding of the editor in full screen mode
 
 - Occlusion paused the editor, and Flutter stopped frames of a hidden app
+
 - The plugin no longer pauses on occlusion; the engine ignores app occlusion
+
+- Add the Cubase verification of the editor fixes
+
+- Full screen, resizing and Hold confirmed in Cubase 15
+- plugin-007 lists the rules that keep the editor drawing in a DAW
 
 ## 0.13.1 - 2026-10-19
 

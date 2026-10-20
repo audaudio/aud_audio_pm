@@ -496,6 +496,12 @@ At the review:
   app's occlusion, hide and unhide; its surface windows are not opaque.
   Test host: a view resized without `onSize` and a covered window both
   draw (before: neither).
+- **Cubase, verified (2026-10-20).** With the debug build linked into the
+  VST3 folder, the user confirmed full screen, resizing and Hold in Cubase
+  15. The editor's log of the session (21:55 to 22:19): one editor
+  process throughout, 2834 frames sent, no pause until the view closed,
+  no surface replaced or renewed, no frame lost on the way. These fixes
+  are not in TestFlight build 168 yet. The rules are part of plugin-007.
 
 ## Open questions
 

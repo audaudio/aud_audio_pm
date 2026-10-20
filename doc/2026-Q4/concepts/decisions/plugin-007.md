@@ -10,7 +10,8 @@
   Store app; [app-010](app-010.md) — what the Audanika editor sends
 - Open work: App Review with the editor nested in the plugin (App Store
   Connect validated build 168 on 2026-10-20 and TestFlight took it without
-  a warning, the editor without a provisioning profile);
+  a warning, the editor without a provisioning profile); the fixes of the
+  Cubase findings in a TestFlight build;
   the embedding checklist of plugin-003 in REAPER and Cubase (step 11); a
   reusable package for the editor runner, the input injector and the
   IOSurface bridge, now in the app
@@ -38,6 +39,27 @@ the inherited socket through FFI in an isolate of its own
 and editor log to the unified log; `AUD_VST3_LOG=<file>` collects both in a
 test.
 
+What keeps the editor drawing in a DAW (the Cubase findings of ticket 37):
+
+- The plugin pauses the editor only while its window is invisible,
+  minimized or on another Space - not when macOS reports it occluded - and
+  sends any change of position, size or scale within 0.1 s, also without
+  `onSize`. A covered view still draws when its surface changes, which a
+  still surface does not; plugin-003's "a covered window costs nothing"
+  gives way.
+- The editor's engine does not follow the app's occlusion, hide and
+  unhide: Flutter takes an app whose windows are all occluded for hidden
+  and draws no frame, and the editor's transparent windows always are.
+- The editor takes a surface of its pool only when the plugin handed it
+  back and no process keeps it in use; one kept in use 100 ms after the
+  release is replaced, and with none handed back for 0.5 s the pool is
+  renewed.
+- A place that arrives while a window takes a new frame is applied after
+  it: FlutterView runs the platform's messages while it waits for a frame
+  of the new size, and nested frame changes abort AppKit.
+- The plugin follows the notes the editor holds and ends them, in the
+  graph and towards the DAW, when the editor ends or crashes.
+
 ## Why
 
 - req-mac-002 and plugin-005: the editor ships inside the sandboxed store
@@ -54,3 +76,10 @@ test.
   on a cold start), in Impeller's 10-bit extended range format (`w40a`),
   and a click into the view comes back as notes on the plugin's event
   output.
+- Cubase 15 (2026-10-20): the editor stood still after a while, crashed on
+  a live resize and paused in full screen mode until each of the rules
+  above was in place; the test host reproduces every case
+  (`--hold-surfaces`, `--resize-steps`, `--reframe`, `--occlude`,
+  `--kill-editor`). With them, a Cubase session of 24 minutes with full
+  screen, resizing and Hold kept one editor process, which sent 2834
+  frames without a pause, a replaced surface or a renewal.
