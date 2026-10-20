@@ -368,6 +368,30 @@ At the review:
   runs and Oli's Favorite Trance Pattern offline (peaks 0.37, 0.89, 0.89,
   0.3 s each), plays it live (peak 0.89) and opens the saved project with
   its preset. Cubase is the user's test.
+- **Step 9 (2026-10-20).** The shell starts the editor its configuration
+  names from `Contents/Helpers` with a socket pair on fd 3 and finds its
+  frames under `<appGroup>.vst3.<pid>.<random>` (plugin-007); one editor
+  process per DAW process and plugin build, warm 10 s, restarted while a
+  view is open. `dart:io` cannot open the inherited socket through
+  `/dev/fd/3` (ENOENT, unlike C in the gate's probe), so `AudShellFd` reads
+  it in an isolate through FFI. Protocol 2 adds the presets to the welcome,
+  preset changes, and MIDI and the preset choice from the editor; the
+  editor's MIDI plays in the graph and leaves on the event output
+  "MIDI Out" (app-010). The spike's editor app and remote view left the
+  package. Deviation: the editor runner, the input injector and the
+  IOSurface bridge went into the app, copied from the spike, not into a
+  reusable part of `aud_audio_vst3` — a package for them follows when a
+  second app needs an editor.
+- **Step 10 (2026-10-20).** The app builds "Audanika Editor.app" (38 MB,
+  `com.audanika.editor`) as the flavor `editor` of its Mac target
+  (`flutter build macos --flavor editor -t lib/main_plugin_editor.dart`),
+  background only and sandboxed with the app group; `tool/build-plugin.js`
+  copies it into the plugin (44 MB in all). The editor is the app in the
+  profile `pluginEditor` (app-010). The test host shows it in a window that
+  takes no focus (`scripts/host.js --editor`): the play surface's first
+  frame arrives 0.33 s after the view is attached; a tap on the chord
+  button "C" sends C2 on channel 1 to the DAW, a tap into the row G sends B
+  on channel 3 and D, G, B on channel 2.
 
 ## Open questions
 
@@ -399,9 +423,10 @@ Recorded at planning:
   joins with the Mac app, Apple silicon only.
 
 Recorded on the way: io-004 (the macOS device), plugin-006 (the shell),
-app-009 (the plugin's document and presets, DAW MIDI and the slider).
-Expected: plugin-007 (the sandboxed editor's channels and the place in the
-bundle), app-010 (the editor's notes to the DAW).
+app-009 (the plugin's document and presets, DAW MIDI and the slider),
+plugin-007 (the sandboxed editor's channels and its place in the plugin's
+`Contents/Helpers`), app-010 (the editor plays through the plugin, which
+sends its notes to the DAW).
 
 ## Model and rules
 
