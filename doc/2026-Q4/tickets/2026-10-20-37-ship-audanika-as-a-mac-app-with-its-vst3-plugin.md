@@ -219,7 +219,7 @@ Phase A — the Mac app and the gate:
    and `altool --validate-app` (the user's credentials); the link placed
    by hand; Cubase 15 and REAPER find and load the plugin from the link,
    and the sandboxed editor connects. Settles the place in the bundle,
-   the signing order and the editor's channels (plugin-006); a refusal by
+   the signing order and the editor's channels (plugin-007); a refusal by
    the validation is decided with the user before anything else is built.
 
 Phase B — the Mac app plays:
@@ -252,7 +252,7 @@ Phase C — the plugin plays Audanika:
 Phase D — the Audanika editor:
 
 9. `aud_audio_vst3`: the editor runner as a reusable part, the channels of
-   step 3 (plugin-006), the protocol for notes from the editor, the preset
+   step 3 (plugin-007), the protocol for notes from the editor, the preset
    list and choice, state pushes and parameters; the logs in the unified
    log.
 10. `audanika_app`: `lib/main_plugin_editor.dart` with its slim
@@ -314,7 +314,7 @@ At the review:
   its own container, looks up a Mach name with the group's prefix (0) but
   not one without it (1100, not privileged), and reads and writes the end of
   a socket pair it inherited as fd 3, also when it opens `/dev/fd/3` — which
-  is how `dart:io` reaches it. This carries plugin-006: a socket pair at
+  is how `dart:io` reaches it. This carries plugin-007: a socket pair at
   spawn and Mach names with the group's prefix, no file anywhere.
 - **Gate, the link (2026-10-20).** A spike plugin inside the app's
   `Contents/PlugIns`, linked into `~/Library/Audio/Plug-Ins/VST3`, is
@@ -398,10 +398,10 @@ Recorded at planning:
 - [release-005](../concepts/decisions/release-005.md) (accepted): macOS
   joins with the Mac app, Apple silicon only.
 
-Expected from the steps: io-004 (the macOS device), plugin-006 (the
-sandboxed editor's channels and the place in the bundle), app-009 (the
-plugin's presets exported from the app), app-010 (DAW MIDI and the
-editor's notes).
+Recorded on the way: io-004 (the macOS device), plugin-006 (the shell),
+app-009 (the plugin's document and presets, DAW MIDI and the slider).
+Expected: plugin-007 (the sandboxed editor's channels and the place in the
+bundle), app-010 (the editor's notes to the DAW).
 
 ## Model and rules
 
