@@ -60,3 +60,7 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 34 (planned): the voice stealing and the load governor in
   `aud_audio_voice_allocator`, which hooks into the instrument nodes
   (step S9d)
+- [2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md](2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md)
+  — ticket 37 (planned): the Audanika app on the Mac through TestFlight and
+  the Mac App Store, with its VST3 plugin inside (the macOS parts of S18
+  and S3b)
