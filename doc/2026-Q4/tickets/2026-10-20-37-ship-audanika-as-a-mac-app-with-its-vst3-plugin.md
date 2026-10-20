@@ -469,6 +469,19 @@ At the review:
   the editor flavor showed the empty main window of `MainMenu.xib` (now
   closed), and the editor holds an activity against App Nap. To verify in
   Cubase.
+- **Cubase, resize (2026-10-20).** Resizing the plugin window lost the
+  editor's state (Hold) and left notes hanging. The editor had crashed:
+  while a window takes a new frame, FlutterView waits for a frame of the
+  new size and runs the platform's messages, so the places of a live
+  resize set the frame inside the frame change, until AppKit aborted
+  (`_enumeratingSubviewsCount < 63`, SIGABRT). The plugin restarted the
+  editor with a new state, and the notes it held never got their note
+  off. Fixes: the editor applies a place that arrives during a frame
+  change afterwards, the latest per view; the plugin follows the notes the
+  editor holds and ends them in the graph and towards the DAW when the
+  editor ends. Test host: 150 live resize steps keep the editor and its
+  frames (before: crash), a held note ends when the editor is killed.
+  Open: the editor's state still lives only in the editor (app-010).
 
 ## Open questions
 

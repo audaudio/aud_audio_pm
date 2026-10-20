@@ -55,7 +55,13 @@
 - Add the finding of the frozen editor in Cubase
 
 - Surfaces kept in use by another process stopped the frames
+
 - Replacement and renewal of surfaces, diagnostics in the unified log
+
+- Add the finding of the editor crash on a resize
+
+- Nested frame changes aborted the editor; places now wait
+- The plugin ends the notes of an editor that ended
 
 ## 0.13.1 - 2026-10-19
 
