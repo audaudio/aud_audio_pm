@@ -8,8 +8,9 @@
   [plugin-006](plugin-006.md) — the shell's editor
 - Related: [plugin-005](plugin-005.md) — the plugin inside the Mac App
   Store app; [app-010](app-010.md) — what the Audanika editor sends
-- Open work: the signing order inside out and the validation by App Store
-  Connect with the editor nested in the plugin (step 12, open question 1);
+- Open work: TestFlight with the editor nested in the plugin without a
+  provisioning profile (the validation by App Store Connect passed on
+  2026-10-20);
   the embedding checklist of plugin-003 in REAPER and Cubase (step 11); a
   reusable package for the editor runner, the input injector and the
   IOSurface bridge, now in the app

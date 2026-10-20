@@ -425,14 +425,26 @@ At the review:
   nested editor app (ITMS-90889); the export with automatic signing is
   expected to create one for `com.audanika.editor`, and the validation
   shows it.
+- **Step 13, export and validation (2026-10-20).** After the user added the
+  macOS platform to the app record 1547307555, `tool/release-mac.js export`
+  signed the archive with the team's cloud-managed Apple Distribution
+  certificate and the package with the 3rd Party Mac Developer Installer
+  certificate: `Audanika.pkg`, 178 MB. The app got its Mac Team Store
+  profile with application and team identifier; Xcode re-signed the plugin
+  and the editor without a profile, the editor with its sandbox and app
+  group only. `validate` (altool): "VERIFY SUCCEEDED with no errors" - the
+  plugin with its nested editor passes the validation of App Store
+  Connect, which settles that part of the gate. Still open: whether
+  TestFlight takes the build with an editor without a profile (ITMS-90889
+  comes only after an upload), and Cubase.
 
 ## Open questions
 
-1. **App Store Connect.** The app record 1547307555 needs the macOS
-   platform (universal purchase; it ends a "Designed for iPad" offer on
-   Apple silicon Macs, if one is switched on), and the Mac needs the
-   distribution certificates — through Xcode's automatic signing with the
-   user's account, or created by the user. Both are needed by step 3.
+1. **App Store Connect.** Settled on 2026-10-20: the user added the macOS
+   platform to the app record 1547307555, and the export signs with the
+   team's cloud-managed distribution certificate; the package passes the
+   validation. Open: TestFlight with the nested editor (step 13, upload on
+   the user's go).
 
 ## Out of scope
 

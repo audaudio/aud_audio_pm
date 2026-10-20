@@ -25,8 +25,15 @@
 - Add the findings of steps 12 and 13 of ticket 37
 
 - The plugin and its editor in the app, signed inside out
+
 - The step Use in DAWs in the main menu of the Mac app
+
 - The archive of the release lane; export and upload wait for the go
+
+- Add the validation of the Mac app with its plugin
+
+- Export signed for App Store Connect, the package validates
+- Open question 1 settled; TestFlight with the nested editor open
 
 ## 0.13.1 - 2026-10-19
 
