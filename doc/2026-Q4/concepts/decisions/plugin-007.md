@@ -10,8 +10,8 @@
   Store app; [app-010](app-010.md) — what the Audanika editor sends
 - Open work: App Review with the editor nested in the plugin (App Store
   Connect validated build 168 on 2026-10-20 and TestFlight took it without
-  a warning, the editor without a provisioning profile); the fixes of the
-  Cubase findings in a TestFlight build;
+  a warning, the editor without a provisioning profile, and build 169 with
+  the fixes of the Cubase findings the next day);
   the embedding checklist of plugin-003 in REAPER and Cubase (step 11); a
   reusable package for the editor runner, the input injector and the
   IOSurface bridge, now in the app

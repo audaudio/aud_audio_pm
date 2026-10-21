@@ -507,7 +507,12 @@ At the review:
   validation ("VERIFY SUCCEEDED with no errors") and upload (delivery
   32f2162d-b13e-4e9b-b13a-059c7d07135a, 178 MB in 47 s); App Store Connect
   processed it as `VALID_BINARY`, `APP_STORE_ELIGIBLE`, expiring on
-  2027-01-19.
+  2027-01-19. TestFlight (read the same day): 4.4.1 (169) "ready to
+  submit", binary checked, in the internal group "App Store Connect
+  Users" next to 168, the nested editor listed with sandbox and app group,
+  no warning. Open: 169 installed from TestFlight and tried in Cubase and
+  REAPER; starting it moves the link of the VST3 folder from the debug
+  build back into `/Applications`.
 
 ## Open questions
 

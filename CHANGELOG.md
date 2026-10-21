@@ -80,6 +80,10 @@
 
 - Build 169 with the Cubase fixes uploaded and processed as valid
 
+- Add the TestFlight state of the Mac app build 169
+
+- Build 169 with the Cubase fixes ready for internal testers, no warning
+
 ## 0.13.1 - 2026-10-19
 
 ### Added
