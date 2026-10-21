@@ -31,7 +31,7 @@ Next number: 38
 | 34 | S9d: Move the voice stealing and the governor into aud_audio_voice_allocator | planned | [2026-10-15-34-move-voice-stealing-and-the-governor-into-aud-audio-voice-allocator.md](2026-Q4/tickets/2026-10-15-34-move-voice-stealing-and-the-governor-into-aud-audio-voice-allocator.md) |
 | 35 | Take QuickJS-ng from the pub.dev package gg_quickjs | part of 31 | [2026-10-19-35-take-quickjs-ng-from-gg-quickjs.md](2026-Q4/tickets/2026-10-19-35-take-quickjs-ng-from-gg-quickjs.md) |
 | 36 | Fix the start of Android release builds with shared_preferences_android 2.5.0 | implemented | [2026-10-19-36-fix-android-release-start-with-shared-preferences.md](2026-Q4/tickets/2026-10-19-36-fix-android-release-start-with-shared-preferences.md) |
-| 37 | S18: Ship Audanika as a Mac app with its VST3 plugin inside | planned | [2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md](2026-Q4/tickets/2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md) |
+| 37 | S18: Ship Audanika as a Mac app with its VST3 plugin inside | implemented | [2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md](2026-Q4/tickets/2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the

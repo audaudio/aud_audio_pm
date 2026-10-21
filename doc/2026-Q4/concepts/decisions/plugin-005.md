@@ -9,9 +9,10 @@
   the DAWs on macOS; [plugin-003](plugin-003.md) — its editor app runs in
   the App Sandbox
 - Related: [release-005](release-005.md) — the Mac app it ships in
-- Open work: whether App Store Connect accepts the nested plugin and its
-  editor app (the gate of ticket 37); which DAWs follow a symbolic link;
-  the answer of App Review; the fallback package if it refuses
+- Open work: the answer of App Review; the fallback package if it refuses;
+  Live with the link (ticket 37 settled the rest: App Store Connect
+  validated the nested plugin and its editor, TestFlight took builds 168
+  and 169, REAPER 7 and Cubase 15 follow the link)
 
 ## Decision
 

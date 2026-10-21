@@ -87,7 +87,14 @@
 - Add the VST3 shell to the architecture (ticket 37)
 
 - Plugin shells: the generic VST3 shell, the editor and the distribution of S18
+
 - The documentation step of ticket 37 in its plan
+
+- Add the implementation state of ticket 37 to its decisions
+- Ticket 37 implemented, with the checks still open
+- plugin-005, plugin-006 and their index rows without the open work ticket 37 settled
+- release-001 refined by release-005
+- app-010 cites req-mac-003 and req-mac-004
 
 ## 0.13.1 - 2026-10-19
 

@@ -9,8 +9,7 @@
   packages linked in
 - Related: [plugin-005](plugin-005.md) — how the plugin reaches the DAWs;
   [app-009](app-009.md) — Audanika's document and presets
-- Open work: the editor (phase D of ticket 37, the sandboxed channels of
-  the probe); sample-accurate automation (block-granular now, a 5 ms ramp);
+- Open work: sample-accurate automation (block-granular now, a 5 ms ramp);
   note expressions and MPE; Windows and Linux; a preset change sets the
   effect values without the app's 50 ms glide; the voice governor
   (ticket 34)

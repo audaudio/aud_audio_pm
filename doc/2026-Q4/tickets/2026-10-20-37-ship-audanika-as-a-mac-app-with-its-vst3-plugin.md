@@ -4,6 +4,10 @@ Status: planned 2026-10-20 on the user's request ("Als nächstes soll
 Audanika als VST Plugin zur Verfügung gestellt werden … Bitte bringe
 Audanika mit Hilfe von aud_audio_vst3 soweit, dass es als VST Plugin
 fungiert"); confirmed by the user the same day, with the answers below.
+Implementation on 2026-10-20 and 2026-10-21 up to TestFlight build 169;
+implemented. Open: the embedding checklist (step 11), build 169 from
+TestFlight in Cubase and REAPER (step 13), the answer of App Review
+(step 14).
 
 ## Goal
 
