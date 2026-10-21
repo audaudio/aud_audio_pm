@@ -29,7 +29,8 @@ Ask one question at a time and propose a default each time:
 - Target date — optional. Without one, plan forward from the start and
   report the end date that results
 - Start — default: the next working day
-- Capacity — who works on the project and how many days per week
+- Capacity — who works on the project and how many days per week;
+  default: `doc/team/people.md`, if the repo has it
 - Blocked times — holidays, vacations, other projects
 - Scope — which goals; default: all active ones
 

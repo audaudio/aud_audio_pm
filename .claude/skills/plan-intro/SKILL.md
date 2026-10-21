@@ -13,14 +13,18 @@ is planned.
 - `/plan-schedule` — cuts the requirements into tickets, estimates them
   and draws the time plan as a Gantt chart, optionally against a target
   date
+- `/plan-jira-export` — exports the next tickets of one person, one
+  sprint's worth, as a CSV file for Jira
+- `/plan-report` — collects what each person needs to hear into their
+  quarterly report, as points to tick off
 
 The tickets come after the requirements; the `gg` workflow creates them
 (`/gg-ticket`, if the repo has it).
 
 ## Say which skill comes next
 
-Read `doc/goals`, `doc/requirements` and `doc/schedule.md` and name the
-next step:
+Read `doc/goals`, `doc/requirements`, `doc/schedule.md`, `doc/team` and
+`doc/reports` and name the next step:
 
 - No active goal or no accepted requirement → `/plan-requirements`
 - Requirements, but the work at hand is not covered by them →
@@ -28,6 +32,10 @@ next step:
 - Requirements, no schedule, and the user wants a time plan or names a
   target date → `/plan-schedule`
 - Requirements accepted → plan the tickets
+- Planned tickets without a Jira key, and the team works in Jira →
+  `/plan-jira-export`
+- Changes since the newest report point, or no report for the current
+  quarter yet → `/plan-report`
 
 ## Important
 

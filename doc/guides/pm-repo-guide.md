@@ -17,6 +17,9 @@ found in the LICENSE file in the root of this package.
 - A ticket that is only planned ends with the PM repo alone
 - Requirements come before tickets: engineer them with the user first, see
   [Engineer the requirements first](#engineer-the-requirements-first)
+- Write the repo in English. If it has `doc/guides/translate-guide.md`
+  from the `dna_translate` layer, keep a German copy of every file as
+  well, see [Keep two languages](#keep-two-languages)
 
 ## Structure the repo like this
 
@@ -41,10 +44,27 @@ root
 | | |-tickets
 | | | |-2026-09-10-cdm-1317-infrastructure-discovery-server.md
 | | |-bugs
+| |-team
+| | |-people.md
+| | |-roles.md
+| |-reports
+| | |-2026-Q3
+| | | |-anna.md
+| |-exports
+| | |-2026-09-10-anna-sprint.csv
+| |-prompts
+| | |-README.md
+| | |-anna                 (on the branch prompts)
+| | | |-2026-09
+| | | | |-2026-09-10_timing_app_3f2a91c0.md
 | |-blog
 | | |-2026
 | | | |-2026-09-10-blogpost-1.md
+| |-de
+| | |-goals
+| | |-...
 |-README.md
+|-README.de.md
 ```
 
 - `README.md` names the project and links to the current quarter, the
@@ -62,8 +82,19 @@ root
   plus diagrams in `img` as mermaid `.mmd` files
 - `tickets` — one plan file per ticket
 - `bugs` — one file per bug; a bug turns into a ticket once it is planned
+- `team` — who works on the project and in which roles, kept across
+  quarters, see [Know the team](#know-the-team)
+- `reports` — one report per person and quarter with the points to tell
+  them, see [Report to the people](#report-to-the-people)
+- `exports` — CSV files of tickets for Jira, see
+  [Export tickets to Jira](#export-tickets-to-jira)
+- `prompts` — the prompts the people wrote to Claude Code, one file per
+  session, on the branch `prompts`; on the main branch only its
+  `README.md`, see [Keep the prompts](#keep-the-prompts)
 - `blog` — one post per finished ticket; exists only if the repo has
   `doc/guides/blog-guide.md` from the `dna_blog` layer, see below
+- `de` and `README.de.md` — the German copy; exist only if the repo keeps
+  two languages, see [Keep two languages](#keep-two-languages)
 
 ## Tell goals and requirements apart
 
@@ -149,6 +180,66 @@ root
   they name their bug file instead
 - `/plan-intro` lists the planning skills and says which one comes next
 
+## Know the team
+
+- Write down who works on the project in `doc/team/people.md`, one
+  section per person:
+
+```markdown
+# People
+
+- Sprint length: 2 weeks
+- Hours per day: 8
+
+## Anna
+
+- Areas: result list, import of race data, the `timing_app` repo
+- Days per week: 4
+- Jira: anna
+- Git: anna@example.com
+```
+
+- The section title is the first name; the file names of the person use
+  it in lower case kebab case: `anna`
+- `Areas` — what the person takes care of: features, topics, repos. The
+  Jira export matches tickets to people by them
+- `Days per week` — how much of the week the person works on the project
+- `Jira` — the name Jira knows the person by: the user name on Jira Data
+  Center or Server, e.g. `anna`, the e-mail address on Jira Cloud;
+  optional
+- `Git` — the e-mail addresses the person commits with, separated by
+  commas. The prompts of the person are filed under their first name by
+  them, see [Keep the prompts](#keep-the-prompts)
+- `Sprint length` — once, at the top; default two weeks
+- `Hours per day` — once, at the top: the working hours of one day, used
+  to turn estimates in days into hours; default 8
+- Write down the roles in `doc/team/roles.md`, one section per role. Start
+  with Developer, Product Owner, Management, Sales and Customer, and add
+  the ones the project needs:
+
+```markdown
+# Roles
+
+## Product Owner
+
+- Responsible for: goals, requirements and their priority
+- People: Anna
+- Hears about: goals, requirements, decisions, schedule shifts
+```
+
+- `People` — the first names of `doc/team/people.md` who have the role.
+  This is the only place that says who has which role; `people.md` does
+  not repeat it
+- `Hears about` decides what lands in the reports of the people in that
+  role. Customers and sales hear about outcomes and dates, never about
+  internals such as code, open decisions or estimates
+- One person may have several roles, so may be listed under several of
+  them; their report covers all of them
+- Ask the user for the team before the first report or export; never
+  guess people or roles
+- Keep only first names, areas and roles in `doc/team`; no contact data
+  besides the Jira account and the git e-mail addresses
+
 ## Fill the concepts folder
 
 - `topics` — one file per product topic: evidence, use cases, user needs,
@@ -187,6 +278,67 @@ root
   `2026-09-10-cdm-1317-infrastructure-discovery-server.md`
 - Name goals, requirement areas, topics, ux files, architecture files and diagrams by their
   topic, in English kebab case
+- Name reports `<name>.md` and exports `<yyyy>-<mm>-<dd>-<name>-sprint.csv`,
+  `<name>` being the first name in lower case kebab case
+- Keep the English file names in the German copy
+
+## Keep two languages
+
+- English is the leading language of a PM repo: every file exists in
+  English, under `doc` and as `README.md`
+- If the repo has `doc/guides/translate-guide.md` from the `dna_translate`
+  layer, every file also exists in German, under `doc/de` with the same
+  path and file name, and as `README.de.md`. Without that guide, write
+  English only
+- Write the English file first, even when the user talks German, then the
+  German copy; change both in the same commit
+- Translate headings and prose. Keep IDs, file names, links, the status
+  and priority values and the field names of requirements as they are, so
+  both copies stay readable for tools
+- Keep both copies equal in content and structure; a ticked point in a
+  report is ticked in both
+- Do not translate the guides, the templates, the CSV exports or the
+  prompts; the guides come from the DNA layers
+
+## Report to the people
+
+- Keep one report per person and quarter in
+  `doc/reports/<yyyy>-Q<n>/<name>.md`: the points the person needs to
+  hear, each with a checkbox to tick once it is communicated
+- The [report guide](report-guide.md) says how, `/plan-report` runs it: it
+  collects what changed for the roles and areas of the person, appends it
+  and starts the file of a new quarter with the open points carried over
+
+## Export tickets to Jira
+
+- Export the next tickets of one person as a CSV file Jira imports:
+  `doc/exports/<yyyy>-<mm>-<dd>-<name>-sprint.csv`
+- The [Jira export guide](jira-export-guide.md) says how,
+  `/plan-jira-export` runs it: it matches the open tickets without a Jira
+  key to the person by their areas, fills one sprint by the estimates and
+  writes the file
+- The person is assigned at export time only, never in the ticket file
+
+## Keep the prompts
+
+- Every prompt the people write to Claude Code in a repo of the project
+  lands here, on the branch `prompts`:
+  `doc/prompts/<name>/<yyyy>-<mm>/<yyyy>-<mm>-<dd>_<repo>_<session>.md`,
+  one file per session, the time of each prompt as its heading
+- The `dna_gg` layer does it: a Claude Code hook in every repo whose
+  variable `dnaPmRepo` names this repo. The hook commits to the branch
+  `prompts` directly, so the main branch and its checks stay untouched
+- The name is the first name in `doc/team/people.md` whose `Git` line
+  lists the e-mail the session's repo commits with. An e-mail that is not
+  listed goes to `doc/prompts/_unknown`; add it to `people.md`, the next
+  sessions are filed under the name
+- Only prompts are kept, never the answers. Tokens and passwords are
+  replaced by `[redacted]` before they leave the computer
+- Never edit, move or delete the prompt files, and never merge the branch
+  `prompts` into the main branch. Read them with
+  `git fetch origin prompts` and `git show origin/prompts:<path>`
+- On the main branch, `doc/prompts/README.md` says where the prompts are,
+  in German in `doc/de/prompts/README.md`
 
 ## Use the design layers
 
@@ -288,3 +440,6 @@ and the requirements it fulfils.
 
 Update `doc/schedule.md`, if the project has one, and check the forecast
 against the target date.
+
+Check `doc/team` and start the reports of the quarter with `/plan-report`;
+it carries the open points of the last quarter over.
