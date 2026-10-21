@@ -73,7 +73,12 @@
 - Add the Cubase verification of the editor fixes
 
 - Full screen, resizing and Hold confirmed in Cubase 15
+
 - plugin-007 lists the rules that keep the editor drawing in a DAW
+
+- Add the upload of the Mac app build 169
+
+- Build 169 with the Cubase fixes uploaded and processed as valid
 
 ## 0.13.1 - 2026-10-19
 

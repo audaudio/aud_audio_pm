@@ -502,6 +502,12 @@ At the review:
   process throughout, 2834 frames sent, no pause until the view closed,
   no surface replaced or renewed, no frame lost on the way. These fixes
   are not in TestFlight build 168 yet. The rules are part of plugin-007.
+- **Build 169 (2026-10-21).** On the user's go: build number 169,
+  `tool/release-mac.js` archive (the editor with the Cubase fixes), export,
+  validation ("VERIFY SUCCEEDED with no errors") and upload (delivery
+  32f2162d-b13e-4e9b-b13a-059c7d07135a, 178 MB in 47 s); App Store Connect
+  processed it as `VALID_BINARY`, `APP_STORE_ELIGIBLE`, expiring on
+  2027-01-19.
 
 ## Open questions
 
