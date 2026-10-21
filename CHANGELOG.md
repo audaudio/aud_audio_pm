@@ -84,6 +84,11 @@
 
 - Build 169 with the Cubase fixes ready for internal testers, no warning
 
+- Add the VST3 shell to the architecture (ticket 37)
+
+- Plugin shells: the generic VST3 shell, the editor and the distribution of S18
+- The documentation step of ticket 37 in its plan
+
 ## 0.13.1 - 2026-10-19
 
 ### Added

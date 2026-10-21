@@ -513,6 +513,15 @@ At the review:
   no warning. Open: 169 installed from TestFlight and tried in Cubase and
   REAPER; starting it moves the link of the VST3 folder from the debug
   build back into `/Applications`.
+- **Step 15, documentation (2026-10-21).** No repo of the ticket has
+  `doc/guides/blog-guide.md`, so the ticket writes no blog post
+  (pm-repo-guide). Updated: README.md and README.de.md of `aud_audio_vst3`
+  (the German one translated anew from the English one), its
+  `doc/plugin-bundle.md` (`appGroup`, `editorSize`, the editor) and
+  `index.jsonc`; the German README of `aud_audio_io` (macOS); the app's
+  README (the Mac app and its plugin) and a new `index.jsonc`; the plugin
+  shells of the architecture. Four commit messages of the Cubase fixes were
+  reworded to begin with "Add" (process-005) before any push.
 
 ## Open questions
 
