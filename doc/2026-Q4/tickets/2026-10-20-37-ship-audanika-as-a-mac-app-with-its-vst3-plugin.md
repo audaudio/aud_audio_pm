@@ -207,6 +207,12 @@ for macOS, uses StoreKit for real, and switches off the motion sensors.
   their own). `aud_audio`, `aud_audio_midi` and `aud_audio_web` came in
   with `gg do add` as dependencies and leave the ticket if they keep no
   change of their own.
+- Changed on the way: `aud_audio_graph` (the node `aud.graph.channel_split`
+  for the DAW's MIDI channels; at the review the arena of emitted events,
+  the arrival order of equal events and the nodes that pass events on);
+  `aud_audio_core` (the capability `AUD_NODE_CAP_PASSES_EVENTS`, a minor
+  version); `aud_audio_midi` (the capability on its port nodes, a patch
+  version).
 
 ## Steps
 
@@ -526,6 +532,40 @@ At the review:
   README (the Mac app and its plugin) and a new `index.jsonc`; the plugin
   shells of the architecture. Four commit messages of the Cubase fixes were
   reworded to begin with "Add" (process-005) before any push.
+- **Step 15, review (2026-10-21 and 2026-10-22).** One reviewer per repo
+  with code of its own; every blocker checked against the code before it
+  was fixed. Blockers: the shell dropped the events of a process call that
+  renders nothing (editor note offs hung); a macOS device whose open failed
+  removed the listeners of another stream; the microphone permission was
+  always granted before macOS 14; this plan and plugin-005, plugin-006,
+  release-001 and app-010 lagged behind the ticket. Then, on the user's
+  request, the follow-ups: names reach the DAW as UTF-16 (a UTF-8 decoder
+  of the shell's own, no shared state); `AudShellFd.close()` runs once;
+  `AudShellProbe`, `AudShellMeter` and the sequence of `AudShellParamValue`
+  left the API; the editor gives a failed or late instance up and opens it
+  again; "Use in DAWs" shows the errors of the open panel and the bookmark;
+  the plugin build leaves Xcode on the app's entry point; the main menu in
+  German and Chinese. Found on the way and fixed:
+  - The events of a render request at one offset could swap (`std::sort`
+    with sequence 0 for all of them): 16 channels of bank select, program
+    change and note at offset 0 came out of order. Equal events now keep
+    their arrival order.
+  - A node that passes its events on doubled the note offs behind it on a
+    stop or a prepare and refused note ons beyond 256 for all behind it:
+    the split, `aud.midi.input` and `aud.midi.output`. Such a node declares
+    `AUD_NODE_CAP_PASSES_EVENTS` (aud_audio_core); the nodes behind it
+    close their own notes, the engine closes the notes it handed out of the
+    graph. The split's emitted events got an arena as large as the block's.
+  - One loss of a device could close the device a stream had just reopened:
+    two reports of one unplug (macOS: device list, default and IsAlive; iOS:
+    route changes and the reset of the media services; Android: both Oboe
+    streams of a duplex device), or a loss reported after the worker had
+    replaced the device itself. Every device has a serial, a loss names it,
+    and the worker drops a recovery for a device the stream no longer runs
+    on. A rate change reopens a macOS stream only if it asked for no rate,
+    weighed by each device's own rate.
+  Not tried on hardware: a real unplug or rate change, a DAW with a
+  non-ASCII preset, the app in German or Chinese.
 
 ## Open questions
 

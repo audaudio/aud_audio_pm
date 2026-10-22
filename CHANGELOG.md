@@ -91,10 +91,18 @@
 - The documentation step of ticket 37 in its plan
 
 - Add the implementation state of ticket 37 to its decisions
+
 - Ticket 37 implemented, with the checks still open
+
 - plugin-005, plugin-006 and their index rows without the open work ticket 37 settled
+
 - release-001 refined by release-005
+
 - app-010 cites req-mac-003 and req-mac-004
+
+- Add the findings of the review of ticket 37
+- The review's blockers and follow-ups, and the three faults found on the way: the order of equal events, the note offs behind nodes that pass events on, a loss that closed a reopened device
+- The repos that changed on the way: graph, core and midi
 
 ## 0.13.1 - 2026-10-19
 
