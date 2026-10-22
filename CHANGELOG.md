@@ -101,8 +101,14 @@
 - app-010 cites req-mac-003 and req-mac-004
 
 - Add the findings of the review of ticket 37
+
 - The review's blockers and follow-ups, and the three faults found on the way: the order of equal events, the note offs behind nodes that pass events on, a loss that closed a reopened device
+
 - The repos that changed on the way: graph, core and midi
+
+- Add the library of the editor and the extension VST3
+- app-010: the editor shows the library with the free and the bought albums, whose product IDs the app shares through its app group; the store stays in the app
+- The plan of ticket 37 records the user requests at the publish: the extension VST3 with its button Install VST, and the library in the editor
 
 ## 0.13.1 - 2026-10-19
 

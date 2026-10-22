@@ -566,6 +566,13 @@ At the review:
     weighed by each device's own rate.
   Not tried on hardware: a real unplug or rate change, a DAW with a
   non-ASCII preset, the app in German or Chinese.
+- **The user's requests at the publish (2026-10-22).** The page "VST3
+  Plugin" became the extension "VST3": like the Hold extension one control,
+  the button "Install VST", which stays after the install and places the
+  link again; not in the main menu by default, no switch and no texts of
+  the link's state. The editor got the library (app-010): the free songs
+  and the albums bought in the app, whose product IDs the app shares through
+  its app group; other albums stay locked, buying stays in the app.
 
 ## Open questions
 
