@@ -107,8 +107,14 @@
 - The repos that changed on the way: graph, core and midi
 
 - Add the library of the editor and the extension VST3
+
 - app-010: the editor shows the library with the free and the bought albums, whose product IDs the app shares through its app group; the store stays in the app
+
 - The plan of ticket 37 records the user requests at the publish: the extension VST3 with its button Install VST, and the library in the editor
+
+- Add the finding of the editor in Cubase on macOS 27
+- macOS 27 stops the display link of an occluded window; the editor stood still in Cubase while its notes played
+- The surface windows lie above the DAW and on every Space; the test host draws again, also with --occlude
 
 ## 0.13.1 - 2026-10-19
 

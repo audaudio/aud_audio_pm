@@ -573,6 +573,16 @@ At the review:
   the link's state. The editor got the library (app-010): the free songs
   and the albums bought in the app, whose product IDs the app shares through
   its app group; other albums stay locked, buying stays in the app.
+- **Cubase on macOS 27 (2026-10-22).** After the update to macOS 27.0.1 the
+  editor stood still in Cubase while its notes played: one to three frames
+  per session, the editor's own window "occluded". macOS 27 stops the
+  display link of a view whose window is occluded, and Flutter draws on it;
+  the test host's `--occlude` failed with the editor and the plugin of
+  today and of 2026-10-21 alike. The transparent surface windows, which let
+  every click through, now lie at the status bar level above the DAW and on
+  every Space; the test host's clicks, 60 live resize steps, reframe and
+  `--occlude` draw again. The editor opens in about 2 s, as each instance
+  loads the library.
 
 ## Open questions
 
