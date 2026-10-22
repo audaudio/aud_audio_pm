@@ -1,5 +1,123 @@
 # Changelog
 
+## 0.13.2 - 2026-10-22
+
+### Added
+
+- Add the plan of ticket 37 (S18, the Audanika Mac app with its VST3 plugin inside), the requirements of the area mac and the decisions plugin-005 and release-005
+
+- Add the findings of step 2 and of the gate of ticket 37
+
+- Add the findings of the steps 4 and 5 of ticket 37 and the decision io-004
+
+- Add the findings of the steps 6 to 8 of ticket 37 and the decisions plugin-006 and app-009
+
+- Add the decisions recorded so far to the plan of ticket 37
+
+- Add the editor decisions plugin-007 and app-010 (ticket 37)
+
+- plugin-007: socket pair on fd 3, frames under app group Mach names
+
+- app-010: the editor plays through the plugin, notes go to the DAW
+
+- Findings of steps 9 and 10 in the plan of ticket 37
+
+- Add the findings of steps 12 and 13 of ticket 37
+
+- The plugin and its editor in the app, signed inside out
+
+- The step Use in DAWs in the main menu of the Mac app
+
+- The archive of the release lane; export and upload wait for the go
+
+- Add the validation of the Mac app with its plugin
+
+- Export signed for App Store Connect, the package validates
+
+- Open question 1 settled; TestFlight with the nested editor open
+
+- Add the upload of the Mac app build 168
+
+- Build 168 uploaded on the go of the user and processed as valid
+
+- TestFlight state of the nested editor still to be seen
+
+- Add the TestFlight state of the Mac app build 168
+
+- Build 168 ready for internal testers, no warning on the nested editor
+
+- plugin-007 open work moves to App Review
+
+- Add the activation of the TestFlight build of the Mac app
+
+- The step Use in DAWs placed the link to the plugin in the app
+
+- Add the finding of the frozen editor in Cubase
+
+- Surfaces kept in use by another process stopped the frames
+
+- Replacement and renewal of surfaces, diagnostics in the unified log
+
+- Add the finding of the editor crash on a resize
+
+- Nested frame changes aborted the editor; places now wait
+
+- The plugin ends the notes of an editor that ended
+
+- Add the finding of the editor in full screen mode
+
+- Occlusion paused the editor, and Flutter stopped frames of a hidden app
+
+- The plugin no longer pauses on occlusion; the engine ignores app occlusion
+
+- Add the Cubase verification of the editor fixes
+
+- Full screen, resizing and Hold confirmed in Cubase 15
+
+- plugin-007 lists the rules that keep the editor drawing in a DAW
+
+- Add the upload of the Mac app build 169
+
+- Build 169 with the Cubase fixes uploaded and processed as valid
+
+- Add the TestFlight state of the Mac app build 169
+
+- Build 169 with the Cubase fixes ready for internal testers, no warning
+
+- Add the VST3 shell to the architecture (ticket 37)
+
+- Plugin shells: the generic VST3 shell, the editor and the distribution of S18
+
+- The documentation step of ticket 37 in its plan
+
+- Add the implementation state of ticket 37 to its decisions
+
+- Ticket 37 implemented, with the checks still open
+
+- plugin-005, plugin-006 and their index rows without the open work ticket 37 settled
+
+- release-001 refined by release-005
+
+- app-010 cites req-mac-003 and req-mac-004
+
+- Add the findings of the review of ticket 37
+
+- The review's blockers and follow-ups, and the three faults found on the way: the order of equal events, the note offs behind nodes that pass events on, a loss that closed a reopened device
+
+- The repos that changed on the way: graph, core and midi
+
+- Add the library of the editor and the extension VST3
+
+- app-010: the editor shows the library with the free and the bought albums, whose product IDs the app shares through its app group; the store stays in the app
+
+- The plan of ticket 37 records the user requests at the publish: the extension VST3 with its button Install VST, and the library in the editor
+
+- Add the finding of the editor in Cubase on macOS 27
+
+- macOS 27 stops the display link of an occluded window; the editor stood still in Cubase while its notes played
+
+- The surface windows lie above the DAW and on every Space; the test host draws again, also with --occlude
+
 ## 0.13.1 - 2026-10-19
 
 ### Added

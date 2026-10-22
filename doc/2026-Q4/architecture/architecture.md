@@ -226,6 +226,18 @@ scheduler. Order: VST3 (MIT since SDK 3.8), CLAP (MIT), AUv3 (out of process,
 360 MB budget). Dart never runs on the host's render thread; a Flutter UI runs
 in a separate process or is replaced by a native view (plugin-001).
 
+The VST3 shell (S18, ticket 37) is generic: an app configures
+`aud_audio_vst3` with `plugin.json`, a graph document and presets exported
+from its own sound code, and the shell compiles the named node packages in
+(plugin-006, app-009). The editor is the app itself in a profile of its own,
+one sandboxed process per DAW process and plugin build with one Flutter view
+per instance; it reaches the plugin through a socket pair inherited as fd 3
+and app-group Mach names for its IOSurface frames, plays MIDI through the
+plugin, which forwards it to the DAW, and keeps drawing while macOS reports
+its windows hidden (plugin-003, plugin-007, app-010). The plugin and its
+editor ship inside the Mac App Store app, which links the plugin into the
+user's VST3 folder after consent (plugin-005).
+
 ## Cross-cutting
 
 - Licenses: the packages are MIT; permissive sources only, no LGPL in

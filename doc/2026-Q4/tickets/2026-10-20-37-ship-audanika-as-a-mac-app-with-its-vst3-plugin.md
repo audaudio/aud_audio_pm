@@ -1,0 +1,638 @@
+# 37: S18 — Ship Audanika as a Mac app with its VST3 plugin inside
+
+Status: planned 2026-10-20 on the user's request ("Als nächstes soll
+Audanika als VST Plugin zur Verfügung gestellt werden … Bitte bringe
+Audanika mit Hilfe von aud_audio_vst3 soweit, dass es als VST Plugin
+fungiert"); confirmed by the user the same day, with the answers below.
+Implementation on 2026-10-20 and 2026-10-21 up to TestFlight build 169;
+implemented. Open: the embedding checklist (step 11), build 169 from
+TestFlight in Cubase and REAPER (step 13), the answer of App Review
+(step 14).
+
+## Goal
+
+Musicians play Audanika inside their DAW. The Audanika app comes to the Mac
+through TestFlight and the Mac App Store, and it carries a VST3 instrument
+built on `aud_audio_vst3`: the DAW plays Audanika's presets from its MIDI
+tracks, the plugin window shows Audanika's play surface, and a project
+keeps the preset and settings. No separate installer is needed; one consent
+step in the app makes the plugin visible to the DAWs (plugin-005). The
+ticket does the macOS part of S18 (the VST3 shell, ticket 17) and of S3b
+(the desktop audio IO), Apple silicon only (release-005). Serves
+[flutter-audio-kit](../goals/flutter-audio-kit.md) through its first user,
+the app (ticket 27).
+
+## Requirements
+
+- [req-mac-001](../../requirements/mac.md#req-mac-001-mac-app-on-testflight-and-the-mac-app-store)
+  (must): the Mac app on TestFlight and the Mac App Store
+- [req-mac-002](../../requirements/mac.md#req-mac-002-the-vst3-plugin-comes-with-the-mac-app)
+  (must): the VST3 plugin comes with the Mac app
+- [req-mac-003](../../requirements/mac.md#req-mac-003-the-plugin-plays-audanikas-sounds-from-the-daw)
+  (must): the plugin plays Audanika's sounds from the DAW
+- [req-mac-004](../../requirements/mac.md#req-mac-004-the-plugin-shows-the-audanika-ui-as-its-editor)
+  (should): the Audanika UI as the plugin's editor — wanted from the start
+  of the editor work, no preset-only editor in between (the user,
+  2026-10-20)
+- [req-mac-005](../../requirements/mac.md#req-mac-005-the-plugin-is-built-on-aud_audio_vst3)
+  (must): the plugin is built on `aud_audio_vst3`
+
+## What the code base gives
+
+- `aud_audio_vst3` 0.1.0 is the spike of ticket 24, not a product: one
+  `SingleComponentEffect` named "Aud Spike", a stereo output and an event
+  input it never reads, the graph's built-in nodes only (no sampler,
+  effects or script node), a graph document compiled in as a string, arm64
+  only, signed ad hoc. What holds: stable parameter ids, state as the graph
+  document, the control thread per instance, the symbol hygiene of
+  plugin-004, the SDK validator (13 bundles pass), and the editor of
+  plugin-003 — a Flutter app in its own process, frames over IOSurfaces and
+  Mach, commands over a Unix socket in `$TMPDIR`. Its pins of graph and core
+  (`^0.4.0`) are behind the family (graph 0.5.3, core 0.5.2).
+- `aud_audio_auv3` holds the iOS spike only; `aud_audio_clap` is empty.
+- `aud_audio_io` 0.3.4 has no macOS device: the hook builds only the null
+  device for macOS (`aud_io_null.cpp`), the vendored miniaudio serves only
+  `aud_io_ios.mm`. Core, graph, sampler, effects, script and the MIDI
+  bridge already build and test on macOS; `aud_midi_apple` has CoreMIDI.
+- The headless host of `aud_audio_graph` (plugin-002) gives the shells what
+  they need: `aud_host_load`/`save`, node presets through
+  `aud_host_apply_preset`, an asset table against a base directory, stable
+  parameter ids, latency and tail, `aud_host_render` with events and
+  transport, `aud_host_wait_loads`; packages register through
+  `aud_graph_host_api`.
+- `audanika_app` 4.4.1+168: `macos/` is the untouched Flutter template
+  (`com.example.audanika`, no team, sandbox only). On macOS the app is
+  silent (`SoundEngine.isSupported` is iOS and Android), looks for its SFZ
+  content next to the executable instead of in `Contents/Resources`, marks
+  every album as bought (`content_item_iap_connector.dart`) and uses a mock
+  store. The engine is built in Dart (`AudSoundEngine`): a sampler node per
+  MIDI channel 1 to 3 (bass, chord, melody), `external` for external MIDI
+  (app-002), `modulator` (`aud.script.modulator`), then delay, plate reverb
+  and limiter (app-003); 28 presets in `content/sfz/index.json`, 110 MB of
+  content; the voice governor runs in Dart (app-005). The UI reaches the
+  engine only through the `SoundEngine` interface — the seam an editor in
+  another process needs.
+- iOS ships as `com.audanika` (team SAZSC68S46, App Store app 1547307555)
+  with `flutter build ipa` and `fastlane deliver`; the app-specific
+  password comes from the keychain. No macOS lane, no Mac metadata, no Mac
+  distribution certificates on the development Mac yet.
+
+## Concept
+
+### Distribution (plugin-005)
+
+DAWs look for VST3 plugins only in `~/Library/Audio/Plug-Ins/VST3` and
+`/Library/Audio/Plug-Ins/VST3`. The plugin lives inside the app and is
+updated with it; the app's step "Activate the plugin" asks the user to pick
+the plug-in folder in an open panel and places a symbolic link to the
+embedded plugin there. App Review Guideline 2.4.5 (ii) forbids installing
+code in shared locations, so the ticket retires that risk first: the gate
+(step 3) validates the bundle with App Store Connect and tries the link in
+the DAWs before the plugin is built out; internal TestFlight testers need
+no App Review. If App Review refuses the step later, the same plugin ships
+as a notarized Developer ID package (a ticket of its own).
+
+### Bundle
+
+```text
+Audanika.app/Contents/
+|-MacOS/Audanika                    the app, App Sandbox
+|-Frameworks/                       Flutter, the family's native assets
+|-Resources/content/sfz/            the SFZ content, once (110 MB)
+|-PlugIns/Audanika.vst3/Contents/   the plugin (place confirmed by the gate)
+  |-MacOS/Audanika                  shell + graph + sampler + effects +
+  |                                 script, arm64, entry points only
+  |-Resources/                      graph document, presets, moduleinfo
+  |-Helpers/Audanika Editor.app     the editor, App Sandbox
+```
+
+The plugin finds the content through its resolved path inside the app, and
+through the app's bundle id when it was installed apart from it (the
+fallback package).
+
+### Processes
+
+```mermaid
+flowchart LR
+  subgraph DAW[DAW process]
+    shell[Audanika.vst3<br/>aud_audio_vst3 shell]
+    host[headless host<br/>graph, sampler,<br/>effects, script]
+    shell --> host
+  end
+  subgraph ED[Audanika Editor.app, sandboxed]
+    ui[Audanika play surface<br/>and Sounds page]
+    sse[ShellSoundEngine<br/>implements SoundEngine]
+    ui --> sse
+  end
+  midi[DAW MIDI, transport,<br/>automation, state] --> shell
+  sse -- notes, preset, params<br/>inherited socket pair --> shell
+  shell -- presets, state, frames<br/>Mach, app-group name --> sse
+  content[(Audanika.app<br/>content/sfz)] -.-> host
+```
+
+- **Engine in the DAW.** The shell runs the headless host with one graph
+  document that has the app's topology: `channel-0` to `channel-2`
+  (sampler), `external` (sampler), `modulator` (script), `delay`,
+  `reverb`, `limiter`. An Audanika preset is a set of node presets — SFZ
+  per node, script text, effect values — applied with
+  `aud_host_apply_preset`, so a preset change crossfades as in the app
+  (sampler-003). Document and presets are exported from the app's Dart
+  code at build time, so app and plugin sound alike. The voice budget is
+  fixed until ticket 34 moves the governor into the engine.
+- **MIDI.** The DAW's notes, poly and channel pressure, pitch bend and
+  controllers (through `IMidiMapping`) become render events at their
+  sample offsets; channels 1 to 3 play bass, chord and melody as the app's
+  own MIDI does, the other channels play `external` as external MIDI does
+  in the app (app-002). The notes played on the editor's surface also
+  leave the plugin through an event output, so a MIDI track can record
+  them (Cubase and REAPER; Live takes no MIDI from a VST3). The host's
+  transport
+  (`ProcessContext`) drives the graph's transport, which the scripts and
+  the tempo delay follow.
+- **Parameters and state.** The preset as a stepped parameter and a program
+  list; delay mix, reverb mix, the master volume and the script controls of
+  the combis (300 to 303: cutoff, resonance, linear gain, position, app-006)
+  as automatable parameters; the state stores the preset and the parameter
+  values with a version, restored without the editor.
+- **Editor (plugin-003, in the sandbox).** A second macOS target of the app,
+  "Audanika Editor", built from `lib/main_plugin_editor.dart`: a slim
+  composition root with the play surface and the Sounds page, without IAP,
+  mediathek, push or MIDI ports. Its `ShellSoundEngine` implements
+  `SoundEngine` over the shell protocol: notes from the surface go into the
+  plugin's event queue and sound in the next block; preset choices and
+  parameters go to the plugin, which pushes its presets and state back. The
+  native runner of the spike's editor (frames, input forwarding, accessory
+  mode, multi-view) becomes a reusable part of `aud_audio_vst3`. A
+  sandboxed process may not reach the spike's socket in `$TMPDIR` nor look
+  up arbitrary Mach names, so the plugin hands the editor a socket pair
+  when it spawns it and registers its Mach name with the app group's prefix
+  (`SAZSC68S46.com.audanika.*`); no file in a group container is touched,
+  which would make macOS ask the user for access. Logs go to the unified
+  log instead of `~/Library/Logs`.
+
+### The Mac app
+
+The app gets a real macOS target: bundle id `com.audanika` (the iOS app
+record gains the macOS platform — universal purchase, the albums bought on
+iOS hold on the Mac), team SAZSC68S46, App Sandbox with the entitlements
+the features need (Bluetooth and network for MIDI, user-selected files and
+bookmarks for the plugin step), the music category, purpose strings, the
+icon, the content in `Contents/Resources`. `aud_audio_io` gets its macOS
+device on miniaudio's Core Audio backend; the app turns its sound engine on
+for macOS, uses StoreKit for real, and switches off the motion sensors.
+
+## Affected repos
+
+- `aud_audio_pm`: the requirements `mac`, this plan, the decisions
+  plugin-005 and release-005 and those the steps settle, the ticket in
+  `issues.md`, the architecture; later the blog post.
+- `aud_audio_io`: the macOS device — `src/aud_io_macos.mm` on miniaudio's
+  Core Audio backend, the device list and default-device changes, the
+  latency and timestamps of time-001, the hook building it; a minor
+  version.
+- `aud_audio_vst3`: from spike to shell — identity from a configuration,
+  the node packages compiled in and registered, DAW MIDI and transport,
+  presets and program list, state, content lookup, the editor runner as a
+  reusable part, the sandbox-safe protocol, signing with hardened runtime,
+  spike leftovers removed, graph and core 0.5; a minor version (0.x).
+- `audanika_app`: the macOS target and its release lane, sound on macOS,
+  StoreKit on macOS, the export of the plugin's document and presets, the
+  plugin configuration and build, the editor target and its entry point,
+  the plugin inside the app, the step "Activate the plugin"; a minor
+  version.
+- Added when a step needs them, as process-005 says: `aud_audio_graph` (a
+  real-time entry for sample-accurate automation, open work of
+  plugin-002), `aud_dsp_sampler`, `aud_dsp_effects`, `aud_audio_script`
+  (source manifests the shell's build reads, if their hooks carry flags of
+  their own). `aud_audio`, `aud_audio_midi` and `aud_audio_web` came in
+  with `gg do add` as dependencies and leave the ticket if they keep no
+  change of their own.
+- Changed on the way: `aud_audio_graph` (the node `aud.graph.channel_split`
+  for the DAW's MIDI channels; at the review the arena of emitted events,
+  the arrival order of equal events and the nodes that pass events on);
+  `aud_audio_core` (the capability `AUD_NODE_CAP_PASSES_EVENTS`, a minor
+  version); `aud_audio_midi` (the capability on its port nodes, a patch
+  version).
+
+## Steps
+
+Phase A — the Mac app and the gate:
+
+1. This plan, the requirements, plugin-005 and release-005; the user
+   reviews and confirms.
+2. `audanika_app`: the macOS target — bundle id, team, sandbox
+   entitlements, category, purpose strings, icon, the content copied into
+   `Contents/Resources` and found there, a minimum window size; the app
+   starts on the Mac (still silent).
+3. Gate: the spike's plugin, renamed and signed for real, with a sandboxed
+   editor, embedded in the app; archive and export for the Mac App Store
+   and `altool --validate-app` (the user's credentials); the link placed
+   by hand; Cubase 15 and REAPER find and load the plugin from the link,
+   and the sandboxed editor connects. Settles the place in the bundle,
+   the signing order and the editor's channels (plugin-007); a refusal by
+   the validation is decided with the user before anything else is built.
+
+Phase B — the Mac app plays:
+
+4. `aud_audio_io`: the macOS device, its tests on the Mac, the example
+   playing; the hook builds it for macOS (decision io-004).
+5. `audanika_app`: the sound engine on macOS, StoreKit instead of the mock
+   and no free albums, motion sensors off, MIDI on the Mac (virtual ports,
+   network sessions), play with mouse and trackpad; the user plays the app
+   on the Mac before the plugin work goes on.
+
+Phase C — the plugin plays Audanika:
+
+6. `aud_audio_vst3`: the shell — identity, version, `moduleinfo.json` and
+   class id from a configuration; probe, test parameter, driver and skew
+   check removed; graph and core 0.5; sampler, effects and script compiled
+   from their sources and manifests (build-001) and registered, every
+   symbol hidden (plugin-004); DAW events and `IMidiMapping` into render
+   events; the host transport; latency and tail; content lookup;
+   presets, program list and state; native tests, the test host and the
+   validator.
+7. `audanika_app`: the exporter of the graph document and the 28 presets
+   from the app's own engine code; the plugin configuration and a build
+   tool; an offline render of each preset by app engine and plugin
+   compared (decision app-009).
+8. REAPER and Cubase: a MIDI clip plays every preset, automation, save and
+   reopen, offline render, two instances, ten minutes without a dropout;
+   memory and CPU recorded.
+
+Phase D — the Audanika editor:
+
+9. `aud_audio_vst3`: the editor runner as a reusable part, the channels of
+   step 3 (plugin-007), the protocol for notes from the editor, the preset
+   list and choice, state pushes and parameters; the logs in the unified
+   log.
+10. `audanika_app`: `lib/main_plugin_editor.dart` with its slim
+    composition root, `ShellSoundEngine`, the target "Audanika Editor"
+    built into the plugin's `Helpers`.
+11. The embedding checklist of plugin-003 in REAPER and Cubase: resizing,
+    Retina, focus and keys, wheel, cursor, open and close a hundred times,
+    two instances; memory per editor and CPU of an animated surface.
+
+Phase E — ship:
+
+12. `audanika_app`: plugin and editor built into `Audanika.app` and signed
+    inside out; "Activate the plugin" and "Deactivate" in the settings
+    (open panel, link, bookmark, status, repair after the app moved).
+13. `audanika_app`: the macOS release lane — build, archive, export,
+    validate, upload (only on the user's go), Mac metadata and
+    screenshots; an internal TestFlight build installed on the Mac and
+    tried in Cubase and REAPER, Live if its trial is installed.
+14. The submission to App Review is the user's decision; the fallback
+    package follows in a ticket of its own if App Review refuses the
+    plugin step.
+15. `/code-review`, documentation (blog posts, `index.jsonc`, READMEs, the
+    architecture), review, publish; the requirements set to `done`.
+
+## Answers of the plan review (2026-10-20)
+
+Before the plan, the user chose:
+
+- **Distribution:** the VST3 inside the app with the fallback package
+  (plugin-005), over an AUv3 in the store and over two distributions.
+- **Editor:** the Audanika UI from the start of the editor work, no
+  preset-only editor in between.
+- **Macs:** Apple silicon only (release-005).
+- **Requirements:** req-mac-001 to req-mac-005 as derived from the request.
+
+At the review:
+
+1. **DAW MIDI:** channels 1 to 3 play bass, chord and melody, every other
+   channel plays `external` (app-002).
+2. **MIDI from the editor:** yes — an event output sends the surface's
+   notes to the DAW.
+3. **Automatable parameters:** preset, delay mix, reverb mix, master volume
+   and the script controls of the combis.
+4. **Tickets:** one ticket, a commit per phase; phases D and E may still
+   move to follow-up tickets if phase C takes longer.
+
+## Findings
+
+- **Step 2 (2026-10-20).** The macOS target builds with Flutter 3.47.5 and
+  Xcode 27.1: arm64 only, signed by the team with the hardened runtime,
+  sandboxed, 293 MB in debug of which 112 MB are the SFZ content in
+  `Contents/Resources/content/sfz`; every native asset of the family
+  (core, graph, io, midi, script, effects, sampler, `gg_quickjs`,
+  `aud_midi_apple`) builds for macOS. The app starts and shows the play
+  surface, still silent.
+- **Gate, the sandboxed editor's channels (2026-10-20).** A probe played the
+  plugin in an unsandboxed parent and spawned a helper app signed with the
+  App Sandbox and the app group `SAZSC68S46.com.audanika`: the helper runs in
+  its own container, looks up a Mach name with the group's prefix (0) but
+  not one without it (1100, not privileged), and reads and writes the end of
+  a socket pair it inherited as fd 3, also when it opens `/dev/fd/3` — which
+  is how `dart:io` reaches it. This carries plugin-007: a socket pair at
+  spawn and Mach names with the group's prefix, no file anywhere.
+- **Gate, the link (2026-10-20).** A spike plugin inside the app's
+  `Contents/PlugIns`, linked into `~/Library/Audio/Plug-Ins/VST3`, is
+  found by REAPER 7 through the link ("VST3i: Aud Spike D1 (no hygiene)
+  (Audanika)") and renders 2256 blocks without an overload. Cubase 15 and
+  the validation by App Store Connect are open (open question 1).
+- **Step 4 (2026-10-20).** `aud_audio_io` plays on macOS
+  (`src/aud_io_macos.mm`, io-004): the devices of the HAL with route,
+  channels and rates — on the development Mac a Sennheiser USB headset as
+  the default, the built-in speakers and microphone, two virtual devices —
+  and the package's sine on the default output at 48 kHz and 256 frames,
+  283 callbacks in 1.5 s, no xrun. The 40 native tests and the 64 Dart
+  tests pass; `aud_audio_core` and `aud_audio_graph` joined the ticket,
+  which the example of `aud_audio_io` needs.
+- **Step 5 (2026-10-20).** The app plays on the Mac
+  (`integration_test/sound_numbers_test.dart -d macos`): content found in
+  `Contents/Resources` in 35 ms, the default preset loaded in 21 ms,
+  10.6 ms from command to sound (8.8 to 12.2), 100 notes in 5 s without an
+  xrun or a late callback, at most 0.14 ms of render time, 7.4 ms output
+  latency. StoreKit replaces the mock store on macOS; debug builds on the
+  Mac show every album, as the simulator does. The governor starts at 64
+  voices on macOS (the default class of `AudDeviceClass`) and rises with
+  the load.
+
+- **Step 6 (2026-10-20).** `aud_audio_vst3` is a shell (plugin-006): an
+  app's `plugin.json`, document and presets configure it, the node packages
+  it names are compiled in, the bundle exports only the three entry points.
+  The DAW's MIDI reaches the graph through IMidiMapping and the new
+  reference node `aud.graph.channel_split` of `aud_audio_graph`; the
+  transport runs free at the DAW's tempo while the DAW stands. A control
+  sends only once it moves: each combi sets its own start value of CC 74,
+  which a default sent at the start would override. The example plugin
+  passes the validator (47 tests) and the new test host; 66 native tests
+  of the shell and 132 of the graph pass in every sanitizer build.
+- **Step 7 (2026-10-20).** The app exports the plugin's document and its 28
+  presets from its own sound code (app-009); `tool/build-plugin.js` builds
+  `Audanika.vst3` (6.6 MB, 23 s from scratch) with the app's package
+  config. The test host plays all 28 presets offline with a note on each of
+  the MIDI channels 1 to 4: peaks from 0.21 to 0.89 (the limiter's
+  -1 dBFS), the state reads back the same, a realtime block of 128 frames
+  takes at most 0.03 ms; the validator passes 47 of 47. Deviations from
+  the app: a preset sets the effects at once, without the app's 50 ms
+  glide; the modulator loads a script under the name of the preset before.
+  The automatable parameters are preset, delay mix, reverb mix, volume (the
+  limiter's input gain) and the scripts' slider (CC 74 of channel 1)
+  instead of cutoff, resonance, gain and position, which the scripts
+  compute every block and a parameter would fight.
+- **Step 8, REAPER (2026-10-20).** `scripts/reaper-test.js` with the plugin
+  linked from the app into `~/Library/Audio/Plug-Ins/VST3`: REAPER finds
+  "VST3i: Audanika (Audanika)", renders a MIDI item with E-Piano, Machine
+  runs and Oli's Favorite Trance Pattern offline (peaks 0.37, 0.89, 0.89,
+  0.3 s each), plays it live (peak 0.89) and opens the saved project with
+  its preset. Cubase is the user's test.
+- **Step 9 (2026-10-20).** The shell starts the editor its configuration
+  names from `Contents/Helpers` with a socket pair on fd 3 and finds its
+  frames under `<appGroup>.vst3.<pid>.<random>` (plugin-007); one editor
+  process per DAW process and plugin build, warm 10 s, restarted while a
+  view is open. `dart:io` cannot open the inherited socket through
+  `/dev/fd/3` (ENOENT, unlike C in the gate's probe), so `AudShellFd` reads
+  it in an isolate through FFI. Protocol 2 adds the presets to the welcome,
+  preset changes, and MIDI and the preset choice from the editor; the
+  editor's MIDI plays in the graph and leaves on the event output
+  "MIDI Out" (app-010). The spike's editor app and remote view left the
+  package. Deviation: the editor runner, the input injector and the
+  IOSurface bridge went into the app, copied from the spike, not into a
+  reusable part of `aud_audio_vst3` — a package for them follows when a
+  second app needs an editor.
+- **Step 10 (2026-10-20).** The app builds "Audanika Editor.app" (38 MB,
+  `com.audanika.editor`) as the flavor `editor` of its Mac target
+  (`flutter build macos --flavor editor -t lib/main_plugin_editor.dart`),
+  background only and sandboxed with the app group; `tool/build-plugin.js`
+  copies it into the plugin (44 MB in all). The editor is the app in the
+  profile `pluginEditor` (app-010). The test host shows it in a window that
+  takes no focus (`scripts/host.js --editor`): the play surface's first
+  frame arrives 0.33 s after the view is attached; a tap on the chord
+  button "C" sends C2 on channel 1 to the DAW, a tap into the row G sends B
+  on channel 3 and D, G, B on channel 2.
+- **Step 12 (2026-10-20).** The app's build phase "Embed VST3 Plugin" puts
+  `build/plugin/Audanika.vst3` into `Contents/PlugIns` and signs it inside
+  out with the app's identity before Xcode signs the app: the editor's
+  frameworks, the editor with its release entitlements (sandbox and app
+  group; the development signature of the flavor had added
+  `get-task-allow`, which the App Store refuses), the plugin. A debug build
+  without the plugin warns, a release build fails. The debug app passes
+  `codesign --verify --deep --strict`, and the test host plays the
+  embedded plugin and its editor (28 presets, first frame after 0.67 s, a
+  tap sends melody and chord). The step "Use in DAWs" is a page "VST3
+  Plugin" in the app's main menu, only in the Mac app: a switch opens the
+  open panel at `~/Library/Audio/Plug-Ins/VST3` (the user's home, not the
+  container's), takes only a folder named VST3, places the link
+  `Audanika.vst3` to the plugin inside the app and keeps the folder's
+  security-scoped bookmark; at every start and whenever the page shows,
+  the app moves a link of an earlier place of the app along and notices a
+  link the user removed; switched off, it removes the link. A plugin it
+  did not place (the fallback package) stays untouched. The logic is Dart
+  (`PluginActivation`, tested on links in a temporary folder), the open
+  panel and the bookmarks are Swift (`PluginFolderChannel`). Not yet tried:
+  the open panel itself, which needs the user's click.
+- **Step 13, archive (2026-10-20).** `tool/release-mac.js archive` builds
+  the plugin, the release app and `build/macos/Audanika.xcarchive`: 4.4.1
+  (168), 201 MB with the plugin's 44 MB, signed by the team with the
+  hardened runtime; app, plugin and editor pass
+  `codesign --verify --deep --strict`, the editor runs sandboxed in the app
+  group without `get-task-allow`. `export` (distribution signing, which may
+  create certificates and profiles in the team's account), `validate` and
+  `upload` wait for the user's go and open question 1. A risk for
+  TestFlight: App Store Connect may expect a provisioning profile for the
+  nested editor app (ITMS-90889); the export with automatic signing is
+  expected to create one for `com.audanika.editor`, and the validation
+  shows it.
+- **Step 13, export and validation (2026-10-20).** After the user added the
+  macOS platform to the app record 1547307555, `tool/release-mac.js export`
+  signed the archive with the team's cloud-managed Apple Distribution
+  certificate and the package with the 3rd Party Mac Developer Installer
+  certificate: `Audanika.pkg`, 178 MB. The app got its Mac Team Store
+  profile with application and team identifier; Xcode re-signed the plugin
+  and the editor without a profile, the editor with its sandbox and app
+  group only. `validate` (altool): "VERIFY SUCCEEDED with no errors" - the
+  plugin with its nested editor passes the validation of App Store
+  Connect, which settles that part of the gate. Still open: whether
+  TestFlight takes the build with an editor without a profile (ITMS-90889
+  comes only after an upload), and Cubase.
+- **Step 13, upload (2026-10-20).** On the user's go, `tool/release-mac.js
+  upload` delivered build 168 (delivery 9095f8f3-3bd6-4e7d-8583-c78620d8c61b,
+  178 MB in 1.1 min). App Store Connect processed it within minutes:
+  `VALID_BINARY`, `APP_STORE_ELIGIBLE`, minimum macOS 12.0, no non-exempt
+  encryption, expiring on 2027-01-18 - the 90 days of a TestFlight build.
+  TestFlight takes it (App Store Connect, read the same day): macOS build
+  4.4.1 (168) is "ready to submit", its binary checked, in the internal
+  group "App Store Connect Users" with four testers, expiring in 90 days.
+  The build metadata lists the entitlements of the app and of the nested
+  editor (sandbox, app group); no warning about the editor's missing
+  provisioning profile (ITMS-90889). The user installed it from
+  TestFlight into `/Applications` and switched on "Use in DAWs": the open
+  panel took the VST3 folder, and the sandboxed app placed the link
+  `~/Library/Audio/Plug-Ins/VST3/Audanika.vst3` →
+  `/Applications/Audanika.app/Contents/PlugIns/Audanika.vst3`, replacing
+  the development link of before. Open: the TestFlight build in Cubase and
+  REAPER.
+- **Cubase, frozen editor (2026-10-20).** In Cubase 15 the editor of build
+  168 stopped drawing after a while while its input still played. The
+  editor copies Flutter's frames into a pool of three IOSurfaces and takes
+  only a surface the plugin handed back that no process keeps in use; once
+  another process (the window server, or Cubase taking pictures of its
+  windows) kept the surfaces in use, the editor waited for good. The test
+  host reproduces it (`--hold-surfaces`: 8 clicks played, 1 redrawn). The
+  fix: a surface handed back 100 ms ago and still in use is replaced by a
+  new one, and without any surface handed back for 0.5 s the editor renews
+  its pool; with surfaces held for a second, 10 of 10 clicks play and
+  redraw. Editor and plugin now log stalls, pauses, visibility changes,
+  late frames and frame counts publicly in the unified log. Also found:
+  the editor flavor showed the empty main window of `MainMenu.xib` (now
+  closed), and the editor holds an activity against App Nap. To verify in
+  Cubase.
+- **Cubase, resize (2026-10-20).** Resizing the plugin window lost the
+  editor's state (Hold) and left notes hanging. The editor had crashed:
+  while a window takes a new frame, FlutterView waits for a frame of the
+  new size and runs the platform's messages, so the places of a live
+  resize set the frame inside the frame change, until AppKit aborted
+  (`_enumeratingSubviewsCount < 63`, SIGABRT). The plugin restarted the
+  editor with a new state, and the notes it held never got their note
+  off. Fixes: the editor applies a place that arrives during a frame
+  change afterwards, the latest per view; the plugin follows the notes the
+  editor holds and ends them in the graph and towards the DAW when the
+  editor ends. Test host: 150 live resize steps keep the editor and its
+  frames (before: crash), a held note ends when the editor is killed.
+  Open: the editor's state still lives only in the editor (app-010).
+- **Cubase, full screen (2026-10-20).** In full screen mode the grid did
+  not follow until the window moved. Two causes: macOS reported the
+  visible full screen window occluded, and the plugin paused the editor on
+  occlusion; and Flutter itself takes an app for hidden once macOS
+  reports all its windows occluded or on another Space - the editor's
+  transparent windows are, under the DAW's window or on the desktop's
+  Space - and then draws no frame while it still handles input, which
+  likely also froze the editor "after a while". Fixes: the plugin pauses
+  the editor only for an invisible or minimized window or another Space,
+  sends any change of position, size or scale within 0.1 s and follows
+  the full screen notifications; the editor's engine no longer follows the
+  app's occlusion, hide and unhide; its surface windows are not opaque.
+  Test host: a view resized without `onSize` and a covered window both
+  draw (before: neither).
+- **Cubase, verified (2026-10-20).** With the debug build linked into the
+  VST3 folder, the user confirmed full screen, resizing and Hold in Cubase
+  15. The editor's log of the session (21:55 to 22:19): one editor
+  process throughout, 2834 frames sent, no pause until the view closed,
+  no surface replaced or renewed, no frame lost on the way. These fixes
+  are not in TestFlight build 168 yet. The rules are part of plugin-007.
+- **Build 169 (2026-10-21).** On the user's go: build number 169,
+  `tool/release-mac.js` archive (the editor with the Cubase fixes), export,
+  validation ("VERIFY SUCCEEDED with no errors") and upload (delivery
+  32f2162d-b13e-4e9b-b13a-059c7d07135a, 178 MB in 47 s); App Store Connect
+  processed it as `VALID_BINARY`, `APP_STORE_ELIGIBLE`, expiring on
+  2027-01-19. TestFlight (read the same day): 4.4.1 (169) "ready to
+  submit", binary checked, in the internal group "App Store Connect
+  Users" next to 168, the nested editor listed with sandbox and app group,
+  no warning. Open: 169 installed from TestFlight and tried in Cubase and
+  REAPER; starting it moves the link of the VST3 folder from the debug
+  build back into `/Applications`.
+- **Step 15, documentation (2026-10-21).** No repo of the ticket has
+  `doc/guides/blog-guide.md`, so the ticket writes no blog post
+  (pm-repo-guide). Updated: README.md and README.de.md of `aud_audio_vst3`
+  (the German one translated anew from the English one), its
+  `doc/plugin-bundle.md` (`appGroup`, `editorSize`, the editor) and
+  `index.jsonc`; the German README of `aud_audio_io` (macOS); the app's
+  README (the Mac app and its plugin) and a new `index.jsonc`; the plugin
+  shells of the architecture. Four commit messages of the Cubase fixes were
+  reworded to begin with "Add" (process-005) before any push.
+- **Step 15, review (2026-10-21 and 2026-10-22).** One reviewer per repo
+  with code of its own; every blocker checked against the code before it
+  was fixed. Blockers: the shell dropped the events of a process call that
+  renders nothing (editor note offs hung); a macOS device whose open failed
+  removed the listeners of another stream; the microphone permission was
+  always granted before macOS 14; this plan and plugin-005, plugin-006,
+  release-001 and app-010 lagged behind the ticket. Then, on the user's
+  request, the follow-ups: names reach the DAW as UTF-16 (a UTF-8 decoder
+  of the shell's own, no shared state); `AudShellFd.close()` runs once;
+  `AudShellProbe`, `AudShellMeter` and the sequence of `AudShellParamValue`
+  left the API; the editor gives a failed or late instance up and opens it
+  again; "Use in DAWs" shows the errors of the open panel and the bookmark;
+  the plugin build leaves Xcode on the app's entry point; the main menu in
+  German and Chinese. Found on the way and fixed:
+  - The events of a render request at one offset could swap (`std::sort`
+    with sequence 0 for all of them): 16 channels of bank select, program
+    change and note at offset 0 came out of order. Equal events now keep
+    their arrival order.
+  - A node that passes its events on doubled the note offs behind it on a
+    stop or a prepare and refused note ons beyond 256 for all behind it:
+    the split, `aud.midi.input` and `aud.midi.output`. Such a node declares
+    `AUD_NODE_CAP_PASSES_EVENTS` (aud_audio_core); the nodes behind it
+    close their own notes, the engine closes the notes it handed out of the
+    graph. The split's emitted events got an arena as large as the block's.
+  - One loss of a device could close the device a stream had just reopened:
+    two reports of one unplug (macOS: device list, default and IsAlive; iOS:
+    route changes and the reset of the media services; Android: both Oboe
+    streams of a duplex device), or a loss reported after the worker had
+    replaced the device itself. Every device has a serial, a loss names it,
+    and the worker drops a recovery for a device the stream no longer runs
+    on. A rate change reopens a macOS stream only if it asked for no rate,
+    weighed by each device's own rate.
+  Not tried on hardware: a real unplug or rate change, a DAW with a
+  non-ASCII preset, the app in German or Chinese.
+- **The user's requests at the publish (2026-10-22).** The page "VST3
+  Plugin" became the extension "VST3": like the Hold extension one control,
+  the button "Install VST", which stays after the install and places the
+  link again; not in the main menu by default, no switch and no texts of
+  the link's state. The editor got the library (app-010): the free songs
+  and the albums bought in the app, whose product IDs the app shares through
+  its app group; other albums stay locked, buying stays in the app.
+- **Cubase on macOS 27 (2026-10-22).** After the update to macOS 27.0.1 the
+  editor stood still in Cubase while its notes played: one to three frames
+  per session, the editor's own window "occluded". macOS 27 stops the
+  display link of a view whose window is occluded, and Flutter draws on it;
+  the test host's `--occlude` failed with the editor and the plugin of
+  today and of 2026-10-21 alike. The transparent surface windows, which let
+  every click through, now lie at the status bar level above the DAW and on
+  every Space; the test host's clicks, 60 live resize steps, reframe and
+  `--occlude` draw again. The editor opens in about 2 s, as each instance
+  loads the library.
+
+## Open questions
+
+1. **App Store Connect.** Settled on 2026-10-20: the user added the macOS
+   platform to the app record 1547307555, and the export signs with the
+   team's cloud-managed distribution certificate; the package passes the
+   validation, and TestFlight offers build 168 to the internal testers.
+
+## Out of scope
+
+- Intel Macs, Windows and Linux (release-005, S3c, S3d, S18).
+- AUv3 on macOS and the CLAP shell (S19, S20).
+- The fallback package outside the store (only if App Review refuses).
+- Sample-accurate automation, unless REAPER's tests show the block
+  granularity of the spike is audible (then `aud_audio_graph` joins).
+- Note expressions and MPE from the DAW; the voice governor in the plugin
+  (ticket 34).
+- Audio input and tone recognition on the Mac.
+
+## Decisions
+
+Recorded at planning:
+
+- [plugin-005](../concepts/decisions/plugin-005.md) (accepted): the VST3
+  inside the Mac App Store app, linked into the plug-in folder after the
+  user's consent; fallback package if App Review refuses.
+- [release-005](../concepts/decisions/release-005.md) (accepted): macOS
+  joins with the Mac app, Apple silicon only.
+
+Recorded on the way: io-004 (the macOS device), plugin-006 (the shell),
+app-009 (the plugin's document and presets, DAW MIDI and the slider),
+plugin-007 (the sandboxed editor's channels and its place in the plugin's
+`Contents/Helpers`), app-010 (the editor plays through the plugin, which
+sends its notes to the DAW).
+
+## Model and rules
+
+Claude Opus 5.5 at extra high effort (process-004); the standing rules of
+process-005. Measurements run on the development Mac (Apple M5) in REAPER
+and Cubase 15; uploads to App Store Connect happen only on the user's go.
+
+## Rests on
+
+plugin-001 to plugin-005, ui-003, release-001, release-003, release-005,
+io-001, time-001, app-002, app-003, app-005, app-006, build-001,
+build-002, process-004, process-005; tickets 17 (S18, S3b), 23, 24, 27
+and 31; the research of 2026-10-20: App Review Guidelines 2.4.5 and 2.5.2
+(<https://developer.apple.com/app-store/review/guidelines/>), Steinberg's
+plug-in locations
+(<https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/Locations+Format/Plugin+Locations.html>),
+the DTS answers on plugins from sandboxed apps
+(<https://developer.apple.com/forums/thread/760318>), Moog's Model D as a
+store app with an AUv3 and a separate VST3.

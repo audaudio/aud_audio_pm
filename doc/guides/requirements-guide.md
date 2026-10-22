@@ -34,8 +34,9 @@ requirements. Bug tickets are the exception, they name their bug file.
   `proposed` only when the user wants to come back to them
 - Challenge vague answers: ask for a number, an example or a check
 - Stop after each area, sum up what was agreed and ask whether to go on
-- Talk to the user in their language; write the files in the language the
-  repo already uses
+- Talk to the user in their language; write the files in English, plus the
+  German copy if the repo keeps one, see the
+  [PM repo guide](pm-repo-guide.md#keep-two-languages)
 
 ## Run the session
 

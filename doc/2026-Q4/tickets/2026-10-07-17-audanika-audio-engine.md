@@ -518,6 +518,8 @@ roughly 22 to 32 engineer-weeks.
   on Windows and Linux decided here with the spike's measurements and
   scripts; parameters only until it is decided; the symbol hygiene of
   plugin-004, as S19 and S20. Depends on S4 (serial engine), not on S6.
+  The macOS part, with the Audanika app as its first plugin shipped inside
+  the Mac app (plugin-005), is ticket 37, planned 2026-10-20.
 - S19 (M) `aud_audio_clap`: shell reusing S18's mapping and editor
   (plugin-003), note expressions from the per-note controllers, the
   thread-pool extension with its single-threaded fallback. Depends on
