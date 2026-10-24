@@ -5,11 +5,10 @@
 ### Added
 
 - Add the plan of the VST3 plugin on Windows
+- Add the editor settings to ticket 38 and app-010
 
-req-windows-002 done and req-windows-003 accepted
-Part 2 of ticket 38 with its findings: lost mouse ups, the replay of a session, getState
-plugin-008: the shell on Windows; plugin-009: the editor on Windows
-Windows marked done in the open work of plugin-003 and plugin-006
+The key and Hold were lost with the plugin window; now in the plugin state
+Only what the user changed: the whole library outgrew the limit of the plugin
 
 ### Changed
 

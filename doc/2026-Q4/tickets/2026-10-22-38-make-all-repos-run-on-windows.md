@@ -434,6 +434,24 @@ Phase C — documentation:
   DAW had just set: REAPER's test saved preset 27 right after setting it
   and reopened preset 16. It now saves the controller's value; the test
   passes with the editor open.
+- **Editor settings (2026-10-24).** The user found the key and Hold lost
+  when the plugin window closed: on Windows every close ends the editor
+  process, and its state lived only there (on the Mac 10 s later). On the
+  user's choice the editor's settings now live in the plugin's state: the
+  editor sends its preferences and Hold on every change (protocol 3,
+  `AudShellSettings`), the plugin keeps them with the project and hands
+  them to the next editor in its welcome (app-010). Tested in the app's
+  session test (key and Hold back in a new editor) and the shell's state
+  test; the close and reopen in a DAW is the user's check.
+- **Editor settings too long (2026-10-24).** In Cubase the key and Hold
+  were still lost. The plugin's log showed why: the editor sent all its
+  preferences, the whole library with 388,221 characters, and the plugin
+  refused every message above its limit of 256 KiB. The editor now sends
+  only what differs from its start, and takes the settings once more when
+  the app is ready: the start imports the library anew and writes the key
+  of every song. The tests had no library, so they missed both. The user
+  checked it in Cubase 15: the key and Hold come back when the plugin
+  window opens again, and the plugin's log shows no refused settings.
 - **Tests on Windows.** The REAPER script saves with `Main_SaveProjectEx`
   under its path (REAPER kept the new project unnamed and asked in a
   dialog), and captures the editor's window on Windows too.
