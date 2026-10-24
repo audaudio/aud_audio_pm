@@ -17,7 +17,9 @@ through TestFlight and the Mac App Store, with its VST3 plugin inside
 Apple silicon (arm64) only; Intel Macs may follow in a ticket of their own.
 `aud_audio_io` gets its macOS device for it — the macOS part of S3b — and
 the macOS part of S18 makes `aud_audio_vst3` a shell that plays Audanika.
-Windows and Linux stay with S3c, S3d and S18 as planned.
+Windows and Linux stay with their parts of S3b and S18 as planned (the
+step names corrected on 2026-10-24, ticket 38: S3c is AUHAL with
+workgroups, S3d `IAudioClient3`).
 
 ## Why
 

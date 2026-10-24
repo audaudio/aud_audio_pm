@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.13.3 - 2026-10-24
+
+### Added
+
+- Add the plan of the VST3 plugin on Windows
+- Add the editor settings to ticket 38 and app-010
+
+### Changed
+
+- Plan ticket 39: UDP loss of Dart processes on Windows
+- Plan the Windows audio device of ticket 38
+
+### Fixed
+
+- Record the app listening check and the sampler stall
+
 ## 0.13.2 - 2026-10-22
 
 ### Added

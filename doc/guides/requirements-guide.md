@@ -63,7 +63,7 @@ requirements. Bug tickets are the exception, they name their bug file.
 10. Check the set, see below, and raise each finding as a question
 11. Write the requirement files, link them from the goals and sum up: what
     is new, what is still `proposed`, and what comes next — the tickets,
-    or `/plan-schedule` for a time plan
+    or `/gg-plan-schedule` for a time plan
 
 ## Ask for the quality requirements
 

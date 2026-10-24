@@ -1,6 +1,6 @@
 ---
-name: plan-intro
-description: Lists the planning skills of the project management repo and says which one comes next. Use when the user says "/plan-intro", asks how to plan the project, or asks what comes before the tickets.
+name: gg-plan-intro
+description: Lists the planning skills of the project management repo and says which one comes next. Use when the user says "/gg-plan-intro", asks how to plan the project, or asks what comes before the tickets.
 ---
 
 # The planning skills
@@ -8,14 +8,14 @@ description: Lists the planning skills of the project management repo and says w
 Print the list below, in this order — it is the order in which a project
 is planned.
 
-- `/plan-requirements` — engineers the goals and requirements together
+- `/gg-plan-requirements` — engineers the goals and requirements together
   with the user, one question at a time
-- `/plan-schedule` — cuts the requirements into tickets, estimates them
+- `/gg-plan-schedule` — cuts the requirements into tickets, estimates them
   and draws the time plan as a Gantt chart, optionally against a target
   date
-- `/plan-jira-export` — exports the next tickets of one person, one
+- `/gg-plan-jira-export` — exports the next tickets of one person, one
   sprint's worth, as a CSV file for Jira
-- `/plan-report` — collects what each person needs to hear into their
+- `/gg-plan-report` — collects what each person needs to hear into their
   quarterly report, as points to tick off
 
 The tickets come after the requirements; the `gg` workflow creates them
@@ -26,16 +26,16 @@ The tickets come after the requirements; the `gg` workflow creates them
 Read `doc/goals`, `doc/requirements`, `doc/schedule.md`, `doc/team` and
 `doc/reports` and name the next step:
 
-- No active goal or no accepted requirement → `/plan-requirements`
+- No active goal or no accepted requirement → `/gg-plan-requirements`
 - Requirements, but the work at hand is not covered by them →
-  `/plan-requirements`
+  `/gg-plan-requirements`
 - Requirements, no schedule, and the user wants a time plan or names a
-  target date → `/plan-schedule`
+  target date → `/gg-plan-schedule`
 - Requirements accepted → plan the tickets
 - Planned tickets without a Jira key, and the team works in Jira →
-  `/plan-jira-export`
+  `/gg-plan-jira-export`
 - Changes since the newest report point, or no report for the current
-  quarter yet → `/plan-report`
+  quarter yet → `/gg-plan-report`
 
 ## Important
 

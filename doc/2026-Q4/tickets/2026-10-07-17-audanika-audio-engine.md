@@ -432,7 +432,11 @@ roughly 22 to 32 engineer-weeks.
 
 - S3b to S3d (M each): the desktop IO backends described in S3 —
   miniaudio on macOS, Windows and Linux; AUHAL with workgroups and
-  aggregate devices; IAudioClient3. Gated by S0-desktop.
+  aggregate devices; IAudioClient3. Gated by S0-desktop. S3b on macOS
+  built 2026-10-20 in ticket 37 (io-004), on Windows 2026-10-24 in ticket
+  38 (io-005): miniaudio's WASAPI backend brings the `IAudioClient3`
+  periods of S3d already, so S3d keeps the native timestamps of
+  `IAudioClock` and exclusive mode. Linux open.
 - S5 (L) `aud_audio_web`: Emscripten build, worklet processor, the Wasm
   Worker control runtime (web-002), JS glue, shared-memory ring buffers
   with the message fallback and its reduced guarantees, web example; the

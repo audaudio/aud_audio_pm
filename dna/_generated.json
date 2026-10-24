@@ -85,9 +85,9 @@
       "name": "dna-plan",
       "package": "dna_plan",
       "ecosystem": "pub",
-      "resolvedVersion": "0.7.0",
+      "resolvedVersion": "1.0.0",
       "via": null,
-      "hash": "0x035d4eaa7ecdcf08"
+      "hash": "0x837a9d9aff97b77b"
     },
     {
       "name": "self",
@@ -118,6 +118,26 @@
       "hash": "0xdb7a268397facfc4"
     },
     {
+      "path": ".claude/skills/gg-plan-intro/SKILL.md",
+      "hash": "0x46a35e27e503c73f"
+    },
+    {
+      "path": ".claude/skills/gg-plan-jira-export/SKILL.md",
+      "hash": "0x9c87e9734944e899"
+    },
+    {
+      "path": ".claude/skills/gg-plan-report/SKILL.md",
+      "hash": "0xa8aef22c24f39cee"
+    },
+    {
+      "path": ".claude/skills/gg-plan-requirements/SKILL.md",
+      "hash": "0x60b17bb8e4d45d84"
+    },
+    {
+      "path": ".claude/skills/gg-plan-schedule/SKILL.md",
+      "hash": "0xd657b728367ec670"
+    },
+    {
       "path": ".claude/skills/gg-publish/SKILL.md",
       "hash": "0x61626e5e2425d9ab"
     },
@@ -144,26 +164,6 @@
     {
       "path": ".claude/skills/install/SKILL.md",
       "hash": "0x076ec2161c246d48"
-    },
-    {
-      "path": ".claude/skills/plan-intro/SKILL.md",
-      "hash": "0x9abbf1836d0f25e7"
-    },
-    {
-      "path": ".claude/skills/plan-jira-export/SKILL.md",
-      "hash": "0x4d1a1f22434f00fd"
-    },
-    {
-      "path": ".claude/skills/plan-report/SKILL.md",
-      "hash": "0x12871153a93da34c"
-    },
-    {
-      "path": ".claude/skills/plan-requirements/SKILL.md",
-      "hash": "0x49c13077aaea5d83"
-    },
-    {
-      "path": ".claude/skills/plan-schedule/SKILL.md",
-      "hash": "0xa1221150dc0be4d6"
     },
     {
       "path": ".claude/skills/readme/SKILL.md",
@@ -307,7 +307,7 @@
     },
     {
       "path": "doc/guides/pm-repo-guide.md",
-      "hash": "0x3f12b7baa2e37533"
+      "hash": "0x54294ca04823c69c"
     },
     {
       "path": "doc/guides/readme-dna-guide.md",
@@ -323,11 +323,11 @@
     },
     {
       "path": "doc/guides/requirements-guide.md",
-      "hash": "0x55e6751806664cca"
+      "hash": "0x4f6f962f9677da64"
     },
     {
       "path": "doc/guides/schedule-guide.md",
-      "hash": "0x38cecbc72f6b9afb"
+      "hash": "0xcad88d37b511729f"
     },
     {
       "path": "doc/guides/test-guide-dart.md",

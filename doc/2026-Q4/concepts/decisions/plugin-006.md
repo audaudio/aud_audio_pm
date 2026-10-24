@@ -10,7 +10,7 @@
 - Related: [plugin-005](plugin-005.md) — how the plugin reaches the DAWs;
   [app-009](app-009.md) — Audanika's document and presets
 - Open work: sample-accurate automation (block-granular now, a 5 ms ramp);
-  note expressions and MPE; Windows and Linux; a preset change sets the
+  note expressions and MPE; Linux (Windows by plugin-008); a preset change sets the
   effect values without the app's 50 ms glide; the voice governor
   (ticket 34)
 

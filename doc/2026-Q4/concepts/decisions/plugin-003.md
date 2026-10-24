@@ -8,7 +8,7 @@
   macOS and iOS; Dart stays out of the DAW process, as plugin-001 says
 - Related: [plugin-004](plugin-004.md) — the symbol hygiene of every
   plugin binary
-- Open work: Windows and Linux (S18, with the spike's scripts); the CPU cost
+- Open work: Linux (S18, with the spike's scripts; Windows by plugin-009); the CPU cost
   of an animated editor (the frame copy on the GPU is the smaller part); the
   multi-view switch of Flutter until it is public; the embedding checklist
   by hand in REAPER and Live; notarization of the editor app inside the
