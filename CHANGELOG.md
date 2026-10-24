@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Added
+
+- Add the plan of the VST3 plugin on Windows
+
+req-windows-002 done and req-windows-003 accepted
+Part 2 of ticket 38 with its findings: lost mouse ups, the replay of a session, getState
+plugin-008: the shell on Windows; plugin-009: the editor on Windows
+Windows marked done in the open work of plugin-003 and plugin-006
+
 ### Changed
 
 - Plan ticket 39: UDP loss of Dart processes on Windows
@@ -10,9 +19,6 @@
 ### Fixed
 
 - Record the app listening check and the sampler stall
-
-The user heard the app on Windows again with the engine on
-The startup stall under flutter run: the sampler hook relinked sfizz on every build, fixed in aud_dsp_sampler
 
 ## 0.13.2 - 2026-10-22
 
