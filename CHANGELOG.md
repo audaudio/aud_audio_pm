@@ -7,11 +7,12 @@
 - Plan ticket 39: UDP loss of Dart processes on Windows
 - Plan the Windows audio device of ticket 38
 
-req-windows-001: the app plays through the default output and follows it
-The plan of ticket 38 with the answers of its review
-io-005: miniaudio on WASAPI shared mode, named by endpoint id
-The engine plan and io-001: S3b on Windows built, S3d keeps IAudioClock and exclusive mode
-The findings on the earphones of the development PC; req-windows-001 done at the smallest shared period
+### Fixed
+
+- Record the app listening check and the sampler stall
+
+The user heard the app on Windows again with the engine on
+The startup stall under flutter run: the sampler hook relinked sfizz on every build, fixed in aud_dsp_sampler
 
 ## 0.13.2 - 2026-10-22
 

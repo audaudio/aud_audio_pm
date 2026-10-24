@@ -150,10 +150,14 @@ output and follow it when it changes. Serves
   have run the stub engine (`SoundEngine.isSupported` left out Windows for
   a while), so the user listened again with the engine on Windows
   restored: the app plays.
-- The startup of the app under `flutter run` waits about 11 s (74 s on
+- The startup of the app under `flutter run` waited about 11 s (74 s on
   the first run after a build) for `aud_dsp_sampler.dll` to load; the app
-  started directly shows its window in about 3 s with the engine on this
-  device. Not the device: investigated apart.
+  started directly showed its window in about 3 s with the engine on this
+  device. Not the device: the build hook of `aud_dsp_sampler` rewrote its
+  wrapper sources on every run, so every build relinked sfizz into a new
+  library, whose first load stalled. Fixed in this ticket: the hook writes
+  them only when they change; the library loads in 3 ms, `AudEngine()`
+  takes 25 to 54 ms and a build 17.5 instead of 74 s.
 - The engines of all three outputs (Realtek, AMD HDMI) grant shared
   streams one period only: default, fundamental, minimum and maximum 480
   frames (`IAudioClient3::GetSharedModeEnginePeriod`). The 256 frames the
