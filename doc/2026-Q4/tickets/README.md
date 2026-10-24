@@ -64,6 +64,10 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 37 (planned): the Audanika app on the Mac through TestFlight and
   the Mac App Store, with its VST3 plugin inside (the macOS parts of S18
   and S3b)
+- [2026-10-22-38-make-all-repos-run-on-windows.md](2026-10-22-38-make-all-repos-run-on-windows.md)
+  — ticket 38: the repos build and test on Windows, and the Audanika app
+  plays through the Windows audio device of `aud_audio_io` (the Windows
+  part of S3b)
 - [2026-10-22-39-stop-udp-loss-of-dart-processes-on-windows.md](2026-10-22-39-stop-udp-loss-of-dart-processes-on-windows.md)
   — ticket 39 (planned): every UDP datagram of `aud_midi_network` arrives
   on Windows, where a Dart process lost most of them (follow-up of ticket
