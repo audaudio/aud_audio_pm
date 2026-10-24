@@ -172,13 +172,13 @@ root
 
 - Find the goals and requirements together with the user, one question at
   a time and with proposals: the
-  [requirements guide](requirements-guide.md) says how, `/plan-requirements`
+  [requirements guide](requirements-guide.md) says how, `/gg-plan-requirements`
   runs it
 - Do it before the first ticket, whenever `doc/requirements` is empty, and
   whenever the work of a ticket is not covered by an accepted requirement
 - Plan and create tickets only after that. Bug tickets are the exception:
   they name their bug file instead
-- `/plan-intro` lists the planning skills and says which one comes next
+- `/gg-plan-intro` lists the planning skills and says which one comes next
 
 ## Know the team
 
@@ -305,7 +305,7 @@ root
 - Keep one report per person and quarter in
   `doc/reports/<yyyy>-Q<n>/<name>.md`: the points the person needs to
   hear, each with a checkbox to tick once it is communicated
-- The [report guide](report-guide.md) says how, `/plan-report` runs it: it
+- The [report guide](report-guide.md) says how, `/gg-plan-report` runs it: it
   collects what changed for the roles and areas of the person, appends it
   and starts the file of a new quarter with the open points carried over
 
@@ -314,7 +314,7 @@ root
 - Export the next tickets of one person as a CSV file Jira imports:
   `doc/exports/<yyyy>-<mm>-<dd>-<name>-sprint.csv`
 - The [Jira export guide](jira-export-guide.md) says how,
-  `/plan-jira-export` runs it: it matches the open tickets without a Jira
+  `/gg-plan-jira-export` runs it: it matches the open tickets without a Jira
   key to the person by their areas, fills one sprint by the estimates and
   writes the file
 - The person is assigned at export time only, never in the ticket file
@@ -417,7 +417,7 @@ Let the user review the plan and revise it until they confirm it.
 
 - A time plan is optional; make one when the user wants it or names a
   target date for the project
-- The [schedule guide](schedule-guide.md) says how, `/plan-schedule` runs
+- The [schedule guide](schedule-guide.md) says how, `/gg-plan-schedule` runs
   it: it asks for the target date and the capacity, cuts the accepted
   requirements into tickets, estimates each one and draws the plan as a
   Gantt chart in `doc/schedule.md`
@@ -441,5 +441,5 @@ and the requirements it fulfils.
 Update `doc/schedule.md`, if the project has one, and check the forecast
 against the target date.
 
-Check `doc/team` and start the reports of the quarter with `/plan-report`;
+Check `doc/team` and start the reports of the quarter with `/gg-plan-report`;
 it carries the open points of the last quarter over.

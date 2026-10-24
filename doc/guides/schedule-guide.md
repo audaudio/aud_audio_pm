@@ -20,7 +20,7 @@ chart.
   whether a target date holds
 - Optional: a project plans with it only when the user wants one
 - It rests on accepted requirements. Without them, run
-  `/plan-requirements` first
+  `/gg-plan-requirements` first
 
 ## Set the frame with the user
 
