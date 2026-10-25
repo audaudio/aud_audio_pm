@@ -72,3 +72,7 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 39 (planned): every UDP datagram of `aud_midi_network` arrives
   on Windows, where a Dart process lost most of them (follow-up of ticket
   38)
+- [2026-10-25-41-ship-audanika-as-auv3.md](2026-10-25-41-ship-audanika-as-auv3.md)
+  — ticket 41 (planned): the Audanika app carries an AUv3 on macOS and
+  iOS, built on `aud_audio_auv3` and the shared shell core
+  `aud_audio_plugin` (S20)
