@@ -72,3 +72,76 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 39 (planned): every UDP datagram of `aud_midi_network` arrives
   on Windows, where a Dart process lost most of them (follow-up of ticket
   38)
+- [2026-10-25-40-review-the-architecture-of-audaudio-and-audmidi.md](2026-10-25-40-review-the-architecture-of-audaudio-and-audmidi.md)
+  — ticket 40: the review of the architecture of both families and the
+  plan of the 23 tickets derived from it
+- [2026-10-25-41-retire-the-template-api-of-the-stub-packages.md](2026-10-25-41-retire-the-template-api-of-the-stub-packages.md)
+  — ticket 41 (proposed): the 18 stubs and the bench app lose their
+  template API and say "planned"
+- [2026-10-25-42-documentation-hygiene-of-the-audaudio-repos.md](2026-10-25-42-documentation-hygiene-of-the-audaudio-repos.md)
+  — ticket 42 (proposed): READMEs by concept, changelogs, index mirror,
+  pubspec fields, the dartdoc lint
+- [2026-10-25-43-notices-and-licenses-in-every-repo.md](2026-10-25-43-notices-and-licenses-in-every-repo.md)
+  — ticket 43 (proposed): the notices check in the DNA layer, the Link
+  license files, the LICENSE wording
+- [2026-10-25-44-ci-platform-matrix-for-both-families.md](2026-10-25-44-ci-platform-matrix-for-both-families.md)
+  — ticket 44 (proposed): macOS, Windows, Linux, Android and web jobs
+  with the sanitizers and the validator (step S22)
+- [2026-10-25-45-node-kit-and-ffi-helper-in-the-core.md](2026-10-25-45-node-kit-and-ffi-helper-in-the-core.md)
+  — ticket 45 (proposed): the effects' node kit and the Dart FFI
+  boilerplate move into the core
+- [2026-10-25-46-generate-the-nodes-from-their-descriptors.md](2026-10-25-46-generate-the-nodes-from-their-descriptors.md)
+  — ticket 46 (proposed): one JSON descriptor per node generates the C,
+  the Dart and the README; typed parameter ids; ABI 0.5
+- [2026-10-25-47-graph-housekeeping-dsp-out-runtime-handle-facets.md](2026-10-25-47-graph-housekeeping-dsp-out-runtime-handle-facets.md)
+  — ticket 47 (proposed): oscillator and filter into the effects, a
+  runtime handle for the process state, facets of `AudGraph` (step S10b)
+- [2026-10-25-48-shared-native-and-test-utilities.md](2026-10-25-48-shared-native-and-test-utilities.md)
+  — ticket 48 (proposed): the semaphore, the harness, the scripts and the
+  hook helper exist once; testing libraries
+- [2026-10-25-49-engine-input-multi-channel-streams-and-a-curated-umbrella.md](2026-10-25-49-engine-input-multi-channel-streams-and-a-curated-umbrella.md)
+  — ticket 49 (proposed): input and duplex in `AudEngine`, more than two
+  channels, `addPackage`, curated exports, the Linux error
+- [2026-10-25-50-error-model-logging-and-the-small-api-fixes.md](2026-10-25-50-error-model-logging-and-the-small-api-fixes.md)
+  — ticket 50 (proposed): one exception base and code ranges, a log sink,
+  finalizers, the small findings of the review
+- [2026-10-25-51-midi-bridge-and-the-aud-midi-tap-and-time-interface.md](2026-10-25-51-midi-bridge-and-the-aud-midi-tap-and-time-interface.md)
+  — ticket 51 (proposed): one tap header, the host-time conversion in
+  `aud_midi`, the typed adapter of the bridge (step S8)
+- [2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md](2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md)
+  — ticket 52 (proposed): what the core holds of OSC and what
+  `aud_audio_osc` adds; one notification type; the server (step S7)
+- [2026-10-25-53-sequencer-render-stage-in-the-abi.md](2026-10-25-53-sequencer-render-stage-in-the-abi.md)
+  — ticket 53 (proposed): the render-stage provider the sequencer needs,
+  in the ABI bump of ticket 46 (before S14)
+- [2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md](2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md)
+  — ticket 54 (proposed): the controls on the core's descriptors and
+  addresses, the binding package of ui-003 (step S17a)
+- [2026-10-25-55-plugin-shell-core-and-node-build-manifests.md](2026-10-25-55-plugin-shell-core-and-node-build-manifests.md)
+  — ticket 55 (proposed): `aud_audio_plugin` takes the format-neutral
+  shell code, the node packages publish build manifests (steps S18 to
+  S20)
+- [2026-10-25-56-bench-app-with-json-export.md](2026-10-25-56-bench-app-with-json-export.md)
+  — ticket 56 (proposed): the bench app from the umbrella's measurement
+  pages, JSON per device for the site (step S24)
+- [2026-10-25-57-docs-site-foundation.md](2026-10-25-57-docs-site-foundation.md)
+  — ticket 57 (proposed): the site repo repaired, getting started, the
+  ecosystem page, `/api/` (step S21)
+- [2026-10-25-58-docs-site-content-from-the-repos.md](2026-10-25-58-docs-site-content-from-the-repos.md)
+  — ticket 58 (proposed): package pages synced from the repos, real Dart
+  snippet tests, cookbook, benchmark and licensing pages (step S21)
+- [2026-10-25-59-aud-midi-windows-and-aud-midi-linux-the-first-real-runs.md](2026-10-25-59-aud-midi-windows-and-aud-midi-linux-the-first-real-runs.md)
+  — ticket 59 (proposed): the two MIDI backends that never ran do run;
+  ticket 39 on the way
+- [2026-10-25-60-aud-midi-core-contract-suite-capability-fix-one-clock.md](2026-10-25-60-aud-midi-core-contract-suite-capability-fix-one-clock.md)
+  — ticket 60 (proposed): a contract suite every backend runs, the
+  capability merge bug, one native clock
+- [2026-10-25-61-aud-midi-api-consistency.md](2026-10-25-61-aud-midi-api-consistency.md)
+  — ticket 61 (proposed): the naming decision, trimmed exports, both
+  network protocols at once, typed backend keys
+- [2026-10-25-62-audmidi-publication-and-readme-consistency.md](2026-10-25-62-audmidi-publication-and-readme-consistency.md)
+  — ticket 62 (proposed): `platforms:` and `documentation:` on pub.dev,
+  READMEs that install from pub.dev, the feature matrix
+- [2026-10-25-63-audmidi-github-io.md](2026-10-25-63-audmidi-github-io.md)
+  — ticket 63 (proposed): the docs site of the audmidi family from the
+  audio site's template

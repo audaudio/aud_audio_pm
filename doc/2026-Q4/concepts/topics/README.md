@@ -26,3 +26,6 @@ tried and what holds.
   — the external review of the engine contracts and the responses
 - [review-2026-10-08-plan-scope.md](review-2026-10-08-plan-scope.md) —
   the external review of scope and sequence and the responses
+- [review-2026-10-25-architecture.md](review-2026-10-25-architecture.md)
+  — the review of the architecture of audaudio and audmidi (ticket 40):
+  state, documentation, package split, interfaces, CI, licenses
