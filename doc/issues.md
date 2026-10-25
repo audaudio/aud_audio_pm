@@ -5,7 +5,7 @@ The tickets of the aud_audio family are numbered here, not on GitHub
 counter, appends its row and links its plan file once it exists; the
 number is the gg ticket ID and the name of the ticket branches.
 
-Next number: 43
+Next number: 66
 
 | Number | Title | Status | Plan |
 | --- | --- | --- | --- |
@@ -32,8 +32,38 @@ Next number: 43
 | 35 | Take QuickJS-ng from the pub.dev package gg_quickjs | part of 31 | [2026-10-19-35-take-quickjs-ng-from-gg-quickjs.md](2026-Q4/tickets/2026-10-19-35-take-quickjs-ng-from-gg-quickjs.md) |
 | 36 | Fix the start of Android release builds with shared_preferences_android 2.5.0 | implemented | [2026-10-19-36-fix-android-release-start-with-shared-preferences.md](2026-Q4/tickets/2026-10-19-36-fix-android-release-start-with-shared-preferences.md) |
 | 37 | S18: Ship Audanika as a Mac app with its VST3 plugin inside | implemented | [2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md](2026-Q4/tickets/2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md) |
-| 41 | S20: Ship Audanika as AUv3 on macOS and iOS | implemented | [2026-10-25-41-ship-audanika-as-auv3.md](2026-Q4/tickets/2026-10-25-41-ship-audanika-as-auv3.md) |
-| 42 | S20b: Finish the AUv3 for the stores | planned | [2026-10-25-42-finish-the-auv3-for-the-stores.md](2026-Q4/tickets/2026-10-25-42-finish-the-auv3-for-the-stores.md) |
+| 38 | Make all repos run on Windows — the Windows audio device and the VST3 plugin | implemented | [2026-10-22-38-make-all-repos-run-on-windows.md](2026-Q4/tickets/2026-10-22-38-make-all-repos-run-on-windows.md) |
+| 39 | Stop the UDP loss of Dart processes on Windows | planned | [2026-10-22-39-stop-udp-loss-of-dart-processes-on-windows.md](2026-Q4/tickets/2026-10-22-39-stop-udp-loss-of-dart-processes-on-windows.md) |
+| 40 | Review the architecture of audaudio and audmidi | implemented | [2026-10-25-40-review-the-architecture-of-audaudio-and-audmidi.md](2026-Q4/tickets/2026-10-25-40-review-the-architecture-of-audaudio-and-audmidi.md) |
+| 41 | Retire the template API of the stub packages | planned | [2026-10-25-41-retire-the-template-api-of-the-stub-packages.md](2026-Q4/tickets/2026-10-25-41-retire-the-template-api-of-the-stub-packages.md) |
+| 42 | Documentation hygiene of the audaudio repos | proposed | [2026-10-25-42-documentation-hygiene-of-the-audaudio-repos.md](2026-Q4/tickets/2026-10-25-42-documentation-hygiene-of-the-audaudio-repos.md) |
+| 43 | Notices and licenses in every repo | proposed | [2026-10-25-43-notices-and-licenses-in-every-repo.md](2026-Q4/tickets/2026-10-25-43-notices-and-licenses-in-every-repo.md) |
+| 44 | S22: CI platform matrix for both families | proposed | [2026-10-25-44-ci-platform-matrix-for-both-families.md](2026-Q4/tickets/2026-10-25-44-ci-platform-matrix-for-both-families.md) |
+| 45 | Node kit and FFI helper in the core | proposed | [2026-10-25-45-node-kit-and-ffi-helper-in-the-core.md](2026-Q4/tickets/2026-10-25-45-node-kit-and-ffi-helper-in-the-core.md) |
+| 46 | Generate the nodes from their descriptors, ABI 0.5 | proposed | [2026-10-25-46-generate-the-nodes-from-their-descriptors.md](2026-Q4/tickets/2026-10-25-46-generate-the-nodes-from-their-descriptors.md) |
+| 47 | S10b: Graph housekeeping — DSP out, runtime handle, facets | proposed | [2026-10-25-47-graph-housekeeping-dsp-out-runtime-handle-facets.md](2026-Q4/tickets/2026-10-25-47-graph-housekeeping-dsp-out-runtime-handle-facets.md) |
+| 48 | Shared native and test utilities | proposed | [2026-10-25-48-shared-native-and-test-utilities.md](2026-Q4/tickets/2026-10-25-48-shared-native-and-test-utilities.md) |
+| 49 | Engine input, multi-channel streams and a curated umbrella | proposed | [2026-10-25-49-engine-input-multi-channel-streams-and-a-curated-umbrella.md](2026-Q4/tickets/2026-10-25-49-engine-input-multi-channel-streams-and-a-curated-umbrella.md) |
+| 50 | Error model, logging and the small API fixes | proposed | [2026-10-25-50-error-model-logging-and-the-small-api-fixes.md](2026-Q4/tickets/2026-10-25-50-error-model-logging-and-the-small-api-fixes.md) |
+| 51 | S8: MIDI bridge and the aud_midi tap and time interface | proposed | [2026-10-25-51-midi-bridge-and-the-aud-midi-tap-and-time-interface.md](2026-Q4/tickets/2026-10-25-51-midi-bridge-and-the-aud-midi-tap-and-time-interface.md) |
+| 52 | S7: OSC — the split decision, one notification type, the server | proposed | [2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md](2026-Q4/tickets/2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md) |
+| 53 | Sequencer render stage in the ABI (before S14) | proposed | [2026-10-25-53-sequencer-render-stage-in-the-abi.md](2026-Q4/tickets/2026-10-25-53-sequencer-render-stage-in-the-abi.md) |
+| 54 | S17a: Controls on the core model and aud_audio_ui_bindings | proposed | [2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md](2026-Q4/tickets/2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md) |
+| 55 | S18 to S20: Plugin shell core and node build manifests | proposed | [2026-10-25-55-plugin-shell-core-and-node-build-manifests.md](2026-Q4/tickets/2026-10-25-55-plugin-shell-core-and-node-build-manifests.md) |
+| 56 | S24: Bench app with JSON export | proposed | [2026-10-25-56-bench-app-with-json-export.md](2026-Q4/tickets/2026-10-25-56-bench-app-with-json-export.md) |
+| 57 | S21: Docs site foundation | proposed | [2026-10-25-57-docs-site-foundation.md](2026-Q4/tickets/2026-10-25-57-docs-site-foundation.md) |
+| 58 | S21: Docs site content from the repos | proposed | [2026-10-25-58-docs-site-content-from-the-repos.md](2026-Q4/tickets/2026-10-25-58-docs-site-content-from-the-repos.md) |
+| 59 | aud_midi_windows and aud_midi_linux: the first real runs | proposed | [2026-10-25-59-aud-midi-windows-and-aud-midi-linux-the-first-real-runs.md](2026-Q4/tickets/2026-10-25-59-aud-midi-windows-and-aud-midi-linux-the-first-real-runs.md) |
+| 60 | aud_midi_core: contract suite, capability fix, one clock | proposed | [2026-10-25-60-aud-midi-core-contract-suite-capability-fix-one-clock.md](2026-Q4/tickets/2026-10-25-60-aud-midi-core-contract-suite-capability-fix-one-clock.md) |
+| 61 | aud_midi API consistency | proposed | [2026-10-25-61-aud-midi-api-consistency.md](2026-Q4/tickets/2026-10-25-61-aud-midi-api-consistency.md) |
+| 62 | audmidi publication and README consistency | proposed | [2026-10-25-62-audmidi-publication-and-readme-consistency.md](2026-Q4/tickets/2026-10-25-62-audmidi-publication-and-readme-consistency.md) |
+| 63 | audmidi.github.io | proposed | [2026-10-25-63-audmidi-github-io.md](2026-Q4/tickets/2026-10-25-63-audmidi-github-io.md) |
+| 64 | S20: Ship Audanika as AUv3 on macOS and iOS | implemented | [2026-10-25-64-ship-audanika-as-auv3.md](2026-Q4/tickets/2026-10-25-64-ship-audanika-as-auv3.md) |
+| 65 | S20b: Finish the AUv3 for the stores | planned | [2026-10-25-65-finish-the-auv3-for-the-stores.md](2026-Q4/tickets/2026-10-25-65-finish-the-auv3-for-the-stores.md) |
+
+The tickets 41 to 63 were proposed by the review of ticket 40 on
+2026-10-25 and await the user's confirmation; a dropped proposal keeps its
+number and is marked `dropped`.
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the

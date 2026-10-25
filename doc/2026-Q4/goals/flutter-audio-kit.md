@@ -33,6 +33,14 @@ a stable foundation.
 - Every copied line of third-party code carries a permissive license and
   its notice.
 
+## Requirements
+
+- [framework](../../requirements/framework.md) — the packages of both
+  families as a framework
+- [mac](../../requirements/mac.md) — the Audanika Mac app and its VST3
+  plugin
+- [windows](../../requirements/windows.md) — the Audanika app on Windows
+
 ## Tickets serving this goal
 
 See the plan of ticket 17:

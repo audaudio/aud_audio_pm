@@ -8,6 +8,19 @@
 - Record the AUv3 shell, the iOS gate and decision plugin-013
 - Record steps 7 and 9 of ticket 41 and their findings
 - Plan ticket 42 with the open steps of ticket 41
+## 0.15.0 - 2026-10-25
+
+### Changed
+
+- Plan ticket 41 and accept the framework requirements
+- Sharpen the acceptance of the framework requirements
+
+## 0.14.0 - 2026-10-25
+
+### Added
+
+- Add the architecture review and the plan of ticket 40
+- Add the German README lines of the review of ticket 40
 
 ## 0.13.3 - 2026-10-24
 
