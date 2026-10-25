@@ -8,6 +8,8 @@
   macOS AUv3; [app-010](app-010.md) — the editor's sound engine
 - Related: [plugin-011](plugin-011.md) — the extension;
   [plugin-007](plugin-007.md) — the VST3's editor out of process
+- Superseded in part by [plugin-013](plugin-013.md): the editor talks to
+  its unit through dart:ffi, not a platform channel
 - Open work: the Flutter plugins an extension may register; the memory of
   the editors on the iPhone
 

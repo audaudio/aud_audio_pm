@@ -131,10 +131,11 @@ extension on both platforms (plugin-003's iOS way, now also for macOS):
 the extension's `AUViewController` shows a Flutter view of the app's own
 Dart code, started from an entry point in the app's `App.framework`, in
 the profile `pluginEditor` (app-010). One Flutter engine group per
-extension process; each instance's editor is a view of it. The editor
-speaks the shell protocol of the VST3 editor, carried in process over a
-platform channel instead of the inherited socket, so `ShellSoundEngine`
-gains a second transport and the editor's code stays one. The extension
+extension process on iOS, an engine per view on macOS. The editor speaks
+the shell protocol of the VST3 editor, carried in process through
+`dart:ffi` (plugin-013) instead of the inherited socket, so
+`ShellSoundEngine` gains a second transport and the editor's code stays
+one. The extension
 registers only the Flutter plugins the editor needs; none may touch
 `UIApplication`. The bought albums come from the app group's defaults
 (app-010), which the iOS app now writes too.
@@ -195,15 +196,15 @@ Phase C — the shell:
    three platforms; native tests, a test host on macOS (offline render,
    state round trip, two instances) and `auval -v aumu`.
 6. `aud_audio_auv3`: the editor bridge — the view controller with the
-   engine group, the shell protocol over a platform channel, notes of the
-   editor ended when its view goes.
+   engine group, the shell protocol through dart:ffi (plugin-013), notes
+   of the editor ended when its view goes.
 
 Phase D — the Mac:
 
 7. `audanika_app`: the AUv3's configuration next to the VST3's, the macOS
    extension target linking the shell, embedded and signed with the app
-   group; the editor's entry point and `ShellSoundEngine` over the
-   platform channel.
+   group; the editor's entry point and `ShellSoundEngine` over
+   `AudAuv3Shell`.
 8. Logic Pro and GarageBand on the Mac: every preset from a MIDI region,
    automation, save and reopen, offline bounce, two instances, the editor;
    MainStage and Live if installed.
@@ -331,6 +332,33 @@ The user confirmed the plan with the proposed answers:
   cache budget per platform. Open: the Flutter plugins the app's editor
   registers in the extension (step 7 and 9), the iPhone's footprint, Logic
   Pro by hand.
+- **Steps 5 and 6 (2026-10-25).** `aud_audio_auv3` is a shell:
+  `AudAuv3AudioUnit` over the engine of `aud_audio_plugin` with the
+  parameters `preset`, `<node>_<param>` and `control_<id>` (an identifier
+  holds no '.', the tree's delimiter), the factory presets, `fullState`
+  with the shell's state under `aud_state`, the host's MIDI 1.0 and UMP
+  events and scheduled parameter changes at their sample offsets, the
+  musical context and transport state as the graph's transport, offline
+  waits for a preset. A preset chosen on the main thread applies at once on
+  the control thread, so that a parameter the host sets right after keeps
+  its value; the render thread only requests one. On the user's request
+  the editor talks to the unit with `dart:ffi` instead of a platform
+  channel: four exported C functions (`src/aud_auv3_editor_api.h`), the
+  editor started with `--aud-auv3-instance=<n>`, the unit's messages to a
+  `NativeCallable.listener`, the shell protocol's JSON either way
+  (`AudAuv3Shell`, pure Dart with `ffi`). `scripts/build-plugin.js` builds
+  a static library for macOS, iOS and the simulator, the extension's
+  `Info.plist` and an xcconfig; the example's iOS extension target has no
+  code of its own. Measured: the test host loads the example out of
+  process on macOS, both presets sound, the state holds, realtime blocks
+  of 128 frames take at most 0.13 ms, two instances play, the editor says
+  hello 58 ms after it starts, `auval -strict` passes, 13 native and 5
+  Dart tests pass; on the iPad two instances load in 145 ms, the host's
+  preset choice applies, both editors open and the unit answers after
+  20 s. Found on the way: the extension must share the app's versions
+  (`CFBundleVersion`, an xcconfig of the app takes Flutter's) and team
+  (hardened runtime); the iOS engine ships an extension-safe Flutter for
+  step 9.
 
 ## Out of scope
 
@@ -353,6 +381,12 @@ Recorded at planning:
 - [plugin-012](../concepts/decisions/plugin-012.md) (accepted with the
   gate on 2026-10-25): the AUv3 editor in the extension on both platforms,
   refines plugin-003.
+
+Recorded on the way:
+
+- [plugin-013](../concepts/decisions/plugin-013.md) (accepted, the user's
+  request): the editor talks to its unit through dart:ffi, superseding
+  the platform channel of plugin-012.
 
 ## Model and rules
 
