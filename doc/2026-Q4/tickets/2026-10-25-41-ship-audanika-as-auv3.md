@@ -3,7 +3,10 @@
 Status: planned 2026-10-25 on the user's request ("Provide Audanika as an
 AUV3 analog to the VST3"); platforms macOS and iOS and the requirements
 `auv3` confirmed the same day; the plan confirmed by the user the same day
-with the proposed answers to open questions 1, 2, 3 and 5.
+with the proposed answers to open questions 1, 2, 3 and 5. Implemented
+2026-10-25 up to step 9 on macOS and iOS, with the MIDI output the user
+asked for on the way; the rest of steps 8 and 9 and steps 10 and 11 moved
+to [ticket 42](2026-10-25-42-finish-the-auv3-for-the-stores.md) (answer 4).
 
 ## Goal
 

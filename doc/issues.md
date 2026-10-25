@@ -5,7 +5,7 @@ The tickets of the aud_audio family are numbered here, not on GitHub
 counter, appends its row and links its plan file once it exists; the
 number is the gg ticket ID and the name of the ticket branches.
 
-Next number: 42
+Next number: 43
 
 | Number | Title | Status | Plan |
 | --- | --- | --- | --- |
@@ -32,7 +32,8 @@ Next number: 42
 | 35 | Take QuickJS-ng from the pub.dev package gg_quickjs | part of 31 | [2026-10-19-35-take-quickjs-ng-from-gg-quickjs.md](2026-Q4/tickets/2026-10-19-35-take-quickjs-ng-from-gg-quickjs.md) |
 | 36 | Fix the start of Android release builds with shared_preferences_android 2.5.0 | implemented | [2026-10-19-36-fix-android-release-start-with-shared-preferences.md](2026-Q4/tickets/2026-10-19-36-fix-android-release-start-with-shared-preferences.md) |
 | 37 | S18: Ship Audanika as a Mac app with its VST3 plugin inside | implemented | [2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md](2026-Q4/tickets/2026-10-20-37-ship-audanika-as-a-mac-app-with-its-vst3-plugin.md) |
-| 41 | S20: Ship Audanika as AUv3 on macOS and iOS | planned | [2026-10-25-41-ship-audanika-as-auv3.md](2026-Q4/tickets/2026-10-25-41-ship-audanika-as-auv3.md) |
+| 41 | S20: Ship Audanika as AUv3 on macOS and iOS | implemented | [2026-10-25-41-ship-audanika-as-auv3.md](2026-Q4/tickets/2026-10-25-41-ship-audanika-as-auv3.md) |
+| 42 | S20b: Finish the AUv3 for the stores | planned | [2026-10-25-42-finish-the-auv3-for-the-stores.md](2026-Q4/tickets/2026-10-25-42-finish-the-auv3-for-the-stores.md) |
 
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the
