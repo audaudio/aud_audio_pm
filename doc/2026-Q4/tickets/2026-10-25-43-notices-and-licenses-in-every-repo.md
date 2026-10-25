@@ -17,7 +17,12 @@ its notice", R26, R27).
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+From the area [framework](../../requirements/framework.md), accepted
+2026-10-25:
+
+- req-framework-014: CI checks the third-party notices
+- req-framework-015: The notices reach the app's license page
+- req-framework-016: Every repo carries the plain MIT text
 
 ## Affected repos
 
@@ -33,8 +38,8 @@ None accepted yet; see open question 1 of ticket 40.
   the generated declarations in `alsa_bindings.g.dart`.
 - Every repo of both families: the `LICENSE` text — "Copyright (c)
   Audanika. All Rights Reserved." under the MIT heading — replaced by the
-  plain MIT copyright line, if the user confirms (open question 4 of
-  ticket 40); `audaudio.github.io` gets its missing `LICENSE`.
+  plain MIT copyright line, as the user decided on 2026-10-25 (open
+  question 4 of ticket 40); `audaudio.github.io` gets its missing `LICENSE`.
 - `aud_audio_pm`: license-001 accepted with the file name the repos use
   (`src/third_party/NOTICES.md`); a note on `LicenseRegistry` — a
   `notices` export apps can register — as open work of the node kit
@@ -51,4 +56,4 @@ None accepted yet; see open question 1 of ticket 40.
 
 ## Open questions
 
-- The LICENSE wording (open question 4 of ticket 40).
+None.

@@ -29,7 +29,9 @@ testing library. Serves
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+No accepted requirement covers it yet; the area
+[framework](../../requirements/framework.md) of 2026-10-25 does not.
+Engineer its requirements before the ticket is planned.
 
 ## Affected repos
 
@@ -46,7 +48,8 @@ None accepted yet; see open question 1 of ticket 40.
 
 ## Steps
 
-1. The decision on the reference nodes (open question 3 of ticket 40).
+1. Decision graph-005: the reference nodes move into `aud_dsp_effects`,
+   as the user decided on 2026-10-25 (open question 3 of ticket 40).
 2. The runtime handle in C and Dart; the umbrella and the headless host
    own it; the statics gone.
 3. The facets; the testing library with the WAV helpers and the waits.
@@ -56,6 +59,5 @@ None accepted yet; see open question 1 of ticket 40.
 
 ## Open questions
 
-- Open question 3 of ticket 40: move or declare stable.
 - Does the Audanika app use `aud.graph.oscillator` or `aud.graph.filter`
   in a document? Then the move needs a migration.

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.15.0 - 2026-10-25
+
+### Changed
+
+- Plan ticket 41 and accept the framework requirements
+- Sharpen the acceptance of the framework requirements
+
 ## 0.14.0 - 2026-10-25
 
 ### Added

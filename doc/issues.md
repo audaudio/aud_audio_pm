@@ -35,7 +35,7 @@ Next number: 64
 | 38 | Make all repos run on Windows — the Windows audio device and the VST3 plugin | implemented | [2026-10-22-38-make-all-repos-run-on-windows.md](2026-Q4/tickets/2026-10-22-38-make-all-repos-run-on-windows.md) |
 | 39 | Stop the UDP loss of Dart processes on Windows | planned | [2026-10-22-39-stop-udp-loss-of-dart-processes-on-windows.md](2026-Q4/tickets/2026-10-22-39-stop-udp-loss-of-dart-processes-on-windows.md) |
 | 40 | Review the architecture of audaudio and audmidi | implemented | [2026-10-25-40-review-the-architecture-of-audaudio-and-audmidi.md](2026-Q4/tickets/2026-10-25-40-review-the-architecture-of-audaudio-and-audmidi.md) |
-| 41 | Retire the template API of the stub packages | proposed | [2026-10-25-41-retire-the-template-api-of-the-stub-packages.md](2026-Q4/tickets/2026-10-25-41-retire-the-template-api-of-the-stub-packages.md) |
+| 41 | Retire the template API of the stub packages | planned | [2026-10-25-41-retire-the-template-api-of-the-stub-packages.md](2026-Q4/tickets/2026-10-25-41-retire-the-template-api-of-the-stub-packages.md) |
 | 42 | Documentation hygiene of the audaudio repos | proposed | [2026-10-25-42-documentation-hygiene-of-the-audaudio-repos.md](2026-Q4/tickets/2026-10-25-42-documentation-hygiene-of-the-audaudio-repos.md) |
 | 43 | Notices and licenses in every repo | proposed | [2026-10-25-43-notices-and-licenses-in-every-repo.md](2026-Q4/tickets/2026-10-25-43-notices-and-licenses-in-every-repo.md) |
 | 44 | S22: CI platform matrix for both families | proposed | [2026-10-25-44-ci-platform-matrix-for-both-families.md](2026-Q4/tickets/2026-10-25-44-ci-platform-matrix-for-both-families.md) |

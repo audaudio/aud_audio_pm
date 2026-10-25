@@ -24,7 +24,11 @@ Serves the goal of the audmidi family (MIDI on six platforms) and
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+From the area [framework](../../requirements/framework.md), accepted
+2026-10-25:
+
+- req-framework-006: Native code compiles in CI on its platforms
+- req-framework-007: Platform tests run in CI on their platform
 
 ## Affected repos
 
