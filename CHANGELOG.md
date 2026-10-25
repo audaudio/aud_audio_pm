@@ -8,6 +8,8 @@
 - Record the AUv3 shell, the iOS gate and decision plugin-013
 - Record steps 7 and 9 of ticket 41 and their findings
 - Plan ticket 42 with the open steps of ticket 41
+- Renumber the AUv3 tickets to 64 and 65, narrow 55
+
 ## 0.15.0 - 2026-10-25
 
 ### Changed

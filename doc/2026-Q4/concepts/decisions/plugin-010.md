@@ -2,14 +2,14 @@
 
 - Status: accepted
 - Date: 2026-10-25
-- Canonical source: Gabriel Gatzsche's choice at the planning of ticket 41
+- Canonical source: Gabriel Gatzsche's choice at the planning of ticket 64
   on 2026-10-25 ("Shared core now"),
-  tickets/2026-10-25-41-ship-audanika-as-auv3.md
+  tickets/2026-10-25-64-ship-audanika-as-auv3.md
 - Refines: [family-001](family-001.md) — one repo per package; a new
   package of the family; [plugin-006](plugin-006.md) — the shell an app
   configures, now shared by the formats
 - Related: [plugin-011](plugin-011.md) — the AUv3 built on it
-- Open work: the move itself (ticket 41, steps 2 and 3); CLAP (S19) on it
+- Open work: the move itself (ticket 64, steps 2 and 3); CLAP (S19) on it
 
 ## Decision
 

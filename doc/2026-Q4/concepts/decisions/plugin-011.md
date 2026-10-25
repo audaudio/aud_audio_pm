@@ -2,9 +2,9 @@
 
 - Status: accepted
 - Date: 2026-10-25
-- Canonical source: Gabriel Gatzsche's choices at the planning of ticket 41
+- Canonical source: Gabriel Gatzsche's choices at the planning of ticket 64
   on 2026-10-25 (macOS and iOS, the requirements `auv3`, the plan with its
-  proposed answers), tickets/2026-10-25-41-ship-audanika-as-auv3.md
+  proposed answers), tickets/2026-10-25-64-ship-audanika-as-auv3.md
 - Refines: [plugin-001](plugin-001.md) — the AUv3 on iOS and macOS;
   [release-003](release-003.md) — M3, widened to macOS
 - Related: [plugin-005](plugin-005.md) — the VST3 in the same Mac app;
@@ -12,7 +12,7 @@
   [plugin-010](plugin-010.md) — the shared core;
   [plugin-012](plugin-012.md) — its editor
 - Open work: the identity in hosts once shipped; the memory on the iPhone
-  (req-auv3-005, ticket 41 step 10)
+  (req-auv3-005, ticket 64 step 10)
 
 ## Decision
 
@@ -36,7 +36,7 @@ extension is never loaded into a host's process.
 
 The content the unit plays and the Dart bundle of its editor travel inside
 the extension, since the App Sandbox lets it read its own bundle but not
-the resources of the app around it (the gate of ticket 41); the app and
+the resources of the app around it (the gate of ticket 64); the app and
 the VST3 find the content there. On iOS the app's App ID carries the
 Inter-App Audio capability: without it the system does not register the
 extension at all.

@@ -1,13 +1,13 @@
 # Requirements: the Audanika AUv3 on macOS and iOS
 
-Area `auv3`. Source: Gabriel Gatzsche's request for ticket 41 on 2026-10-25
+Area `auv3`. Source: Gabriel Gatzsche's request for ticket 64 on 2026-10-25
 ("Provide Audanika as an AUV3 analog to the VST3"), the platforms macOS and
 iOS chosen and the requirements confirmed the same day. The VST3
 counterparts are [req-mac-002 to req-mac-005](mac.md). Changed on
 2026-10-25 on the user's request: the iOS hosts of the acceptance are those
 installed on the user's iPhone - Loopy Pro, GarageBand and Cubasis - in
 place of AUM and the iPad. The plan:
-[ticket 41](../2026-Q4/tickets/2026-10-25-41-ship-audanika-as-auv3.md).
+[ticket 64](../2026-Q4/tickets/2026-10-25-64-ship-audanika-as-auv3.md).
 
 ## req-auv3-001: The AUv3 comes with the app on macOS and iOS
 

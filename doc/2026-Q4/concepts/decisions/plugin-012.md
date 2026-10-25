@@ -1,8 +1,8 @@
 # plugin-012: The AUv3 editor is the app's Flutter UI inside the extension, on macOS as on iOS
 
-- Status: accepted (the gate of ticket 41, step 4, 2026-10-25)
+- Status: accepted (the gate of ticket 64, step 4, 2026-10-25)
 - Date: 2026-10-25
-- Canonical source: tickets/2026-10-25-41-ship-audanika-as-auv3.md
+- Canonical source: tickets/2026-10-25-64-ship-audanika-as-auv3.md
   (concept "Editor")
 - Refines: [plugin-003](plugin-003.md) — its iOS way, now also for the
   macOS AUv3; [app-010](app-010.md) — the editor's sound engine
@@ -42,7 +42,7 @@ controller exists.
 - One protocol and one editor code base for VST3 and AUv3.
 - The spike measured Flutter in an iOS extension at 69 to 93 MB for one to
   four editors (plugin-003).
-- The gate of ticket 41: on macOS a test host loading the unit out of
+- The gate of ticket 64: on macOS a test host loading the unit out of
   process as Logic Pro does opened the editor, which drew 62 frames in its
   first second and reached the unit 60 ms after the view appeared; on the
   iPad Pro M5 one, two and four instances with the app's sampler, presets

@@ -2,10 +2,10 @@
 
 - Status: accepted
 - Date: 2026-10-25
-- Canonical source: Gabriel Gatzsche's request in ticket 41 on 2026-10-25
+- Canonical source: Gabriel Gatzsche's request in ticket 64 on 2026-10-25
   ("Can you do the communication between Editor and Core using dart ffi
   and not a basic message channel?"),
-  tickets/2026-10-25-41-ship-audanika-as-auv3.md (steps 5 and 6),
+  tickets/2026-10-25-64-ship-audanika-as-auv3.md (steps 5 and 6),
   `aud_audio_auv3/src/aud_auv3_editor_api.h`
 - Supersedes: the transport of [plugin-012](plugin-012.md) - a platform
   channel; the rest of plugin-012 holds
@@ -34,6 +34,6 @@ editor's end, pure Dart with `ffi`.
   works before and beyond the plugins an extension may register, and
   `aud_audio_auv3` keeps no Flutter dependency.
 - One protocol for both shells (plugin-012).
-- Measured in ticket 41: the example's editor says hello 58 ms after it
+- Measured in ticket 64: the example's editor says hello 58 ms after it
   starts on macOS, through the test host that loads the unit out of
   process.

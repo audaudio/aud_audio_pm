@@ -1,12 +1,12 @@
-# 42: S20b — Finish the AUv3 for the stores
+# 65: S20b — Finish the AUv3 for the stores
 
 Status: planned 2026-10-25 as the follow-up of
-[ticket 41](2026-10-25-41-ship-audanika-as-auv3.md), which moved its open
+[ticket 64](2026-10-25-64-ship-audanika-as-auv3.md), which moved its open
 steps here when it went to review (answer 4 of its plan review).
 
 ## Goal
 
-The AUv3 of ticket 41 reaches the users: the editor shows the albums they
+The AUv3 of ticket 64 reaches the users: the editor shows the albums they
 bought, the iPhone keeps it within an extension's memory, the hosts of the
 acceptance play it from their projects, and the app's release lanes carry
 the extension on macOS and iOS.
@@ -20,7 +20,7 @@ the extension on macOS and iOS.
 - [req-auv3-005](../../requirements/auv3.md#req-auv3-005-the-auv3-stays-within-an-extensions-memory-on-ios)
   (must): within an extension's memory on the iPhone
 
-## What ticket 41 leaves
+## What ticket 64 leaves
 
 The app carries the extension `AudanikaAUv3` (`com.audanika.auv3`) on
 macOS and iOS, built on `aud_audio_auv3` and `aud_audio_plugin`; Logic Pro,
@@ -43,7 +43,7 @@ development profile; the gate's probe apps and App IDs still exist.
 
 1. Logic Pro and GarageBand on the Mac by hand: every preset from a MIDI
    region, automation, offline bounce, two instances; MainStage and Live
-   if installed (step 8 of ticket 41).
+   if installed (step 8 of ticket 64).
 2. The purchases in the editor: the app group on iOS, the bought albums in
    its defaults as on macOS, read by the editor inside the extension on
    both platforms; no other Flutter plugin reachable from the editor (the
@@ -55,7 +55,7 @@ development profile; the gate's probe apps and App IDs still exist.
    macOS lane (`tool/release-mac.js`), the App ID `com.audanika.auv3` with
    its profiles; TestFlight builds uploaded only on the user's go (step 11).
 5. Windows: the VST3 rebuilt on `aud_audio_plugin` and tried on the Windows
-   machine of ticket 38 (answer 3 of ticket 41).
+   machine of ticket 38 (answer 3 of ticket 64).
 6. Clean up, only on the user's go: the probe apps of the gate on the Mac,
    the iPad and the iPhone, the App IDs `com.audanika.auv3gate*` (team
    SAZSC68S46) and `io.audaudio.audGate*` (Personal Team).

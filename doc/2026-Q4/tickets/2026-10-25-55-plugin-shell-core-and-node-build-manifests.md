@@ -5,6 +5,20 @@ Status: proposed 2026-10-25 by the review of ticket 40
 4 and 5); awaits the user's confirmation. Phase 5 of the plan; size L;
 steps S18 to S20 of ticket 17; depends on tickets 46 and 48.
 
+Narrowed 2026-10-25 on the user's choice: [ticket 64](2026-10-25-64-ship-audanika-as-auv3.md)
+(the AUv3) created `aud_audio_plugin` with decision `plugin-010` and moved
+the format-neutral code of `aud_audio_vst3` into it - the editor
+protocol's messages and codec (version 3 in hello and welcome), the engine
+with its control thread and parameter ring, settings, presets, state,
+bundle and content lookup, the host transport, the MIDI events, the
+semaphore and a native harness - with `aud_audio_vst3` and the AUv3 shell
+of S20 (`aud_audio_auv3`) on it; the socket and the UI thread stay with
+the VST3's editor. Left for this ticket: the build manifests of the node
+packages and `scripts/plugin-build.js` reading them instead of its three
+recipes, the `Aud` prefixes, the JSON schemas, the platform-neutral input
+contract, a check of the protocol version, the editor runner of
+plugin-007, and the VST3 validated on Windows.
+
 ## Goal
 
 The three plugin shells share one core instead of copying the VST3
