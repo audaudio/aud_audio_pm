@@ -27,7 +27,10 @@ changes to the engine", R11).
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+From the area [framework](../../requirements/framework.md), accepted
+2026-10-25:
+
+- req-framework-010: A DSP node needs its DSP code and one description
 
 ## Affected repos
 

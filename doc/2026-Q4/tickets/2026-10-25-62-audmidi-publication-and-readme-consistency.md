@@ -26,7 +26,10 @@ audmidi goal.
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+From the area [framework](../../requirements/framework.md), accepted
+2026-10-25:
+
+- req-framework-002: Every README says the state and the platforms
 
 ## Affected repos
 

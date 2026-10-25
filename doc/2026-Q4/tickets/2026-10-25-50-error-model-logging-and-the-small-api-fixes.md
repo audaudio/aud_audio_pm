@@ -31,7 +31,11 @@ ecosystem apps can rely on).
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+From the area [framework](../../requirements/framework.md), accepted
+2026-10-25:
+
+- req-framework-011: One exception type for every failure
+- req-framework-012: The log output reaches the app's sink
 
 ## Affected repos
 

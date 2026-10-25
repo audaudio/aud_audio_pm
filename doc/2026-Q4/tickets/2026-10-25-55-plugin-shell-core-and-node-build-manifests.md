@@ -31,7 +31,9 @@ parameter id; S19 builds CLAP on it. Serves
 
 ## Requirements
 
-None accepted yet; see open question 1 of ticket 40.
+No accepted requirement covers it yet; the area
+[framework](../../requirements/framework.md) of 2026-10-25 does not.
+Engineer its requirements before the ticket is planned.
 
 ## Affected repos
 

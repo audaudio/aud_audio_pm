@@ -151,17 +151,26 @@ with the thread-count dimension of the goldens.
    generated from its node descriptors", "every package of the family
    resolves without SSH keys"; the derived tickets then name them. To be
    confirmed with the user before the first ticket starts.
+   **Answered 2026-10-25:** accepted as req-framework-001 to 016 in
+   [framework](../../requirements/framework.md); the plans of the tickets
+   41 to 63 name the ones they fulfil.
 2. **Numbering of the audmidi tickets.** Tickets 59 to 63 are numbered in
    `doc/issues.md` of `aud_audio_pm` as tickets 26 and 39 were, and record
    their decisions in `aud_midi_pm`. Alternatively `aud_midi_pm` numbers
-   them.
+   them. Still open.
 3. **The graph's reference nodes.** Ticket 47 proposes to move oscillator
    and filter into `aud_dsp_effects` (S10b) and to keep `aud.test.*` nodes
    for the contract tests; the alternative is to declare `aud.graph.*`
    stable production nodes and shrink S10b.
+   **Answered 2026-10-25:** they move into `aud_dsp_effects`, as ticket 47
+   proposes.
 4. **The LICENSE wording.** "Copyright (c) Audanika. All Rights Reserved."
    under the MIT heading — intended, or the template's text? Ticket 43
    assumes the latter.
+   **Answered 2026-10-25:** the template's text; every `LICENSE` gets the
+   plain MIT text (ticket 43, req-framework-016).
 5. **Which tickets start first.** The proposal is the phase order with 41,
    43 and 44 first; the user may pull the docs or the audmidi phase
    forward.
+   **Answered 2026-10-25:** the user left the order to the plan; it
+   follows the phase order, ticket 41 first, then 43 and 44.
