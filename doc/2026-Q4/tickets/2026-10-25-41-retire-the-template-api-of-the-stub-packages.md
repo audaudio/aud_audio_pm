@@ -50,8 +50,8 @@ The stubs are in three states (checked on 2026-10-25):
   template API.
 
 All 19: a state line ("Planned: step Sx of ticket 17, no code yet") and
-the platforms of `packages.jsonc` in `README.md`, `README.de.md` and
-`index.jsonc`; patch version each.
+the platforms of `packages.jsonc` in `README.md` and `README.de.md`, the
+state also in the `summary` of `index.jsonc`; patch version each.
 
 - `aud_audio`: drop the dependency on `aud_audio_web` until it has code;
   patch version.

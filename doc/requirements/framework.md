@@ -23,7 +23,6 @@ the maintainers of the families and the users of the plugins.
     `package_ffi` or Flutter templates (`sum`, `sumAsync`,
     `sum_long_running`)
   - a package without code exports its version only
-- Tickets: 41
 
 ## req-framework-002: Every README says the state and the platforms
 
@@ -35,8 +34,10 @@ the maintainers of the families and the users of the plugins.
   R35), review sections 1 and 2
 - Acceptance:
   - every README has a state line and a list of platforms
-  - both match the entry of the package in `packages.jsonc`
-- Tickets: 41, 42, 62
+  - the state line says "planned" exactly when the package exports its
+    version only
+  - the platforms match `packages.jsonc` for audaudio and the pubspec
+    for audmidi
 
 ## req-framework-003: The dependencies follow the package graph
 
@@ -48,7 +49,6 @@ the maintainers of the families and the users of the plugins.
   review sections 1 and 4, decision ui-003
 - Acceptance: the `aud_*` dependencies of every `pubspec.yaml` equal the
   edges of the package in `packages.jsonc`
-- Tickets: 41
 
 ## req-framework-004: The exported API is documented
 
@@ -60,7 +60,6 @@ the maintainers of the families and the users of the plugins.
   review section 2
 - Acceptance: the lint `public_member_api_docs` reports nothing in any
   published package
-- Tickets: 42, 58
 
 ## req-framework-005: The platform setup is documented
 
@@ -72,7 +71,6 @@ the maintainers of the families and the users of the plugins.
   R16), review section 2
 - Acceptance: the README names, for every platform the package lists, the
   permissions, the build settings and the minimum OS version
-- Tickets: 42
 
 ## req-framework-006: Native code compiles in CI on its platforms
 
@@ -84,7 +82,6 @@ the maintainers of the families and the users of the plugins.
   review section 8, CI
 - Acceptance: a pull request cannot be merged while the build of one
   listed platform fails
-- Tickets: 44, 59
 
 ## req-framework-007: Platform tests run in CI on their platform
 
@@ -95,7 +92,6 @@ the maintainers of the families and the users of the plugins.
 - Why: [flutter-audio-kit](../2026-Q4/goals/flutter-audio-kit.md) (R5),
   review section 8, CI
 - Acceptance: every test file with `@TestOn` runs in the CI matrix
-- Tickets: 44, 59
 
 ## req-framework-008: The realtime checks run in CI
 
@@ -106,7 +102,6 @@ the maintainers of the families and the users of the plugins.
   R23), review section 8, CI
 - Acceptance: the RTSan and TSan builds and the VST3 validator run on
   every pull request
-- Tickets: 44
 
 ## req-framework-009: Every package resolves without SSH keys
 
@@ -116,9 +111,8 @@ the maintainers of the families and the users of the plugins.
   GitHub SSH keys
 - Why: [flutter-audio-kit](../2026-Q4/goals/flutter-audio-kit.md) (R35),
   review section 8, versioning, decision repos-001
-- Acceptance: `dart pub get` succeeds for every package in a CI job
-  without SSH keys
-- Tickets: none planned yet
+- Acceptance: `pub get` (dart or flutter) succeeds for every package in a
+  CI job without SSH keys
 
 ## req-framework-010: A DSP node needs its DSP code and one description
 
@@ -131,7 +125,6 @@ the maintainers of the families and the users of the plugins.
   sections 4 and 7
 - Acceptance: a new node in `aud_dsp_effects` changes no hand-written
   file besides its DSP code and its description
-- Tickets: 45, 46
 
 ## req-framework-011: One exception type for every failure
 
@@ -143,7 +136,6 @@ the maintainers of the families and the users of the plugins.
   review section 8, errors and logging
 - Acceptance: every error the audaudio packages throw extends one base
   type
-- Tickets: 50
 
 ## req-framework-012: The log output reaches the app's sink
 
@@ -154,7 +146,6 @@ the maintainers of the families and the users of the plugins.
 - Why: [flutter-audio-kit](../2026-Q4/goals/flutter-audio-kit.md),
   review section 8, errors and logging
 - Acceptance: one call redirects the log output of every package
-- Tickets: 50
 
 ## req-framework-013: A member's patch needs no umbrella release
 
@@ -165,7 +156,6 @@ the maintainers of the families and the users of the plugins.
 - Why: [flutter-audio-kit](../2026-Q4/goals/flutter-audio-kit.md),
   review section 8, versioning, decision family-002
 - Acceptance: the umbrella depends on its members with caret ranges
-- Tickets: none planned yet
 
 ## req-framework-014: CI checks the third-party notices
 
@@ -178,7 +168,6 @@ the maintainers of the families and the users of the plugins.
   review section 8, licenses
 - Acceptance: the notice check runs in CI in every repo with third-party
   code
-- Tickets: 43
 
 ## req-framework-015: The notices reach the app's license page
 
@@ -188,9 +177,10 @@ the maintainers of the families and the users of the plugins.
   third-party code on Flutter's license page
 - Why: [flutter-audio-kit](../2026-Q4/goals/flutter-audio-kit.md) (R27),
   review section 8, licenses
-- Acceptance: `showLicensePage` of an app on `aud_audio` lists miniaudio,
-  Oboe, sfizz, QuickJS-ng and every other vendored library
-- Tickets: 43
+- Acceptance: `showLicensePage` of an app on `aud_audio`,
+  `aud_dsp_sampler`, `aud_dsp_effects` and `aud_audio_script` lists
+  miniaudio, Oboe, sfizz, Freeverb, QuickJS-ng and every other vendored
+  library of these packages
 
 ## req-framework-016: Every repo carries the plain MIT text
 
@@ -202,4 +192,3 @@ the maintainers of the families and the users of the plugins.
   user's answer to open question 4 of ticket 40 on 2026-10-25
 - Acceptance: no `LICENSE` file of the families contains "All Rights
   Reserved"
-- Tickets: 43
