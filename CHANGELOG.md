@@ -5,6 +5,7 @@
 ### Added
 
 - Add the architecture review and the plan of ticket 40
+- Add the German README lines of the review of ticket 40
 
 ## 0.13.3 - 2026-10-24
 
