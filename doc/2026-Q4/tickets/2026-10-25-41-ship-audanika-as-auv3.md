@@ -359,6 +359,76 @@ The user confirmed the plan with the proposed answers:
   (`CFBundleVersion`, an xcconfig of the app takes Flutter's) and team
   (hardened runtime); the iOS engine ships an extension-safe Flutter for
   step 9.
+- **Step 7 (2026-10-25).** The Mac app carries the AUv3: an extension
+  target `AudanikaAUv3` (`com.audanika.auv3`) without code of its own -
+  an empty source, the app's xcconfig with Flutter's and the shell's
+  settings and the app's versions, the sandbox and the app group - built
+  by `tool/build-auv3.js` from `macos/plugin/auv3.json` (the VST3's
+  document and presets, the codes `aumu`/`Audk`/`Audn`). The extension
+  copies its configuration and the SFZ content into itself; the app reads
+  the content there (`SfzContent.bundleRootOf`), the VST3 through a new
+  first location of its `plugin.json`; the content exists once. Runner's
+  phase "Embed AUv3 Extension" embeds it after Flutter's script with the
+  app's `App.framework` and signs inside out; the editor flavor carries
+  none, so the editor inside the VST3 registers no second unit. The
+  editor is `auv3EditorMain` of `main.dart`: `Auv3Editor` makes the same
+  `AudanikaSession` as the VST3 editor from the unit's welcome. The
+  target signs locally without a profile; the App ID follows with step 11.
+  Measured with the shell's test host, out of process: all 28 presets
+  sound (peaks 0.26 to 0.89), the state holds, realtime blocks of 128
+  frames take at most 0.39 ms, two instances play, the editor's hello
+  comes after 98 to 163 ms, `auval -strict` passes; the app is 232 MB
+  (VST3 45 MB, AUv3 143 MB). The VST3 builds on `aud_audio_plugin` with
+  the app's tool. With the screen recording the user granted, the test
+  host's `--snapshot` shows the editor out of process: Audanika's play
+  surface "Freies Spiel" with its chord rows, library and settings - the
+  app's session runs inside the extension. A tap into it (`--tap`) needs
+  the Accessibility permission, which this session lacks. Open: playing
+  the surface in Logic Pro and GarageBand (step 8); the shared purchases
+  in the extension, which registers no Flutter plugin - the library shows
+  the free songs, bought albums stay locked.
+- **Dropouts in GarageBand and Logic Pro:** the user heard dropouts
+  playing the AUv3, in GarageBand without Audanika too. The cause was a
+  booted iOS Simulator playing an app's audio: coreaudiod reported its
+  simulated output device overloaded thousands of times an hour, on the
+  headphones the hosts played through. With the simulator shut down the
+  overloads and the dropouts are gone. The unit's render meter
+  in GarageBand: blocks of 128 frames at 44.1 kHz (1024 while the track
+  is not live), the slowest 0.30 ms of 2.90 ms, none late; in Logic Pro
+  blocks of 512 frames, the slowest 1.11 ms of 11.61 ms, none late. Live in the
+  test host (`--play`, realtime mode) no stream underflows, the samples
+  take 12 MB of the 256 MB cache; the open editor costs the extension
+  0.2 to 2 % CPU. The test host's `realtime` check renders in
+  AVAudioEngine's offline mode, which sets the unit to render offline.
+- **The editor's settings in Logic Pro:** Logic did not keep what the user
+  changed in Audanika's UI. The unit kept the settings in fullState but
+  told the host nothing, where the VST3 calls `setDirty`; AUv3 has no
+  documented call for it. Since a change notifies the observers of
+  `fullState` and `fullStateForDocument`, Logic saves them: the log shows
+  the settings arrive (429 bytes), Logic takes the state with them and
+  restores them when the project opens again.
+- **Step 9, the iOS extension (2026-10-25).** The iOS app carries the
+  extension target `AudanikaAUv3` (`com.audanika.auv3`) as the Mac app
+  does: no code of its own, `ios/AudanikaAUv3/AudanikaAUv3.xcconfig` with
+  Flutter's and the shell's settings, Runner embedding it before Flutter's
+  script and putting the app's `App.framework` into it after "Thin
+  Binary". The content lives once, inside the extension
+  (`PlugIns/AudanikaAUv3.appex/content/sfz`); the app reads it there. The
+  extension is signed with the team's wildcard development profile, the
+  app with its own and Inter-App Audio. On the iPad Pro iOS lists the unit
+  at once and Loopy Pro plays it. The editor first stayed empty: the app's
+  setup asked `device_info_plus` whether it runs in the simulator, and
+  the extension registers no Flutter plugins - found with a temporary file
+  log in the extension's container, which `devicectl` copies without
+  root. The app now tells the simulator by its environment
+  (`SIMULATOR_DEVICE_NAME`); the editor shows in Loopy, three instances
+  build their session about 0.5 s after the welcome, the editor's settings
+  reach the unit. Open in step 9: the app group on iOS and the bought
+  albums in the extension.
+- **MIDI output (2026-10-25).** On the user's request the AUv3 offers the
+  notes played on Audanika's UI as a MIDI source, as the VST3 does through
+  its event output: `MIDIOutputNames` "MIDI Out", the notes at the block's
+  start through the host's MIDI output block or MIDI event list block.
 
 ## Out of scope
 

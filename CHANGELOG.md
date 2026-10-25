@@ -6,6 +6,7 @@
 
 - Plan ticket 41, the AUv3 on macOS and iOS, and its gate
 - Record the AUv3 shell, the iOS gate and decision plugin-013
+- Record steps 7 and 9 of ticket 41 and their findings
 
 ## 0.13.3 - 2026-10-24
 
