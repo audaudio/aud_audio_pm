@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.0 - 2026-10-26
+
+### Changed
+
+- Record the TestFlight release of ticket 65
+
 ## 0.16.0 - 2026-10-26
 
 ### Changed

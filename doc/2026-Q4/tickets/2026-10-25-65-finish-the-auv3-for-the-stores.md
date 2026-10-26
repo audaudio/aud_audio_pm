@@ -61,6 +61,19 @@ development profile; the gate's probe apps and App IDs still exist.
    SAZSC68S46) and `io.audaudio.audGate*` (Personal Team).
 7. Review, documentation, publish; the requirements set to `done`.
 
+## Findings
+
+- **Step 4, TestFlight (2026-10-26).** Audanika 4.7.0 (172) with its AUv3
+  went to TestFlight on the user's go: the Mac build through
+  `tool/release-mac.js`, whose archive check now covers the extension,
+  the iOS build through the new fastlane lane `beta`. An iOS extension may
+  carry no `Frameworks` folder (ITMS-90206), so on iOS the AUv3 takes the
+  app's `App.framework` from the app's `Frameworks`, as it takes Flutter;
+  the editor shows in Loopy Pro with it. `upload_to_testflight` needs a
+  full Apple ID session; the lane uploads with `altool` and the
+  app-specific password instead. The AUv3 editor still shows only the free
+  songs (step 2).
+
 ## Open questions
 
 1. Is the MIDI output of the AUv3 a requirement of its own (proposed
