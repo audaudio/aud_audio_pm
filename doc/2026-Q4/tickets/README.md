@@ -118,9 +118,9 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 54 (proposed): the controls on the core's descriptors and
   addresses, the binding package of ui-003 (step S17a)
 - [2026-10-25-55-plugin-shell-core-and-node-build-manifests.md](2026-10-25-55-plugin-shell-core-and-node-build-manifests.md)
-  — ticket 55 (proposed): `aud_audio_plugin` takes the format-neutral
-  shell code, the node packages publish build manifests (steps S18 to
-  S20)
+  — ticket 55 (proposed): the node packages publish build manifests and
+  the rest of the shell core joins `aud_audio_plugin`, which ticket 64
+  created (steps S18 to S20)
 - [2026-10-25-56-bench-app-with-json-export.md](2026-10-25-56-bench-app-with-json-export.md)
   — ticket 56 (proposed): the bench app from the umbrella's measurement
   pages, JSON per device for the site (step S24)
@@ -145,3 +145,10 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-25-63-audmidi-github-io.md](2026-10-25-63-audmidi-github-io.md)
   — ticket 63 (proposed): the docs site of the audmidi family from the
   audio site's template
+- [2026-10-25-64-ship-audanika-as-auv3.md](2026-10-25-64-ship-audanika-as-auv3.md)
+  — ticket 64 (implemented): the Audanika app carries an AUv3 on macOS and
+  iOS, built on `aud_audio_auv3` and the shared shell core
+  `aud_audio_plugin` (S20)
+- [2026-10-25-65-finish-the-auv3-for-the-stores.md](2026-10-25-65-finish-the-auv3-for-the-stores.md)
+  — ticket 65 (planned): the AUv3's bought albums, the iPhone's
+  footprint, the hosts by hand and the release lanes (S20b)

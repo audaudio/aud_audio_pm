@@ -5,7 +5,7 @@ The tickets of the aud_audio family are numbered here, not on GitHub
 counter, appends its row and links its plan file once it exists; the
 number is the gg ticket ID and the name of the ticket branches.
 
-Next number: 64
+Next number: 66
 
 | Number | Title | Status | Plan |
 | --- | --- | --- | --- |
@@ -49,7 +49,7 @@ Next number: 64
 | 52 | S7: OSC — the split decision, one notification type, the server | proposed | [2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md](2026-Q4/tickets/2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md) |
 | 53 | Sequencer render stage in the ABI (before S14) | proposed | [2026-10-25-53-sequencer-render-stage-in-the-abi.md](2026-Q4/tickets/2026-10-25-53-sequencer-render-stage-in-the-abi.md) |
 | 54 | S17a: Controls on the core model and aud_audio_ui_bindings | proposed | [2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md](2026-Q4/tickets/2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md) |
-| 55 | S18 to S20: Plugin shell core and node build manifests | proposed | [2026-10-25-55-plugin-shell-core-and-node-build-manifests.md](2026-Q4/tickets/2026-10-25-55-plugin-shell-core-and-node-build-manifests.md) |
+| 55 | S18 to S20: Node build manifests and the rest of the plugin shell core | proposed | [2026-10-25-55-plugin-shell-core-and-node-build-manifests.md](2026-Q4/tickets/2026-10-25-55-plugin-shell-core-and-node-build-manifests.md) |
 | 56 | S24: Bench app with JSON export | proposed | [2026-10-25-56-bench-app-with-json-export.md](2026-Q4/tickets/2026-10-25-56-bench-app-with-json-export.md) |
 | 57 | S21: Docs site foundation | proposed | [2026-10-25-57-docs-site-foundation.md](2026-Q4/tickets/2026-10-25-57-docs-site-foundation.md) |
 | 58 | S21: Docs site content from the repos | proposed | [2026-10-25-58-docs-site-content-from-the-repos.md](2026-Q4/tickets/2026-10-25-58-docs-site-content-from-the-repos.md) |
@@ -58,6 +58,11 @@ Next number: 64
 | 61 | aud_midi API consistency | proposed | [2026-10-25-61-aud-midi-api-consistency.md](2026-Q4/tickets/2026-10-25-61-aud-midi-api-consistency.md) |
 | 62 | audmidi publication and README consistency | proposed | [2026-10-25-62-audmidi-publication-and-readme-consistency.md](2026-Q4/tickets/2026-10-25-62-audmidi-publication-and-readme-consistency.md) |
 | 63 | audmidi.github.io | proposed | [2026-10-25-63-audmidi-github-io.md](2026-Q4/tickets/2026-10-25-63-audmidi-github-io.md) |
+| 64 | S20: Ship Audanika as AUv3 on macOS and iOS | implemented | [2026-10-25-64-ship-audanika-as-auv3.md](2026-Q4/tickets/2026-10-25-64-ship-audanika-as-auv3.md) |
+| 65 | S20b: Finish the AUv3 for the stores | planned | [2026-10-25-65-finish-the-auv3-for-the-stores.md](2026-Q4/tickets/2026-10-25-65-finish-the-auv3-for-the-stores.md) |
+
+Ticket 64 was planned as 41 before the review of ticket 40 took that
+number; its gg ticket and branches keep the name 41 until it is published.
 
 The tickets 41 to 63 were proposed by the review of ticket 40 on
 2026-10-25 and await the user's confirmation; a dropped proposal keeps its
