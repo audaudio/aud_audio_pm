@@ -12,7 +12,7 @@
   [plugin-010](plugin-010.md) — the shared core;
   [plugin-012](plugin-012.md) — its editor
 - Open work: the identity in hosts once shipped; the memory on the iPhone
-  (req-auv3-005, ticket 64 step 10)
+  (req-auv3-005, ticket 65 step 3)
 
 ## Decision
 

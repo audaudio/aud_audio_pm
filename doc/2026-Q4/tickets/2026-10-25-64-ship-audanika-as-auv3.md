@@ -438,8 +438,6 @@ The user confirmed the plan with the proposed answers:
 
 ## Out of scope
 
-- MIDI from the editor to the host (not required; possible later through
-  `MIDIOutputEventBlock`, as app-010 does for the VST3).
 - In-process loading on macOS (`AudioComponentBundle`), Intel Macs
   (release-005), visionOS.
 - User presets of the AUv3 beyond what the host keeps itself, note
@@ -467,7 +465,8 @@ Recorded on the way:
 ## Model and rules
 
 Claude Opus 5.5 (process-004); the standing rules of process-005.
-Measurements on the development Mac (Apple M5) and the user's iPhone; uploads to App Store Connect only on the user's go.
+Measurements on the development Mac (Apple M5) and the user's iPhone;
+uploads to App Store Connect only on the user's go.
 
 ## Rests on
 

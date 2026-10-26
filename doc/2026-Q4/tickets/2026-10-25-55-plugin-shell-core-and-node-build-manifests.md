@@ -5,8 +5,8 @@ Status: proposed 2026-10-25 by the review of ticket 40
 4 and 5); awaits the user's confirmation. Phase 5 of the plan; size L;
 steps S18 to S20 of ticket 17; depends on tickets 46 and 48.
 
-Narrowed 2026-10-25 on the user's choice: [ticket 64](2026-10-25-64-ship-audanika-as-auv3.md)
-(the AUv3) created `aud_audio_plugin` with decision `plugin-010` and moved
+Narrowed 2026-10-25 on the user's choice:
+[ticket 64](2026-10-25-64-ship-audanika-as-auv3.md) (the AUv3) created `aud_audio_plugin` with decision `plugin-010` and moved
 the format-neutral code of `aud_audio_vst3` into it - the editor
 protocol's messages and codec (version 3 in hello and welcome), the engine
 with its control thread and parameter ring, settings, presets, state,
@@ -61,16 +61,16 @@ Engineer its requirements before the ticket is planned.
   sources; patch versions.
 - `aud_audio_auv3`: on the core, S20 planned in its own ticket;
   `aud_audio_clap`: S19 likewise.
-- `aud_audio_pm`: decisions `plugin-010` (the shell core) and `build-003`
-  (the manifests); the architecture section "Plugin shells".
+- `aud_audio_pm`: decision `build-003` (the manifests) beside
+  `plugin-010` of ticket 64; the architecture section "Plugin shells".
 
 ## Steps
 
 1. The decisions and the manifest format.
 2. The manifests in the three node packages; `build-plugin.js` reads them
    while still inside vst3.
-3. The shell core repo; the code moved with its tests; vst3 on it; the
-   validator and the test host green on macOS and Windows.
+3. The VST3 on the core of ticket 64: the validator and the test host
+   green on Windows as on macOS.
 4. The protocol made platform-neutral; the editor of the app follows in
    its own ticket.
 5. The schemas; the app's export test uses them.
@@ -79,4 +79,3 @@ Engineer its requirements before the ticket is planned.
 
 - Does the editor runner of plugin-007 (one editor process per DAW
   process) belong to the core or stay per format? Proposal: the core.
-- Name: `aud_audio_plugin` or `aud_audio_shell`?

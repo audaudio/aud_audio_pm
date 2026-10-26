@@ -118,9 +118,9 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   — ticket 54 (proposed): the controls on the core's descriptors and
   addresses, the binding package of ui-003 (step S17a)
 - [2026-10-25-55-plugin-shell-core-and-node-build-manifests.md](2026-10-25-55-plugin-shell-core-and-node-build-manifests.md)
-  — ticket 55 (proposed): `aud_audio_plugin` takes the format-neutral
-  shell code, the node packages publish build manifests (steps S18 to
-  S20)
+  — ticket 55 (proposed): the node packages publish build manifests and
+  the rest of the shell core joins `aud_audio_plugin`, which ticket 64
+  created (steps S18 to S20)
 - [2026-10-25-56-bench-app-with-json-export.md](2026-10-25-56-bench-app-with-json-export.md)
   — ticket 56 (proposed): the bench app from the umbrella's measurement
   pages, JSON per device for the site (step S24)

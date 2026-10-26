@@ -9,7 +9,7 @@
   package of the family; [plugin-006](plugin-006.md) — the shell an app
   configures, now shared by the formats
 - Related: [plugin-011](plugin-011.md) — the AUv3 built on it
-- Open work: the move itself (ticket 64, steps 2 and 3); CLAP (S19) on it
+- Open work: the VST3 on Windows (ticket 65, step 5); CLAP (S19) on it
 
 ## Decision
 

@@ -20,8 +20,9 @@ as no `AudioComponentBundle` is shipped (plugin-011). So its editor runs
 Flutter inside the extension on both platforms: the extension's
 `AUViewController` shows a view of the app's own Dart code, started from
 an entry point in the app's `App.framework`, in the profile
-`pluginEditor` (app-010). One Flutter engine group per extension process;
-each instance's editor is a view of it. The editor speaks the shell
+`pluginEditor` (app-010). On iOS one Flutter engine group per extension
+process, each instance's editor a view of it; on macOS one engine per
+view. The editor speaks the shell
 protocol of the VST3 editor, carried in process over a platform channel
 instead of an inherited socket, so `ShellSoundEngine` gains a second
 transport. The extension registers only the Flutter plugins the editor

@@ -4,11 +4,12 @@
 
 ### Changed
 
-- Plan ticket 41, the AUv3 on macOS and iOS, and its gate
+- Plan ticket 64, the AUv3 on macOS and iOS, and its gate
 - Record the AUv3 shell, the iOS gate and decision plugin-013
-- Record steps 7 and 9 of ticket 41 and their findings
-- Plan ticket 42 with the open steps of ticket 41
+- Record steps 7 and 9 of ticket 64 and their findings
+- Plan ticket 65 with the open steps of ticket 64
 - Renumber the AUv3 tickets to 64 and 65, narrow 55
+- Bring plans and decisions up to date with the review
 
 ## 0.15.0 - 2026-10-25
 
