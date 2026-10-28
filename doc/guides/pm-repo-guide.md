@@ -326,7 +326,7 @@ root
   `doc/prompts/<name>/<yyyy>-<mm>/<yyyy>-<mm>-<dd>_<repo>_<session>.md`,
   one file per session, the time of each prompt as its heading
 - The `dna_gg` layer does it: a Claude Code hook in every repo whose
-  variable `dnaPmRepo` names this repo. The hook commits to the branch
+  variable `` names this repo. The hook commits to the branch
   `prompts` directly, so the main branch and its checks stay untouched
 - The name is the first name in `doc/team/people.md` whose `Git` line
   lists the e-mail the session's repo commits with. An e-mail that is not

@@ -9,5 +9,8 @@
 
   // Spelled out instead of inheriting "https://github.com/dnaGitOrg":
   // a reference renders the value in the casing of the reference.
-  "dnaGitOrgUrl": "https://github.com/audaudio"
+  "dnaGitOrgUrl": "https://github.com/audaudio",
+
+  // The job name of the quick check workflow the GitHub ruleset requires.
+  "dnaGitQuickCheckPipelineName": "Quick Check"
 }
