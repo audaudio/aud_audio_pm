@@ -6,10 +6,10 @@ repository: https://github.com/audaudio/aud_audio_pm
 publish_to: none
 
 environment:
-  sdk: ^3.12.2
+  sdk: ^3.13.0
 
 dev_dependencies:
-  dna_audanika: ^0.0.2
+  dna_audanika: ^0.1.0
   dna_plan: ^1.0.0
   helix: ^1.14.0
   lints: ^6.1.0
