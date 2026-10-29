@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Blog about the test clock of the graph timing test
+
 ## 0.19.0 - 2026-10-29
 
 ### Added
@@ -51,6 +57,7 @@
 - Upgrade the dependencies published since the first pass
 
 - Lift the lock file to the newest resolvable versions
+
 
 ## 0.17.0 - 2026-10-26
 
@@ -217,6 +224,7 @@
 
 - The surface windows lie above the DAW and on every Space; the test host draws again, also with --occlude
 
+
 ## 0.13.1 - 2026-10-19
 
 ### Added
@@ -244,6 +252,7 @@
 - Add app-008 to the decision index
 
 - Add the iOS purpose string and release notes to ticket 36
+
 
 ## 0.13.0 - 2026-10-19
 
@@ -319,6 +328,7 @@
 
 - create-family-repos.js takes external pub.dev dependencies as plain version ranges
 
+
 ## 0.12.2 - 2026-10-15
 
 ### Added
@@ -349,6 +359,7 @@
 
 - Below Android 12 the affinity binds; one cluster keeps the system placement only below Android 12
 
+
 ## 0.12.1 - 2026-10-14
 
 ### Added
@@ -374,6 +385,7 @@
 - The plan: the p99 at 0.69 or more, the counts of the voice columns, the unsettled Vibraphone, the dependency repos, the decisions it went into
 
 - lifecycle-003 names the inputs of the start budgets as the code uses them; the index matches the open work of sampler-008
+
 
 ## 0.12.0 - 2026-10-14
 
@@ -504,6 +516,7 @@
 
 - Add family-002: every package has a version of its own
 
+
 ## 0.8.0 - 2026-10-12
 
 ### Added
@@ -560,6 +573,7 @@
 
 - The plan: questions 8 and 9 answered, none open
 
+
 ## 0.7.0 - 2026-10-11
 
 ### Added
@@ -598,6 +612,7 @@
 - Mark ticket 24 as done
 
 - The embedding checklist in REAPER and Live and the cycles in Live stay open
+
 
 ## 0.6.0 - 2026-10-09
 
@@ -638,6 +653,7 @@
 
 - Link the plan from doc/issues.md and the tickets index
 
+
 ## 0.2.0 - 2026-10-08
 
 ### Changed
@@ -655,6 +671,7 @@
 - Update the open work of graph-001, graph-003, interop-002, lifecycle-001, plugin-002
 
 - Plan and record the audio graph (ticket 19)
+
 
 ## 0.1.0 - 2026-10-08
 
