@@ -54,3 +54,5 @@ None.
 - [Placeholder app IDs in every example](2026-10-29-placeholder-app-ids-in-every-example.md):
   the new example keeps `com.audanika.*` like all examples of the family
   until then
+- [Move the example keyboard to aud_audio_ui_keyboard](2026-10-29-move-the-example-keyboard-to-aud-audio-ui-keyboard.md):
+  removes the copy of `keyboard.dart` this ticket adds

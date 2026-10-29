@@ -10,6 +10,7 @@
 
 - Plan decouple_aud_audio_midi and the rename follow-up
 - Propose placeholder app IDs in every example
+- Plan moving the example keyboard to aud_audio_ui_keyboard
 
 ## 0.18.0 - 2026-10-28
 

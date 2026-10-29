@@ -161,3 +161,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-29-placeholder-app-ids-in-every-example.md](2026-10-29-placeholder-app-ids-in-every-example.md)
   — follow-up (proposed): `com.example.<app>` instead of the organization's
   IDs in every example app
+- [2026-10-29-move-the-example-keyboard-to-aud-audio-ui-keyboard.md](2026-10-29-move-the-example-keyboard-to-aud-audio-ui-keyboard.md)
+  — follow-up (proposed): the on-screen keyboard of the examples becomes
+  the first widget of `aud_audio_ui_keyboard`, a first part of S17b
