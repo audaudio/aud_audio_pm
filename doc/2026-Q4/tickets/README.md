@@ -158,3 +158,6 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
   examples join the pub workspace of their package
 - [2026-10-29-rename-aud-audio-midi-to-aud-audio-with-midi.md](2026-10-29-rename-aud-audio-midi-to-aud-audio-with-midi.md)
   — follow-up (proposed): rename `aud_audio_midi` to `aud_audio_with_midi`
+- [2026-10-29-placeholder-app-ids-in-every-example.md](2026-10-29-placeholder-app-ids-in-every-example.md)
+  — follow-up (proposed): `com.example.<app>` instead of the organization's
+  IDs in every example app

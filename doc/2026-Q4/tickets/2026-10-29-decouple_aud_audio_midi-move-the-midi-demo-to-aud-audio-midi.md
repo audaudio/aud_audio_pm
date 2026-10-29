@@ -51,3 +51,6 @@ None.
 ## Follow-ups
 
 - [Rename aud_audio_midi to aud_audio_with_midi](2026-10-29-rename-aud-audio-midi-to-aud-audio-with-midi.md)
+- [Placeholder app IDs in every example](2026-10-29-placeholder-app-ids-in-every-example.md):
+  the new example keeps `com.audanika.*` like all examples of the family
+  until then
