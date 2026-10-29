@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add a blog post about the placeholder app IDs
+
 ### Changed
 
 - Require placeholder app IDs in the examples
