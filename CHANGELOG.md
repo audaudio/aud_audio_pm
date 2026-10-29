@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add the blog post on examples that show their own package
+
 ### Changed
 
 - Plan decouple_aud_audio_midi and the rename follow-up
