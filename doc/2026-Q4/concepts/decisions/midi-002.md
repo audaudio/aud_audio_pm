@@ -4,14 +4,14 @@
 - Date: 2026-10-12
 - Canonical source: tickets/2026-10-12-26-bridge-aud-midi-ports-into-the-engine-on-ios-and-android.md
   (scope 4, the rule of the plan review; Measurements)
-- Refines: [midi-001](midi-001.md) — how `aud_audio_midi` bridges the ports
+- Refines: [midi-001](midi-001.md) — how `aud_audio_with_midi` bridges the ports
 - Open work: the numbers of the iPad Pro M5 and a Pixel; USB and Bluetooth
   hardware on the reference devices; native taps of the desktop backends
   with S3b
 
 ## Decision
 
-`aud_audio_midi` bridges an input port of `aud_midi` into the engine as an
+`aud_audio_with_midi` bridges an input port of `aud_midi` into the engine as an
 `aud.midi.input` node fed by an event source of the graph (interop-003). On
 CoreMIDI and `android.media.midi` the backend's receive thread calls a
 native tap (native-001 of `aud_midi_pm`), and the tap's adapter pushes the

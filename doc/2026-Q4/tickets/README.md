@@ -152,12 +152,12 @@ One plan file per ticket, e.g. 2026-10-07-17-audanika-audio-engine.md.
 - [2026-10-25-65-finish-the-auv3-for-the-stores.md](2026-10-25-65-finish-the-auv3-for-the-stores.md)
   — ticket 65 (planned): the AUv3's bought albums, the iPhone's
   footprint, the hosts by hand and the release lanes (S20b)
-- [2026-10-29-decouple_aud_audio_midi-move-the-midi-demo-to-aud-audio-midi.md](2026-10-29-decouple_aud_audio_midi-move-the-midi-demo-to-aud-audio-midi.md)
-  — ticket decouple_aud_audio_midi (implemented): the MIDI demo moves from
-  the example of `aud_audio` to a new example of `aud_audio_midi`, both
+- [2026-10-29-decouple_aud_audio_with_midi-move-the-midi-demo-to-aud-audio-midi.md](2026-10-29-decouple_aud_audio_with_midi-move-the-midi-demo-to-aud-audio-midi.md)
+  — ticket decouple_aud_audio_with_midi (implemented): the MIDI demo moves from
+  the example of `aud_audio` to a new example of `aud_audio_with_midi`, both
   examples join the pub workspace of their package
 - [2026-10-29-rename-aud-audio-midi-to-aud-audio-with-midi.md](2026-10-29-rename-aud-audio-midi-to-aud-audio-with-midi.md)
-  — follow-up (proposed): rename `aud_audio_midi` to `aud_audio_with_midi`
+  — follow-up (proposed): rename `aud_audio_with_midi` to `aud_audio_with_midi`
 - [2026-10-29-placeholder-app-ids-in-every-example.md](2026-10-29-placeholder-app-ids-in-every-example.md)
   — follow-up (proposed): `com.example.<app>` instead of the organization's
   IDs in every example app

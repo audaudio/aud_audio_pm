@@ -5,7 +5,7 @@
 - Canonical source: Gabriel Gatzsche's decision at the plan review on
   2026-10-08; the aud_midi plan (aud_midi_pm, ticket aud_midi_01)
 - Open work: agree the shared major-version rule across the two families. Done:
-  S1 on the release of `aud_midi_standard` (ticket 18); `aud_audio_midi` bridges
+  S1 on the release of `aud_midi_standard` (ticket 18); `aud_audio_with_midi` bridges
   the `aud_midi` ports on these types (ticket 26, midi-002); the aud_audio
   family takes `aud_midi_standard` from pub.dev like the aud_midi family, so
   that apps combine both (ticket 26)
@@ -17,7 +17,7 @@ needs: MIDI 1.0 messages and byte streams, UMP packets and MIDI 2.0
 messages, note numbers, controller numbers and the codecs between
 them. The engine defines no interim MIDI event types of its own; event
 ports carry `aud_midi_standard` messages next to the OSC-typed control
-messages. `aud_audio_midi` bridges `aud_midi` ports into the graph on
+messages. `aud_audio_with_midi` bridges `aud_midi` ports into the graph on
 the same types.
 
 ## Why

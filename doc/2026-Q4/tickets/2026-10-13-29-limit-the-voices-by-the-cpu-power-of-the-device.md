@@ -151,12 +151,12 @@ process).
 - `aud_audio_pm`: this plan and the decisions.
 
 The packages take patch versions, as family-002 asks for additions in
-0.x: `aud_audio_midi` asks for `aud_audio_graph ^0.5.1` and `aud_audio
+0.x: `aud_audio_with_midi` asks for `aud_audio_graph ^0.5.1` and `aud_audio
 ^0.4.1`, and a minor version (0.6.0, 0.5.0) would leave that range and
 break the app's resolution. `AudGraph.renderLoad` is a new member of an
 interface that nothing outside `aud_audio_graph` implements, as
 `AudGraph.timing` was in 0.5.1. gg added `aud_audio_core`,
-`aud_audio_io`, `aud_audio_midi`, `aud_audio_web` and `aud_dsp_effects` to
+`aud_audio_io`, `aud_audio_with_midi`, `aud_audio_web` and `aud_dsp_effects` to
 the ticket as dependencies; they carry only tooling changes (helix ^1.12.0,
 example locks of the current version) and leave it unless they change
 (family-002).

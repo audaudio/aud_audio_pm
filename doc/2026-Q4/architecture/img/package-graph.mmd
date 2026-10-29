@@ -15,7 +15,7 @@ flowchart BT
   file[aud_audio_file<br/>decoders, player, recorder, bounce] --> graphpkg
   dsp_stretch[aud_dsp_stretch<br/>Signalsmith Stretch] --> core
   backing[aud_audio_backing<br/>multitrack loops, tempo without pitch change] --> file & dsp_stretch
-  midi[aud_audio_midi<br/>aud_midi ports into the graph] --> umbrella
+  midi[aud_audio_with_midi<br/>aud_midi ports into the graph] --> umbrella
   osc[aud_audio_osc<br/>address router, UDP server] --> graphpkg
   seq[aud_audio_sequencer<br/>transport, tracks, clips] --> graphpkg
   linkpkg[aud_audio_link<br/>Ableton Link, own license] --> seq

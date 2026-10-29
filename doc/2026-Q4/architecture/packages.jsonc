@@ -103,7 +103,7 @@
       ]
     },
     {
-      "name": "aud_audio_midi",
+      "name": "aud_audio_with_midi",
       "template": "ffi",
       "description": "MIDI bridge of the Audanika Audio Engine: aud_midi ports as event inlets and outlets of the graph",
       "platforms": [

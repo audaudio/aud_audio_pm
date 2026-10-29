@@ -114,7 +114,7 @@ phase (about 10 weeks) can run beside the audio phases.
 | 48 | [Shared native and test utilities](2026-10-25-48-shared-native-and-test-utilities.md) | M | – | – | aud_audio_core, graph, io, midi, script, vst3, dna_audanika |
 | 49 | [Engine input, multi-channel streams and a curated umbrella](2026-10-25-49-engine-input-multi-channel-streams-and-a-curated-umbrella.md) | M | – | 48 | aud_audio, aud_audio_io, aud_audio_graph |
 | 50 | [Error model, logging and the small API fixes](2026-10-25-50-error-model-logging-and-the-small-api-fixes.md) | M | – | – | core, graph, io, sampler, effects, script |
-| 51 | [MIDI bridge and the aud_midi tap and time interface](2026-10-25-51-midi-bridge-and-the-aud-midi-tap-and-time-interface.md) | M | S8 | – | aud_audio_midi, aud_midi, aud_midi_core, aud_midi_apple, aud_midi_android, aud_midi_pm |
+| 51 | [MIDI bridge and the aud_midi tap and time interface](2026-10-25-51-midi-bridge-and-the-aud-midi-tap-and-time-interface.md) | M | S8 | – | aud_audio_with_midi, aud_midi, aud_midi_core, aud_midi_apple, aud_midi_android, aud_midi_pm |
 | 52 | [OSC: the split decision, one notification type, the server](2026-10-25-52-osc-the-split-decision-one-notification-type-the-server.md) | M | S7 | 47 | aud_audio_core, aud_audio_graph, aud_audio_osc, aud_audio_pm |
 | 53 | [Sequencer render stage in the ABI](2026-10-25-53-sequencer-render-stage-in-the-abi.md) | S | S14 | 46 | aud_audio_core, aud_audio_graph, aud_audio_pm |
 | 54 | [Controls on the core model and aud_audio_ui_bindings](2026-10-25-54-controls-on-the-core-model-and-aud-audio-ui-bindings.md) | M | S17a | 41, 46 | aud_audio_ui_controls, aud_audio_core, aud_audio_ui_bindings (new), aud_audio_pm |

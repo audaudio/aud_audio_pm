@@ -39,7 +39,7 @@ From the area [framework](../../requirements/framework.md), accepted
   `aud_midi_standard` on dart2js and Wasm); the quick check stays the gate
   for every push, the matrix runs on pull requests and `main`.
 - `aud_audio_core`, `aud_audio_graph`, `aud_audio_io`, `aud_audio`,
-  `aud_audio_midi`, `aud_audio_script`, `aud_audio_vst3`, `aud_dsp_sampler`,
+  `aud_audio_with_midi`, `aud_audio_script`, `aud_audio_vst3`, `aud_dsp_sampler`,
   `aud_dsp_effects`: adopt the matrix; vst3 gains the
   `test/scripts/test_native_test.dart` wrapper midi and script have, so
   that `dart test` reaches its native tests.

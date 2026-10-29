@@ -1,7 +1,7 @@
 # Placeholder app IDs in every example
 
 Status: proposed 2026-10-29 by the review of ticket
-`decouple_aud_audio_midi`; no ID yet.
+`decouple_aud_audio_with_midi`; no ID yet.
 
 ## Goal
 
@@ -22,7 +22,7 @@ Decide with the user whether it becomes a requirement of the area
 
 Every example with an ID of the organization, as of 2026-10-29:
 
-- `com.audanika.*`: `aud_audio`, `aud_audio_midi`, `aud_audio_clap`,
+- `com.audanika.*`: `aud_audio`, `aud_audio_with_midi`, `aud_audio_clap`,
   `aud_audio_core`, `aud_audio_file`, `aud_audio_graph`, `aud_audio_io`,
   `aud_audio_link`, `aud_audio_script`, `aud_audio_sequencer`,
   `aud_audio_ui_controls`, `aud_dsp_analysis`, `aud_dsp_effects`,

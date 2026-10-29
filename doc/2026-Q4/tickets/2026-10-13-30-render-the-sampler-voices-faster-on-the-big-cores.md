@@ -152,7 +152,7 @@ user on 2026-10-14):
   sustained performance mode caps the clocks, and no xrun asked for more.
 - `aud_audio_pm`: this plan and the decisions io-003, sampler-009 and
   lifecycle-004.
-- `aud_audio_core`, `aud_audio_graph`, `aud_audio_midi`, `aud_audio_web`
+- `aud_audio_core`, `aud_audio_graph`, `aud_audio_with_midi`, `aud_audio_web`
   and `aud_dsp_effects`: added by gg as dependencies between the ticket's
   repos (the example of `aud_audio_io` resolves the graph and the core by
   path); they leave the ticket without a change of their own (family-002).
