@@ -39,7 +39,7 @@ From the area [framework](../../requirements/framework.md), accepted
   without sibling overrides.
 - `aud_dsp_sampler`: the parameter table and one "where may an instrument
   live" section; `aud_dsp_effects`: the platform list.
-- `aud_audio_midi`: an `example/`; the four empty changelog sections.
+- `aud_audio_with_midi`: an `example/`; the four empty changelog sections.
 - All implemented packages: the 21 empty changelog sections filled from
   the git history, the 16 template `example/README.md` files replaced,
   `documentation:`, `issue_tracker:`, `topics:` in the pubspecs,

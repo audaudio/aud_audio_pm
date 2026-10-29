@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.18.2 - 2026-10-29
+
+### Added
+
+- Add a blog post about the rename
+
+### Changed
+
+- Rename aud_audio_midi to aud_audio_with_midi
+
 ## 0.18.1 - 2026-10-29
 
 ### Added

@@ -204,14 +204,14 @@ for macOS, uses StoreKit for real, and switches off the motion sensors.
   real-time entry for sample-accurate automation, open work of
   plugin-002), `aud_dsp_sampler`, `aud_dsp_effects`, `aud_audio_script`
   (source manifests the shell's build reads, if their hooks carry flags of
-  their own). `aud_audio`, `aud_audio_midi` and `aud_audio_web` came in
+  their own). `aud_audio`, `aud_audio_with_midi` and `aud_audio_web` came in
   with `gg do add` as dependencies and leave the ticket if they keep no
   change of their own.
 - Changed on the way: `aud_audio_graph` (the node `aud.graph.channel_split`
   for the DAW's MIDI channels; at the review the arena of emitted events,
   the arrival order of equal events and the nodes that pass events on);
   `aud_audio_core` (the capability `AUD_NODE_CAP_PASSES_EVENTS`, a minor
-  version); `aud_audio_midi` (the capability on its port nodes, a patch
+  version); `aud_audio_with_midi` (the capability on its port nodes, a patch
   version).
 
 ## Steps

@@ -11,7 +11,7 @@ like 26: numbered here, its decisions recorded in `aud_midi_pm`.
 The seam between the two families is a declared interface, not a set of
 copies. `aud_midi_core` ships one canonical `aud_midi_tap.h` — the C
 signature of the native tap with its kind constants, versioned — that
-`aud_midi_apple`, `aud_midi_android` and `aud_audio_midi` include instead
+`aud_midi_apple`, `aud_midi_android` and `aud_audio_with_midi` include instead
 of their three typedefs; `aud_midi` offers the conversion between
 `MidiTime` and the host clock the tap stamps with (`hostTimeNs`), so that
 the bridge's `AudMidiClock`, a second copy of `MidiClockMapper`, goes;
@@ -39,7 +39,7 @@ Engineer its requirements before the ticket is planned.
 - `aud_midi`: the time conversion, the exceptions, `supportsNativeTap`
   per port; minor.
 - `aud_midi_apple`, `aud_midi_android`: include the header; patch.
-- `aud_audio_midi`: the adapter, the lifecycle, the vectors, the example;
+- `aud_audio_with_midi`: the adapter, the lifecycle, the vectors, the example;
   minor.
 - `aud_midi_pm`: decisions `native-002` (the tap header) and `time-001`
   (the host-time conversion); `aud_audio_pm`: `packages.jsonc`.

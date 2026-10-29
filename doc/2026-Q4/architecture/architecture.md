@@ -14,7 +14,7 @@ Apps, plugin shells, docs cookbook
        └─ aud_audio_core    C ABI, buffers, events, contracts, OSC model
             ▲
             └─ aud_dsp_*     DSP packages: C++ nodes + Dart descriptors
-Integration: aud_audio_midi, aud_audio_osc, aud_audio_sequencer,
+Integration: aud_audio_with_midi, aud_audio_osc, aud_audio_sequencer,
              aud_audio_link, aud_audio_script, aud_audio_web,
              aud_audio_file, aud_audio_backing
 UI:          aud_audio_ui_graph_edit, aud_audio_ui_piano_roll,
@@ -114,7 +114,7 @@ time through the transport — at the adapter. The engine replies with
 `/done` and `/fail` and notifies about node lifecycle and meters.
 (osc-001)
 
-MIDI enters through `aud_audio_midi`, which turns `aud_midi` ports into
+MIDI enters through `aud_audio_with_midi`, which turns `aud_midi` ports into
 event inlets and outlets; all MIDI types come from `aud_midi_standard`
 (midi-001), and per-note controllers of MPE and MIDI 2.0 travel as UMP
 to the nodes and to the note expressions of the plugin shells.

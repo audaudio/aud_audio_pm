@@ -35,7 +35,7 @@ From the area [framework](../../requirements/framework.md), accepted
 
 - `audaudio.github.io`: the script, the Dart test package, the pages, the
   goldens; minor version.
-- `aud_audio_core`, `aud_dsp_sampler`, `aud_dsp_effects`, `aud_audio_midi`,
+- `aud_audio_core`, `aud_dsp_sampler`, `aud_dsp_effects`, `aud_audio_with_midi`,
   `aud_audio_script`, `aud_audio_ui_controls`, `aud_audio_vst3`: one
   `doc/<package>.md` page each, written from the README of ticket 42;
   patch versions.

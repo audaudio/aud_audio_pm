@@ -13,7 +13,7 @@ The Audanika Audio Engine is a family of Dart packages in the GitHub
 organization `audaudio`, one repo per package, like the `aud_midi` family:
 `aud_audio_core` (C ABI and contracts), `aud_audio_graph` (engine),
 `aud_audio_io` (devices), `aud_audio` (umbrella the apps depend on),
-`aud_audio_web` (web build), `aud_audio_midi`, `aud_audio_osc`,
+`aud_audio_web` (web build), `aud_audio_with_midi`, `aud_audio_osc`,
 `aud_audio_sequencer`, `aud_audio_link`, the DSP packages `aud_dsp_*`, the UI
 packages `aud_audio_ui_*`, the plugin shells `aud_audio_vst3`,
 `aud_audio_clap` and `aud_audio_auv3`, and the docs repo `audaudio.github.io`.

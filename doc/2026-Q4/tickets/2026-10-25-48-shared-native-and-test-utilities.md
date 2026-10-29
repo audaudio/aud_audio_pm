@@ -35,7 +35,7 @@ Engineer its requirements before the ticket is planned.
   under `WIN32_LEAN_AND_MEAN`) and uses `#ifdef _WIN32`; patch version.
 - `dna_audanika` or a new dev package `aud_audio_tools`: the scripts and
   the hook helper, with tests; open question below.
-- `aud_audio_graph`, `aud_audio_io`, `aud_audio_midi`, `aud_audio_script`,
+- `aud_audio_graph`, `aud_audio_io`, `aud_audio_with_midi`, `aud_audio_script`,
   `aud_audio_vst3`: the copies deleted, the helpers used, the testing
   libraries; patch versions.
 

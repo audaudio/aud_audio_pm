@@ -1,7 +1,6 @@
 # Rename aud_audio_midi to aud_audio_with_midi
 
-Status: proposed 2026-10-29 by ticket `decouple_aud_audio_midi`; no ID
-yet.
+Status: implemented 2026-10-29 in ticket `rename_aud_audio_midi`.
 
 ## Goal
 
@@ -29,6 +28,11 @@ with MIDI, one layer above `aud_audio`, not a part of it. Serves
 2. Rename the repo and the package, keep a redirect on GitHub
 3. Update every reference in the family and the docs site
 
-## Open questions
+## Decisions
 
-- Do the C symbols `aud_audio_midi_*` change with the package name?
+- The C symbols `aud_audio_midi_*` and the header `aud_audio_midi.h`
+  follow the package name: `aud_audio_with_midi_*`,
+  `aud_audio_with_midi.h` (user, 2026-10-29)
+- The node type IDs `aud.midi.*` keep their names: saved graphs stay
+  valid
+- `audaudiohub.io` names the package nowhere; nothing to change there

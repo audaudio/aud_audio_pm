@@ -72,7 +72,7 @@ Ticket 29 built the pieces in three repos (sampler `6fbaf9f`, `aud_audio`
 - No other package steals voices; `aud_dsp_synth` is still the template.
 - Versions: `aud_audio_core` 0.5.2, `aud_dsp_sampler` 0.3.2, `aud_audio`
   0.4.2, which pins core, graph, io and web exactly (against family-002),
-  `aud_audio_midi` 0.1.3 asks `aud_audio ^0.4.2`.
+  `aud_audio_with_midi` 0.1.3 asks `aud_audio ^0.4.2`.
 - Ticket 30 works on the same code: its sampler branch `30-voices`
   rewrites `VoiceManager` around `stealVoices`, and its step 6 raises the
   start budgets of `AudDeviceClass` in `aud_audio`.
@@ -180,7 +180,7 @@ flowchart TB
    (today the governor's test runs `AudEngineFfi` on the null device);
    the web fixture, the README sections. `aud_audio` drops them and its
    exact pins become caret constraints (family-002); otherwise the app
-   could not resolve `aud_audio_core` 0.5.3. `aud_audio_midi` widens its
+   could not resolve `aud_audio_core` 0.5.3. `aud_audio_with_midi` widens its
    constraint to the next minor of `aud_audio`.
 6. **The app**: the adapter of the governor to `AudEngine` with the test
    that ran in `aud_audio` (the null device); the imports, the hook,
@@ -202,7 +202,7 @@ flowchart TB
 - `aud_dsp_sampler`: the source and the hook in, the budget and the order
   out; a minor, since public members leave.
 - `aud_audio`: the governor out, the pins as carets; a minor (0.4 → 0.5).
-- `aud_audio_midi`: the constraint on `aud_audio`; a patch.
+- `aud_audio_with_midi`: the constraint on `aud_audio`; a patch.
 - `audanika_app`: the adapter of the governor, the wiring, the tests,
   the measurements.
 - `aud_audio_pm`: this plan; a decision lifecycle-004 that supersedes the
@@ -222,12 +222,12 @@ flowchart TB
 4. The allocator with its native tests over a fake source, and its API.
 5. The sampler as a source; `VoiceManager` without the order; the node
    tests with the allocator; the goldens.
-6. The governor from `aud_audio`; the pins; `aud_audio_midi`.
+6. The governor from `aud_audio`; the pins; `aud_audio_with_midi`.
 7. The app; the sweep and the stress test on the tablet and the
    simulator.
 8. Decision lifecycle-004, review, publish in the order of the
    dependencies: core, the allocator, the sampler (whose tests use the
-   allocator), `aud_audio`, `aud_audio_midi`, the app.
+   allocator), `aud_audio`, `aud_audio_with_midi`, the app.
 
 ## Open questions
 

@@ -46,7 +46,7 @@ it closes its notes arrive.
 
 ## Consequences
 
-- The MIDI bridge of `aud_audio_midi` pushes from CoreMIDI's and Android's
+- The MIDI bridge of `aud_audio_with_midi` pushes from CoreMIDI's and Android's
   receive threads without Dart (midi-002).
 - Statistics per source — delivered, late, lateness, delivery delay,
   drops — are readable from the control thread.

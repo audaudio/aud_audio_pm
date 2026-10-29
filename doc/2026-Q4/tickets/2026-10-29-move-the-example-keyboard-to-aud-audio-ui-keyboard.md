@@ -1,6 +1,6 @@
 # Move the example keyboard to aud_audio_ui_keyboard
 
-Status: proposed 2026-10-29 by ticket `decouple_aud_audio_midi`; no ID
+Status: proposed 2026-10-29 by ticket `decouple_aud_audio_with_midi`; no ID
 yet. A first part of step S17b of
 [ticket 17](2026-10-07-17-audanika-audio-engine.md).
 
@@ -8,8 +8,8 @@ yet. A first part of step S17b of
 
 The on-screen keyboard is a widget of the family, not a file every example
 copies. Today `Keyboard` lives in `example/lib/keyboard.dart` of
-`aud_audio` and, since ticket `decouple_aud_audio_midi`, as a copy in the
-example of `aud_audio_midi`; its own doc comment says that S17b builds the
+`aud_audio` and, since ticket `decouple_aud_audio_with_midi`, as a copy in the
+example of `aud_audio_with_midi`; its own doc comment says that S17b builds the
 real one in `aud_audio_ui_keyboard`. Moving it there gives app developers
 the keyboard as a package, removes the copies and starts S17b on a widget
 that already plays the sampler on devices. Serves
@@ -32,7 +32,7 @@ that already plays the sampler on devices. Serves
   velocities through callbacks; minor
 - `aud_audio`: the example uses the keyboard of `aud_audio_ui_keyboard`
   and deletes `keyboard.dart`; patch
-- `aud_audio_midi`: the example uses the keyboard of
+- `aud_audio_with_midi`: the example uses the keyboard of
   `aud_audio_ui_keyboard` and deletes `keyboard.dart`; patch
 - `aud_audio_pm`: `packages.jsonc` drops the edge from
   `aud_audio_ui_keyboard` to `aud_audio`
