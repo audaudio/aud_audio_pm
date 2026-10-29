@@ -192,3 +192,17 @@ the maintainers of the families and the users of the plugins.
   user's answer to open question 4 of ticket 40 on 2026-10-25
 - Acceptance: no `LICENSE` file of the families contains "All Rights
   Reserved"
+
+## req-framework-017: The examples carry placeholder app IDs
+
+- Status: accepted
+- Priority: should
+- Statement: The example apps of the families identify themselves with
+  placeholder IDs under `com.example`, never with an ID of the
+  organization
+- Why: [flutter-audio-kit](../2026-Q4/goals/flutter-audio-kit.md), the
+  review guide (section "Placeholder identifiers"), the user's answer in
+  ticket `placeholder_app_ids` on 2026-10-29
+- Acceptance: no file of an `example/` folder of the families contains
+  `com.audanika` or `io.audaudio` as an app, bundle or package ID; class
+  names of the libraries stay

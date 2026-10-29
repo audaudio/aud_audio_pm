@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.19.0 - 2026-10-29
+
+### Added
+
+- Add a blog post about the placeholder app IDs
+
+### Changed
+
+- Require placeholder app IDs in the examples
+
 ## 0.18.2 - 2026-10-29
 
 ### Added

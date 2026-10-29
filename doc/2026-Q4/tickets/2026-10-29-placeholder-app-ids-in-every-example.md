@@ -1,7 +1,6 @@
 # Placeholder app IDs in every example
 
-Status: proposed 2026-10-29 by the review of ticket
-`decouple_aud_audio_with_midi`; no ID yet.
+Status: implemented 2026-10-29 in ticket `placeholder_app_ids`.
 
 ## Goal
 
@@ -13,10 +12,8 @@ organization. Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
 
 ## Requirements
 
-No accepted requirement covers it yet; the rule comes from
-`doc/guides/for-ai/ai-review-guide.md`, section "Placeholder identifiers".
-Decide with the user whether it becomes a requirement of the area
-[framework](../../requirements/framework.md).
+- [req-framework-017](../../requirements/framework.md): the examples
+  carry placeholder app IDs
 
 ## Affected repos
 
@@ -46,10 +43,14 @@ patch each.
 3. Build every example once per platform in CI and run its tests
 4. Add a check that fails on an ID of the organization in an example
 
-## Open questions
+## Decisions
 
-- Does the AUv3 example keep `io.audaudio.*` for its app group and the
-  extension, which the host and the signing need to agree on?
-- Does the example of `aud_midi_android` in the audmidi family, still at
-  `com.audanika.aud_midi_android_example`, follow in a ticket of
-  `aud_midi_pm`?
+- Scheme as planned; the existing suffixes stay, only the prefix changes:
+  `com.audanika.<id>` becomes `com.example.<id>` (user, 2026-10-29)
+- The AUv3 example and its extension move to
+  `com.example.audAudioAuv3Example`, the VST3 example to
+  `com.example.audAudioVst3Example` (user)
+- The example of `aud_midi_android` follows in this ticket (user)
+- Class names of the libraries keep `com.audanika`, e.g.
+  `com.audanika.aud_midi_android.AudMidiLoopbackService`
+- Step 4, a check against IDs of the organization, is left for later
