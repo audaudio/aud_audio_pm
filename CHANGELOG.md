@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.19.1 - 2026-10-30
+
+### Changed
+
+- Blog about the test clock of the graph timing test
+
 ## 0.19.0 - 2026-10-29
 
 ### Added
