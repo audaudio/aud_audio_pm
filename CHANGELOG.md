@@ -6,6 +6,7 @@
 
 - Require Flutter 3.50 and Dart 3.14, build the DNA
 - Name the app by its role, not by its repos
+- Raise the ticket counter to 76
 
 ## 0.19.1 - 2026-10-30
 
