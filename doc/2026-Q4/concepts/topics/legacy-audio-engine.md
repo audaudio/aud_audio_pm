@@ -1,12 +1,12 @@
 # Topic: the legacy audio engine
 
 What the current Audanika audio engine does, how it is built, and what
-the new engine keeps or drops. Source: the `audio_engine` repo of the
-`audanika-legacy` organization, inspected 2026-10-07.
+the new engine keeps or drops. Source: the private repo of the legacy
+engine, inspected 2026-10-07.
 
 ## Shape
 
-- A Flutter plugin `audio_engine` for iOS and Android only. Dart API:
+- A Flutter plugin for iOS and Android only. Dart API:
   `init(assetDirInMainBundle)`, `playMidi(Uint8List)`, `loadPreset(id)`,
   `selectedPreset()`, `presets()`; a `StubAudioEngine` serves the other
   platforms and the tests.

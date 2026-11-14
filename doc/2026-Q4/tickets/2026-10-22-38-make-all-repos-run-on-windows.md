@@ -1,14 +1,14 @@
 # 38: Make all repos run on Windows — the Windows audio device
 
 Status: ticket 38 makes the repos of the family build and test on Windows
-and gives `audanika_app` a Windows runner; the app starts the real engine
-there (`SoundEngine.isSupported`), but `aud_audio_io` has only the null
-device on Windows, so it stays silent. On 2026-10-24 the user added the
-Windows audio device to this ticket instead of a ticket of its own. This
-file holds its plan; confirmed by the user on 2026-10-24 with the answers
-below. Implemented the same day: the app plays on the earphones of the
-development PC and follows the default output (see Findings), at the one
-period of 480 frames its drivers grant in shared mode.
+and gives the Audanika app a Windows runner; the app starts the real engine
+there (its platform check allows Windows), but `aud_audio_io` has only the
+null device on Windows, so it stays silent. On 2026-10-24 the user added
+the Windows audio device to this ticket instead of a ticket of its own.
+This file holds its plan; confirmed by the user on 2026-10-24 with the
+answers below. Implemented the same day: the app plays on the earphones of
+the development PC and follows the default output (see Findings), at the
+one period of 480 frames its drivers grant in shared mode.
 
 Later on 2026-10-24 the user added the VST3 plugin on Windows to this
 ticket ("Bitte bring Audanika als VST3 unter Windows zum Laufen … Führe
@@ -93,8 +93,8 @@ output and follow it when it changes. Serves
 - `aud_audio_io`: the device, the hook, the `wasapi::` decisions and their
   native tests, the comments that still say "null device on Windows",
   README and CHANGELOG; minor version.
-- `audanika_app`: no code change expected; the comment on
-  `SoundEngine.isSupported`, and the check that the app sounds.
+- The app: no code change expected; the comment on the platform check of
+  its sound engine, and the check that the app sounds.
 - `aud_audio`: the Windows line of its README.
 - `aud_audio_pm`: this plan, req-windows-001, decision io-005, the engine
   plan (S3b to S3d) and io-001's open work.
@@ -109,8 +109,8 @@ output and follow it when it changes. Serves
    notifications, permission, time; the hook builds it for Windows.
 4. `aud_audio_io`: `node scripts/test-native.js` and `flutter test` on
    Windows; a sine through the example on the Remote Desktop endpoint.
-5. `audanika_app`: `flutter run -d windows`, every preset sounds; the
-   stream's format, latency, xruns and late callbacks of 100 notes.
+5. The app: `flutter run -d windows`, every preset sounds; the stream's
+   format, latency, xruns and late callbacks of 100 notes.
 6. The acceptance on the earphones in the Realtek jack: switch the default
    output, unplug the earphones; the user does what needs hands at the PC.
 7. The engine plan, io-001's open work and the docs (READMEs, CHANGELOG,
@@ -237,9 +237,9 @@ formats) through its first user, the app.
 - Graph, core, sampler, effects and script build and test on Windows
   (ticket 38); their hooks hold the Windows flags the plugin's recipes must
   mirror (build-001).
-- `audanika_app` has a Windows runner: `Audanika.exe` with `content/sfz`
-  next to it (`build/windows/x64/runner/<Mode>`). The editor of the Mac is
-  the flavor `editor` (`lib/main_plugin_editor.dart`), started by the
+- The app has a Windows runner: `Audanika.exe` with `content/sfz` next to
+  it (`build/windows/x64/runner/<Mode>`). The editor of the Mac is the
+  flavor `editor` of the app with an entry point of its own, started by the
   plugin with an inherited socket (`--fd`), which `AudShellFd` refuses on
   Windows; `AudShellClient.connect` reaches a Unix domain socket on every
   platform, Windows included (the app's tests of ticket 38).
@@ -298,9 +298,9 @@ IOSurfaces nor its input injector:
   cursor and scaling are Windows' own; the plugin sizes the child with its
   view.
 - The editor is the app itself: `Audanika.exe --plugin-editor` starts the
-  Dart entry point of the editor (the composition root of
-  `main_plugin_editor.dart`, `@pragma('vm:entry-point')`) instead of
-  `main`, so the app folder carries no second Flutter build.
+  Dart entry point of the editor (the composition root of the app's plugin
+  editor, `@pragma('vm:entry-point')`) instead of `main`, so the app folder
+  carries no second Flutter build.
 - The channel: protocol 2 of ticket 37 over a Unix domain socket in
   `%TEMP%` with a random name and token, which the plugin listens on
   (Winsock `AF_UNIX`) and the editor reaches with `AudShellClient.connect`;
@@ -318,8 +318,8 @@ IOSurfaces nor its input injector:
   and the validator on Windows, the REAPER script on Windows; then the
   Windows editor view and the socket on Winsock; README, CHANGELOG,
   `doc/plugin-bundle.md`; minor version (0.x).
-- `audanika_app`: `windows/plugin/plugin.json` (or the Mac's with a
-  Windows location), `tool/build-plugin.js` on Windows with `--link`; then
+- The app: its plugin configuration for Windows (or the Mac's with a
+  Windows location), its plugin build script on Windows with `--link`; then
   the runner's `--plugin-editor`, the editor's entry point and its native
   views on Windows, the editor on a socket path instead of `--fd`; README.
 - `aud_audio_pm`: this part, req-windows-002 and -003, the decisions
@@ -341,8 +341,8 @@ Phase A — the plugin plays on Windows:
    recipes with the hooks' Windows flags, the DLL with its three exports,
    the bundle, `--install` as a junction; the example plugin passes the
    validator.
-4. `audanika_app`: `tool/build-plugin.js` on Windows: the plugin into the
-   app folder (debug and release), `--link` places the junction.
+4. The app: its plugin build script on Windows: the plugin into the app
+   folder (debug and release), `--link` places the junction.
 5. REAPER (scripted with `scripts/reaper-test.js` on Windows): listed,
    every preset plays from a MIDI item, save and reopen, offline render
    against live playback, two instances; Cubase 15 by the user. Commit
@@ -353,9 +353,9 @@ Phase B — the Audanika editor on Windows:
 6. `aud_audio_vst3`: the socket on Winsock `AF_UNIX`, the view for
    `kPlatformTypeHWND`, the editor started with `--plugin-editor`, the
    socket's name, token and instance; sizes, scale, close.
-7. `audanika_app`: the runner's `--plugin-editor`, the editor's entry
-   point, the native views as children of the plugin's windows, the
-   editor on `AudShellClient.connect`.
+7. The app: the runner's `--plugin-editor`, the editor's entry point, the
+   native views as children of the plugin's windows, the editor on
+   `AudShellClient.connect`.
 8. REAPER and Cubase 15: the editor opens and follows the window's size;
    playing sounds and reaches a MIDI track; a preset chosen in the editor
    is kept by the project; open and close fifty times, two instances.
@@ -389,10 +389,10 @@ Phase C — documentation:
   Windows; the example plugin passes 47 of 47 tests. The sampler's recipe
   takes the hook's Windows flags (AVX, `_USE_MATH_DEFINES`, the forced
   `<cmath>`, shell32); QuickJS-ng's `_WIN32_WINNT` stays with its C files.
-- **Step 4.** `tool/build-plugin.js --app release --link`: the plugin (4.6
-  MB) in `build\windows\x64\runner\Release\Audanika.vst3` next to
-  `audanika.exe` and `content\sfz`, put there by the app's CMake install
-  step, and the junction
+- **Step 4.** The app's plugin build script with `--app release --link`:
+  the plugin (4.6 MB) in `build\windows\x64\runner\Release\Audanika.vst3`
+  next to `audanika.exe` and `content\sfz`, put there by the app's CMake
+  install step, and the junction
   `%LOCALAPPDATA%\Programs\Common\VST3\Audanika.vst3` to it. Through the
   junction the plugin finds its real folder and the content; the validator
   passes 47 of 47.

@@ -146,8 +146,8 @@ process).
 - `aud_audio_graph`: the load gauge; a patch version (0.5.1 → 0.5.2).
 - `aud_audio`: the governor and the device class; a patch version
   (0.4.1 → 0.4.2).
-- `audanika_app`: the governor switched on, the developer setting, the
-  stored budget, the stress test as an acceptance test.
+- The app: the governor switched on, the developer setting, the stored
+  budget, the stress test as an acceptance test.
 - `aud_audio_pm`: this plan and the decisions.
 
 The packages take patch versions, as family-002 asks for additions in

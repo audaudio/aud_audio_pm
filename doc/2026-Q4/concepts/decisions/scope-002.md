@@ -13,7 +13,7 @@
 ## Decision
 
 The Audanika Audio Engine owes the existing Audanika app and its legacy
-`audio_engine` plugin nothing: no preset format is loaded, converted or
+engine plugin nothing: no preset format is loaded, converted or
 emulated, no parameter set or API of the legacy engine is carried over,
 and no ticket has "the legacy presets play through it" as a goal. The
 sampler (S9) plays SFZ instruments stored as node presets; the app

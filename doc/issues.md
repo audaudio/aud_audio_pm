@@ -5,7 +5,7 @@ The tickets of the aud_audio family are numbered here, not on GitHub
 counter, appends its row and links its plan file once it exists; the
 number is the gg ticket ID and the name of the ticket branches.
 
-Next number: 66
+Next number: 71
 
 | Number | Title | Status | Plan |
 | --- | --- | --- | --- |
@@ -71,3 +71,6 @@ number and is marked `dropped`.
 Numbers 1, 3 and 4 were taken by pull requests while GitHub numbered the
 tickets (process-001) and stay unused; 6 to 16 stay unused so that the
 counter continues above 17.
+
+Numbers 66 to 70 are taken by tickets of another project management repo
+of the workspace.

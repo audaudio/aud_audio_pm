@@ -101,7 +101,7 @@ flowchart TB
   alloc["aud_audio_voice_allocator (new)<br/>stealing, governor"]
   sampler["aud_dsp_sampler<br/>voices offered through callbacks, the fade"]
   audio["aud_audio"]
-  app["audanika_app"]
+  app["app"]
   alloc --> core
   sampler --> core
   audio --> core
@@ -203,8 +203,8 @@ flowchart TB
   out; a minor, since public members leave.
 - `aud_audio`: the governor out, the pins as carets; a minor (0.4 → 0.5).
 - `aud_audio_with_midi`: the constraint on `aud_audio`; a patch.
-- `audanika_app`: the adapter of the governor, the wiring, the tests,
-  the measurements.
+- The app: the adapter of the governor, the wiring, the tests, the
+  measurements.
 - `aud_audio_pm`: this plan; a decision lifecycle-004 that supersedes the
   place of the budget and the order in sampler-008 and of the governor in
   lifecycle-003; the package in `packages.jsonc` and `architecture.md`;

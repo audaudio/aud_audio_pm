@@ -146,10 +146,10 @@ user on 2026-10-14):
   since the counters only gain fields with defaults.
 - `aud_audio`: the start budgets of `AudDeviceClass` (lifecycle-004); a
   patch version (0.4.2 → 0.4.3).
-- `audanika_app`: the measurements print the placement of the audio thread;
-  `tool/measure-voices.js` and `tool/profile-audio-thread.js` measure and
-  profile the voices on a device. No opt-in of the app was needed: the
-  sustained performance mode caps the clocks, and no xrun asked for more.
+- The app: the measurements print the placement of the audio thread; two
+  scripts of the app measure and profile the voices on a device. No opt-in
+  of the app was needed: the sustained performance mode caps the clocks,
+  and no xrun asked for more.
 - `aud_audio_pm`: this plan and the decisions io-003, sampler-009 and
   lifecycle-004.
 - `aud_audio_core`, `aud_audio_graph`, `aud_audio_with_midi`, `aud_audio_web`

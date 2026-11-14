@@ -47,5 +47,5 @@ packages are on pub.dev the git references give way to hosted versions.
 - gg tickets rely on repos that exist and on dependencies gg can read;
   creating the family up front makes every later ticket a plain
   `gg do add`.
-- Git references with `tag_pattern` are the Audanika convention
-  (`aud_app`, `aud_sc`) and work before pub.dev publication.
+- Git references with `tag_pattern` are the Audanika convention (the new
+  app and its supply chain) and work before pub.dev publication.

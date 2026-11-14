@@ -60,18 +60,18 @@ the app (ticket 27).
   parameter ids, latency and tail, `aud_host_render` with events and
   transport, `aud_host_wait_loads`; packages register through
   `aud_graph_host_api`.
-- `audanika_app` 4.4.1+168: `macos/` is the untouched Flutter template
-  (`com.example.audanika`, no team, sandbox only). On macOS the app is
-  silent (`SoundEngine.isSupported` is iOS and Android), looks for its SFZ
-  content next to the executable instead of in `Contents/Resources`, marks
-  every album as bought (`content_item_iap_connector.dart`) and uses a mock
-  store. The engine is built in Dart (`AudSoundEngine`): a sampler node per
-  MIDI channel 1 to 3 (bass, chord, melody), `external` for external MIDI
-  (app-002), `modulator` (`aud.script.modulator`), then delay, plate reverb
-  and limiter (app-003); 28 presets in `content/sfz/index.json`, 110 MB of
+- The Audanika app 4.4.1+168: its macOS project is the untouched Flutter
+  template (`com.example.audanika`, no team, sandbox only). On macOS the
+  app is silent (its sound engine is supported on iOS and Android only),
+  looks for its SFZ content next to the executable instead of in
+  `Contents/Resources`, marks every album as bought and uses a mock store.
+  The engine is built in Dart: a sampler node per MIDI channel 1 to 3
+  (bass, chord, melody), `external` for external MIDI (app-002),
+  `modulator` (`aud.script.modulator`), then delay, plate reverb and
+  limiter (app-003); 28 presets in `content/sfz/index.json`, 110 MB of
   content; the voice governor runs in Dart (app-005). The UI reaches the
-  engine only through the `SoundEngine` interface — the seam an editor in
-  another process needs.
+  engine only through the app's sound engine interface — the seam an editor
+  in another process needs.
 - iOS ships as `com.audanika` (team SAZSC68S46, App Store app 1547307555)
   with `flutter build ipa` and `fastlane deliver`; the app-specific
   password comes from the keychain. No macOS lane, no Mac metadata, no Mac
@@ -155,7 +155,7 @@ flowchart LR
   as automatable parameters; the state stores the preset and the parameter
   values with a version, restored without the editor.
 - **Editor (plugin-003, in the sandbox).** A second macOS target of the app,
-  "Audanika Editor", built from `lib/main_plugin_editor.dart`: a slim
+  "Audanika Editor", built from an entry point of its own: a slim
   composition root with the play surface and the Sounds page, without IAP,
   mediathek, push or MIDI ports. Its `ShellSoundEngine` implements
   `SoundEngine` over the shell protocol: notes from the surface go into the
@@ -195,11 +195,10 @@ for macOS, uses StoreKit for real, and switches off the motion sensors.
   presets and program list, state, content lookup, the editor runner as a
   reusable part, the sandbox-safe protocol, signing with hardened runtime,
   spike leftovers removed, graph and core 0.5; a minor version (0.x).
-- `audanika_app`: the macOS target and its release lane, sound on macOS,
-  StoreKit on macOS, the export of the plugin's document and presets, the
-  plugin configuration and build, the editor target and its entry point,
-  the plugin inside the app, the step "Activate the plugin"; a minor
-  version.
+- The app: the macOS target and its release lane, sound on macOS, StoreKit
+  on macOS, the export of the plugin's document and presets, the plugin
+  configuration and build, the editor target and its entry point, the
+  plugin inside the app, the step "Activate the plugin"; a minor version.
 - Added when a step needs them, as process-005 says: `aud_audio_graph` (a
   real-time entry for sample-accurate automation, open work of
   plugin-002), `aud_dsp_sampler`, `aud_dsp_effects`, `aud_audio_script`
@@ -220,8 +219,8 @@ Phase A — the Mac app and the gate:
 
 1. This plan, the requirements, plugin-005 and release-005; the user
    reviews and confirms.
-2. `audanika_app`: the macOS target — bundle id, team, sandbox
-   entitlements, category, purpose strings, icon, the content copied into
+2. The app: the macOS target — bundle id, team, sandbox entitlements,
+   category, purpose strings, icon, the content copied into
    `Contents/Resources` and found there, a minimum window size; the app
    starts on the Mac (still silent).
 3. Gate: the spike's plugin, renamed and signed for real, with a sandboxed
@@ -236,10 +235,10 @@ Phase B — the Mac app plays:
 
 4. `aud_audio_io`: the macOS device, its tests on the Mac, the example
    playing; the hook builds it for macOS (decision io-004).
-5. `audanika_app`: the sound engine on macOS, StoreKit instead of the mock
-   and no free albums, motion sensors off, MIDI on the Mac (virtual ports,
-   network sessions), play with mouse and trackpad; the user plays the app
-   on the Mac before the plugin work goes on.
+5. The app: the sound engine on macOS, StoreKit instead of the mock and no
+   free albums, motion sensors off, MIDI on the Mac (virtual ports, network
+   sessions), play with mouse and trackpad; the user plays the app on the
+   Mac before the plugin work goes on.
 
 Phase C — the plugin plays Audanika:
 
@@ -251,10 +250,10 @@ Phase C — the plugin plays Audanika:
    events; the host transport; latency and tail; content lookup;
    presets, program list and state; native tests, the test host and the
    validator.
-7. `audanika_app`: the exporter of the graph document and the 28 presets
-   from the app's own engine code; the plugin configuration and a build
-   tool; an offline render of each preset by app engine and plugin
-   compared (decision app-009).
+7. The app: the exporter of the graph document and the 28 presets from the
+   app's own engine code; the plugin configuration and a build tool; an
+   offline render of each preset by app engine and plugin compared
+   (decision app-009).
 8. REAPER and Cubase: a MIDI clip plays every preset, automation, save and
    reopen, offline render, two instances, ten minutes without a dropout;
    memory and CPU recorded.
@@ -265,8 +264,8 @@ Phase D — the Audanika editor:
    step 3 (plugin-007), the protocol for notes from the editor, the preset
    list and choice, state pushes and parameters; the logs in the unified
    log.
-10. `audanika_app`: `lib/main_plugin_editor.dart` with its slim
-    composition root, `ShellSoundEngine`, the target "Audanika Editor"
+10. The app: the editor's entry point with its slim composition root, a
+    sound engine over the shell protocol, the target "Audanika Editor"
     built into the plugin's `Helpers`.
 11. The embedding checklist of plugin-003 in REAPER and Cubase: resizing,
     Retina, focus and keys, wheel, cursor, open and close a hundred times,
@@ -274,13 +273,13 @@ Phase D — the Audanika editor:
 
 Phase E — ship:
 
-12. `audanika_app`: plugin and editor built into `Audanika.app` and signed
-    inside out; "Activate the plugin" and "Deactivate" in the settings
-    (open panel, link, bookmark, status, repair after the app moved).
-13. `audanika_app`: the macOS release lane — build, archive, export,
-    validate, upload (only on the user's go), Mac metadata and
-    screenshots; an internal TestFlight build installed on the Mac and
-    tried in Cubase and REAPER, Live if its trial is installed.
+12. The app: plugin and editor built into `Audanika.app` and signed inside
+    out; "Activate the plugin" and "Deactivate" in the settings (open
+    panel, link, bookmark, status, repair after the app moved).
+13. The app: the macOS release lane — build, archive, export, validate,
+    upload (only on the user's go), Mac metadata and screenshots; an
+    internal TestFlight build installed on the Mac and tried in Cubase and
+    REAPER, Live if its trial is installed.
 14. The submission to App Review is the user's decision; the fallback
     package follows in a ticket of its own if App Review refuses the
     plugin step.
@@ -360,7 +359,7 @@ At the review:
   passes the validator (47 tests) and the new test host; 66 native tests
   of the shell and 132 of the graph pass in every sanitizer build.
 - **Step 7 (2026-10-20).** The app exports the plugin's document and its 28
-  presets from its own sound code (app-009); `tool/build-plugin.js` builds
+  presets from its own sound code (app-009); its plugin build script builds
   `Audanika.vst3` (6.6 MB, 23 s from scratch) with the app's package
   config. The test host plays all 28 presets offline with a note on each of
   the MIDI channels 1 to 4: peaks from 0.21 to 0.89 (the limiter's
@@ -394,8 +393,8 @@ At the review:
   second app needs an editor.
 - **Step 10 (2026-10-20).** The app builds "Audanika Editor.app" (38 MB,
   `com.audanika.editor`) as the flavor `editor` of its Mac target
-  (`flutter build macos --flavor editor -t lib/main_plugin_editor.dart`),
-  background only and sandboxed with the app group; `tool/build-plugin.js`
+  (`flutter build macos --flavor editor` with the editor's entry point),
+  background only and sandboxed with the app group; its plugin build script
   copies it into the plugin (44 MB in all). The editor is the app in the
   profile `pluginEditor` (app-010). The test host shows it in a window that
   takes no focus (`scripts/host.js --editor`): the play surface's first

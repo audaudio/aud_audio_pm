@@ -28,7 +28,7 @@ format at run time. What SoundPrism does is described in
 
 - The app plays one sampler node per MIDI channel (app-002) into the
   master delay, plate and limiter (app-003). Its sounds are SFZ files that
-  `tool/convert-content-bundle.js` rebuilt once from the legacy package
+  the app's content converter rebuilt once from the legacy package
   (app-001), listed in `content/sfz/index.json`. The same converter
   dropped the scripts, which were never active in the legacy app.
 - The graph connects event outputs to event inputs; a node with
@@ -115,8 +115,8 @@ flowchart LR
   renders are deterministic. A script load builds a new context on the
   worker and swaps at a tick; a failed load keeps the old one. A memory
   limit and a time budget per tick stop a runaway script.
-- **The Audanika host layer in JavaScript** (`audanika-host.js`, in the
-  app's content) recreates what SoundPrism's Objective-C interface did:
+- **The Audanika host layer in JavaScript** (a script in the app's
+  content) recreates what SoundPrism's Objective-C interface did:
   `sampler.time` from the beat (`linkTime` = beat × 0.5), the slider from
   CC 74, the load order (`DefaultSamplerScript.js`, `DefaultSoundScript.js`
   per channel, the three channel scripts in one shared scope),
@@ -168,17 +168,17 @@ Approaches not taken:
    only configures the node; native tests (no allocation and no lock on
    the audio thread, ThreadSanitizer, the late worker, deterministic
    offline renders) and a bench entry.
-2. **A Node reference** in `audanika_app`: the original scripts run in
-   Node's `vm` with a stub `sampler` on the same tick grid and write the
-   control streams of every combi for a fixed scenario (120 BPM, CC 74
-   moves, 32 bars, the buffer sizes of the devices). The modulator with
-   the host layer must reproduce them within a tolerance (QuickJS-ng and
-   V8 may differ in the last bits of `sin`).
+2. **A Node reference** in the app: the original scripts run in Node's `vm`
+   with a stub `sampler` on the same tick grid and write the control
+   streams of every combi for a fixed scenario (120 BPM, CC 74 moves, 32
+   bars, the buffer sizes of the devices). The modulator with the host
+   layer must reproduce them within a tolerance (QuickJS-ng and V8 may
+   differ in the last bits of `sin`).
 3. **The measurements of QuickJS-ng**, before the app is wired:
    - Workloads: a synthetic script in `aud_audio_script` (envelopes and
      target functions like the combis', plus a tenfold stress variant),
-     public; the 23 real combis with `audanika-host.js` in `audanika_app`,
-     since the scripts are not public.
+     public; the 23 real combis with the host layer in the app, since the
+     scripts are not public.
    - Numbers per device: the time of a tick (mean, p99, maximum) against
      the buffer duration, late ticks, context creation and the load of a
      combi, memory per context, the longest pause over 10 minutes
@@ -197,16 +197,15 @@ Approaches not taken:
      if not, the WebView's V8 (`JavaScriptSandbox`, in a process of its
      own) is measured on Android too, and the engine per platform is
      decided with the user.
-4. **The converter** `tool/convert-soundprism-link-edition.js` in
-   `audanika_app`: reads the content packages from a path given on the
-   command line and writes into `content/`:
+4. **The converter** of the combis in the app: reads the content packages
+   from a path given on the command line and writes into `content/`:
    - the 46 sample sets from the reduced packages, decoded from m4a and
      stored as FLAC, in the layout of ticket 32;
    - the channel SFZ files of the 69 channel presets of the 23 combis;
-   - the scripts, the two default scripts and `audanika-host.js`;
+   - the scripts, the two default scripts and the host layer;
    - the combis in `index.json`: channels, scripts, the start value of CC
      74, delay and reverb from `AUD002021_3_HighReverb`.
-   It shares the sample rules of `convert-content-bundle.js`.
+   It shares the sample rules of the converter of ticket 27.
 5. **The app**: the modulator in `AudSoundEngine`, the event connections,
    the transport at 120 BPM from the start of the engine, CC 74 from
    external MIDI to the modulator, the combis in the sound list.
@@ -225,7 +224,7 @@ Approaches not taken:
 - `aud_audio_script` (new): the package, QuickJS-ng, the node, the
   synthetic benchmark; 0.1.0. QuickJS-ng comes from the pub.dev package
   `gg_quickjs` (ticket 35, done here, build-002).
-- `audanika_app`: the reference, the measurements of the real combis, the
+- The app: the reference, the measurements of the real combis, the
   converter, the content, the wiring.
 - `aud_dsp_sampler`: the tests of ticket 32 (includes, `$` variables,
   `default_path` and `note_offset` over virtual paths and text loads, a
@@ -264,7 +263,7 @@ Approaches not taken:
 1. The package is `aud_audio_script`, the node `aud.script.modulator`.
 2. QuickJS-ng on all platforms; measure; if the scripts run fast enough,
    QuickJS-ng stays.
-3. `audanika-host.js` lives in the app's content.
+3. The host layer lives in the app's content.
 4. The tick follows the buffer size of the operating system: new values
    every buffer, in step with the audio callback.
 5. Fidelity as in SoundPrism: one value per buffer, no smoothing; how it
@@ -334,9 +333,10 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
 8. **CC 74.** External MIDI reaches only the `external` node; the app
    connects every external input to the modulator too. The slider reads
    CC 74 of the first MIDI channel, as in SoundPrism.
-9. **Play modes** (changed by the user): no `sml`; the app's channels stay
-   as they are — bass on MIDI channel 1, chord on 2, melody on 3 (the
-   app's channels 0 to 2, app-002) — and the variants are not converted.
+9. **Play modes** (changed by the user): no change to the app's play modes;
+   its channels stay as they are — bass on MIDI channel 1, chord on 2,
+   melody on 3 (the app's channels 0 to 2, app-002) — and the variants are
+   not converted.
 10. **The content.** All reduced sample sets are m4a, 25 of the 46 at
     22 kHz without `sampleInfo.xml`; the app's converter rejects them.
     The new converter decodes and encodes with macOS's `afconvert` (no
@@ -360,11 +360,11 @@ Confirmed by the user on 2026-10-18; point 9 was changed by the user.
 The implementation deviates from the plan where the code or the
 measurements asked for it.
 
-- **The port is exact.** The Node reference (`tool/soundprism-reference.js`,
-  an independent re-implementation of SoundPrism's Objective-C interface)
-  and the modulator running `audanika-host.js` on QuickJS-ng agree on every
-  tick of all 23 combis at 180, 256 and 512 frames: the same grid points and
-  offsets, values within 2e-15.
+- **The port is exact.** The Node reference of the app (an independent
+  re-implementation of SoundPrism's Objective-C interface) and the
+  modulator running the host layer on QuickJS-ng agree on every tick of all
+  23 combis at 180, 256 and 512 frames: the same grid points and offsets,
+  values within 2e-15.
 - **A lookahead of the worker** (script-001). On the Galaxy Tab S4 a tick of
   the real scripts took about 0.1 ms of the 3.75 ms block, yet 6.7 % of the
   ticks came late: after a late callback the stream calls back twice in a
@@ -524,9 +524,8 @@ JavaScript could run scripts in the worklet later.
   interop-001. The engine and the umbrella never depend on the package.
 - app-006 (app-005 went to ticket 29): the SoundPrism Link Edition combis
   are rebuilt once as SFZ with FLAC samples; their scripts ship unchanged
-  and run in `aud.script.modulator` behind the host layer
-  `audanika-host.js` — the one legacy format the app reads at run time
-  (refines scope-002 and app-001).
+  and run in `aud.script.modulator` behind the host layer — the one legacy
+  format the app reads at run time (refines scope-002 and app-001).
 - app-007 and sampler-010, the decisions of ticket 32, done here: a
   sample set exists once as FLAC and presets include it; a missing
   include fails the load, and `note_offset_open_bounds` keeps the outer
