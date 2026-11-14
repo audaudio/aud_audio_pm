@@ -312,8 +312,8 @@ roughly 22 to 32 engineer-weeks.
 - S22 (M) Tooling: starts small with S1 — analyze, format, tests and
   the notices check on every repo — and grows into the CI matrix (macOS,
   Windows, Linux runners, Android emulator, headless Chrome), Clang's
-  RealtimeSanitizer and the watchdog in CI, a supply-chain repo like
-  `aud_sc`. Depends on S1 (minimal), S4 (matrix).
+  RealtimeSanitizer and the watchdog in CI, a supply-chain repo like the
+  app's. Depends on S1 (minimal), S4 (matrix).
 - S24 (M) `aud_audio_bench`: starts small with S4 — callback time,
   xruns and command-to-sound latency on the reference devices — and
   grows into loopback latency measurement, CPU per node type and memory
@@ -331,12 +331,12 @@ roughly 22 to 32 engineer-weeks.
   and one sample cache budget per process) and osc-002 (messages to
   nodes).
 - S29a (M, M1, built 2026-10-13 in ticket 27 for iOS and Android, in
-  `audanika_app` of `audanika-legacy` instead of `aud_app`, with the
-  legacy engine removed there) Early app integration: an integration
-  branch of `aud_app` plays one SFZ instrument through `aud_audio` and
+  the existing Audanika app instead of the new app, with the legacy
+  engine removed there) Early app integration: an integration branch of
+  the new app plays one SFZ instrument through `aud_audio` and
   `aud_dsp_sampler` from the app's MIDI stream on iOS and Android as soon
   as S4 and S9 exist, and feeds its findings back into the contracts. The
-  code repo lives in `audanika-private`; the plan file lives here.
+  code repo is private; the plan file lives here.
   Depends on S4, S9. Result: app-001 (the sounds rebuilt once as SFZ),
   app-002 (one sampler node per MIDI channel) and sampler-004 (`apk:/`
   paths on Android).
@@ -354,13 +354,13 @@ roughly 22 to 32 engineer-weeks.
   ahead of S29b, which keeps the tuning by ear and the reference devices)
   and sampler-005 (the state all synths of a process share is
   thread-safe).
-- S29b (L, M2) App migration: `aud_app` replaces the legacy
-  `audio_engine` with `aud_audio`, `aud_audio_midi` over the `aud_midi`
-  ports and `aud_dsp_sampler` with the reverb and
-  delay of S10a; the instruments are rebuilt as SFZ and graph documents,
-  the legacy presets are neither converted nor emulated (scope-002); the
-  instrument reference suite of the new instruments passes on the
-  reference devices (release-001, release-002). Depends on S29a, S10a.
+- S29b (L, M2) App migration: the new app replaces the legacy engine with
+  `aud_audio`, `aud_audio_midi` over the `aud_midi` ports and
+  `aud_dsp_sampler` with the reverb and delay of S10a; the instruments are
+  rebuilt as SFZ and graph documents, the legacy presets are neither
+  converted nor emulated (scope-002); the instrument reference suite of the
+  new instruments passes on the reference devices (release-001,
+  release-002). Depends on S29a, S10a.
 
 - S9b (M, M2, planned as ticket 29) Voice budget: a voice limit of the
   sampler that changes in real time, one voice budget per process and a

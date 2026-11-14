@@ -33,8 +33,8 @@ development profile; the gate's probe apps and App IDs still exist.
 
 ## Affected repos
 
-- `audanika_app`: the app group on iOS, the purchases the app shares with
-  the extension on both platforms, the release lanes
+- The app: the app group on iOS, the purchases the app shares with the
+  extension on both platforms, the release lanes
 - `aud_audio_auv3`, `aud_audio_plugin`: only if a host shows a fault
 - `aud_audio_vst3`: the Windows build after the move to `aud_audio_plugin`
 - `aud_audio_pm`: this plan and its findings

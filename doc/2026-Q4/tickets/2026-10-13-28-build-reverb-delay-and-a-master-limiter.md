@@ -43,7 +43,7 @@ Serves [flutter-audio-kit](../goals/flutter-audio-kit.md).
   is `scripts/check-notices.js` of `aud_audio_midi`.
 - The app (ticket 27) connects one sampler node per MIDI channel and the
   node `external` straight to the output and loads presets from
-  `content/sfz/index.json`, which `tool/convert-content-bundle.js`
+  `content/sfz/index.json`, which the app's content converter
   writes. The app has no tempo. The legacy engine ran Apple's reverb and
   delay on iOS only and off by default; its reverb presets used wet 0.05
   to 0.2 with 2 to 3 s decay and a delay of 0.4 s, feedback 0.15, wet
@@ -124,8 +124,8 @@ modulation and distortion of S10b.
 
 - `aud_dsp_effects`: the nodes, the package around them, tests, bench,
   example; 0.2.0 (minor: the Dart API of the spike breaks).
-- `audanika_app`: the master chain, the effects per preset, the converter,
-  tests and numbers; a minor version.
+- The app: the master chain, the effects per preset, the converter, tests
+  and numbers; a minor version.
 - `aud_audio_pm`: this plan, process-004 and process-005, the decisions of
   the findings, `issues.md`.
 - `aud_midi_windows`: joined on 2026-10-13 with the user's consent, because
@@ -148,11 +148,10 @@ The standing rules of process-005 hold: no Dart on the audio thread and no
 allocation there; permissive licenses with notices and the check;
 Node.js scripts with the license header; independent versions; commits
 with `gg one do commit -m`, first word "Add", "- " bullets, no
-Co-Authored-By trailer, no name of a repo of `audanika-legacy` or
-`audanika-private` in commit, merge or changelog lines; publish configs
-before `gg do review`. Model and effort: Claude Opus 5.5 at extra high
-effort for the lead and every agent (process-004); Fable only after
-asking the user.
+Co-Authored-By trailer, no name of a repo of another organization in
+commit, merge or changelog lines; publish configs before `gg do review`.
+Model and effort: Claude Opus 5.5 at extra high effort for the lead and
+every agent (process-004); Fable only after asking the user.
 
 ## Defaults for the open questions
 
@@ -182,8 +181,8 @@ asking the user.
 1. Plan, process-004, process-005, `issues.md` (this file).
 2. `aud_dsp_effects`: package on ABI 0.4, the five nodes, notices,
    native and Dart tests, goldens, bench, README.
-3. `audanika_app`, in parallel with step 2: effects per preset in the
-   converter, `index.json` and the content model.
+3. The app, in parallel with step 2: effects per preset in the converter,
+   `index.json` and the content model.
 4. `aud_dsp_effects` example and its integration test; the app's master
    chain and its numbers test.
 5. Measure on the iOS simulator and the Android emulator.

@@ -46,7 +46,7 @@ app integration of S29a and the goal
 
 ## Affected repos (expected)
 
-- `audanika_app`: the state, the control, the delay, the tests.
+- The app: the state, the control, the delay, the tests.
 - `aud_audio_pm`: this plan; a decision on the delay if it changes
   app-003.
 

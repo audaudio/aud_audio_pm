@@ -4,7 +4,7 @@
 - Date: 2026-10-24
 - Canonical source: tickets/2026-10-22-38-make-all-repos-run-on-windows.md
   (part 2, steps 6 to 8), `aud_audio_vst3/src/aud_vst3_editor_win.cpp`,
-  `audanika_app/windows/runner/plugin_editor_window.h`
+  the editor window of the app's Windows runner
 - Refines: [plugin-003](plugin-003.md) — the editor process on Windows;
   [plugin-007](plugin-007.md) — its channel without a sandbox
 - Related: [plugin-008](plugin-008.md) — the shell on Windows;

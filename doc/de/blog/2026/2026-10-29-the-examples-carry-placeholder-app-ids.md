@@ -47,4 +47,4 @@ found in the LICENSE file in the root of this package.
 - Schritt 4 des Plans, ein Check gegen IDs der Organisation in einem
   Example, folgt später.
 - Nicht jedes Example wurde auf jeder Plattform gebaut.
-- `aud_ab_space_widget` der privaten Familie nutzt weiter `com.audanika`.
+- Ein Example eines privaten Repos nutzt weiter `com.audanika`.

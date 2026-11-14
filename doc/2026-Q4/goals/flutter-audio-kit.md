@@ -15,7 +15,7 @@ a stable foundation.
 
 ## Why
 
-- The legacy `audio_engine` plugin is iOS/Android only, Flutter-bound,
+- The legacy Audanika engine plugin is iOS/Android only, Flutter-bound,
   MethodChannel plus FFI, built around one fixed sampler pipeline. It
   cannot carry desktop, web, plugin formats or third-party DSP.
 - The new Audanika app family (`aud_*`) and the `aud_midi` family are

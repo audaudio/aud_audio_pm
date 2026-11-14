@@ -1,4 +1,4 @@
-# 27: S29a — Play an SFZ instrument from audanika_app on the new engine on iOS and Android
+# 27: S29a — Play an SFZ instrument from the Audanika app on the new engine on iOS and Android
 
 Status: implemented 2026-10-13 without a plan review, as the user asked
 (the defaults below answer the open questions); findings and numbers
@@ -6,36 +6,33 @@ below.
 
 ## Goal
 
-Build step S29a of the plan of ticket 17 (milestone M1) in
-`audanika-legacy/audanika_app`: the app plays its previous sounds through
-`aud_audio`, `aud_audio_midi` and `aud_dsp_sampler` on iOS and Android.
+Build step S29a of the plan of ticket 17 (milestone M1) in the existing
+Audanika app: the app plays its previous sounds through `aud_audio`,
+`aud_audio_midi` and `aud_dsp_sampler` on iOS and Android.
 The on-screen keys go into the engine directly from Dart (never on the
 audio thread), external MIDI goes over the native tap of ticket 26
-(midi-002, midi-003), the legacy `audio_engine` plugin and
+(midi-002, midi-003), the legacy engine plugin and
 `flutter_midi_command` leave the app, and the findings go back into the
 contracts as decisions. Serves
 [flutter-audio-kit](../goals/flutter-audio-kit.md) and is the first user
 of the family outside its own examples.
 
-S29a of ticket 17 named an integration branch of `aud_app` in
-`audanika-private`. The user moved it to `audanika_app` in the
-`audanika-legacy` organization and widened it: the legacy engine is
-removed here, not in S29b. S29b keeps the reverb and delay of S10a, the
-instrument reference suite and the reference devices.
+S29a of ticket 17 named an integration branch of the new app. The user
+moved it to the existing Audanika app and widened it: the legacy engine
+is removed here, not in S29b. S29b keeps the reverb and delay of S10a,
+the instrument reference suite and the reference devices.
 
 ## What the code base gives
 
-The app (`audanika_app`, Flutter 3.47.5, iOS 15, Android minSdk 24):
+The app (Flutter 3.47.5, iOS 15, Android minSdk 24):
 
-- `audio_engine` (legacy, C++ on Oboe and AudioUnits) loads the content
-  package `content/AUD007870_audanika_default.contentpackage.bundle` and
-  plays MIDI bytes through FFI `playMidi`
-  (`lib/src/audio/audio_engine_adapter.dart`). Two adapters wrap one
-  engine: one fed by the app's `MidiManager`, one by the MIDI extension
-  (`lib/src/application/application.dart:830-872`).
-- The on-screen keys become MIDI in `sml`: bass on channel 0, chord on 1,
-  melody on 2, velocity always 76; the motion sensors send CC 7; stop
-  sends CC 123.
+- The legacy engine plugin (C++ on Oboe and AudioUnits) loads the app's
+  default content package and plays MIDI bytes through FFI. Two adapters
+  wrap one engine: one fed by the app's MIDI manager, one by the MIDI
+  extension.
+- The app's play surface turns the on-screen keys into MIDI: bass on
+  channel 0, chord on 1, melody on 2, velocity always 76; the motion
+  sensors send CC 7; stop sends CC 123.
 - `flutter_midi_command` serves outputs only: external devices, BLE and
   the virtual ports "Audanika Bass/Chord/Melody" on iOS. **The app reads
   no external MIDI today**; S29a adds the input.
@@ -67,7 +64,7 @@ aud_midi 0.1.1 on pub.dev) — see tickets 22, 25 and 26:
 
 ## Scope
 
-1. **SFZ folders.** A Node.js script `tool/convert-content-bundle.js`
+1. **SFZ folders.** A Node.js script of the app, the converter,
    turns the bundle once into `content/sfz`; the output is committed and
    the bundle leaves the app. The app never reads the legacy format at
    run time. Per sample set one folder with its WAVs and an
@@ -98,8 +95,8 @@ aud_midi 0.1.1 on pub.dev) — see tickets 22, 25 and 26:
    exists); hot-plug through the bridge.
 6. **MIDI out.** `aud_midi` replaces `flutter_midi_command` for the
    outputs, the virtual ports on iOS and BLE.
-7. **Removal.** `audio_engine`, `flutter_midi_command` and the bundle go;
-   the Android assets and the iOS folder reference carry `content/sfz`;
+7. **Removal.** The legacy engine, `flutter_midi_command` and the bundle
+   go; the Android assets and the iOS folder reference carry `content/sfz`;
    `aud_dsp_sampler` builds for `armeabi-v7a` again, so the app keeps its
    three ABIs.
 8. **Numbers** on the iOS simulator and the Android emulator with an
@@ -143,8 +140,8 @@ defaults decide the questions and become decisions where they hold:
 
 ## Affected repos
 
-- `audanika_app`: converter, SFZ content, engine service, MIDI on
-  `aud_midi`, removal of the legacy engine, tests, numbers.
+- The app: converter, SFZ content, engine service, MIDI on `aud_midi`,
+  removal of the legacy engine, tests, numbers.
 - `aud_audio_pm`: this plan, decisions, findings, issues.md.
 - `aud_dsp_sampler`: `apk:/` paths read from the APK's assets on Android
   (sampler-004), the `armeabi-v7a` build, and the defects the integration
@@ -161,8 +158,8 @@ defaults decide the questions and become decisions where they hold:
 2. Add the engine service; play the keys through it.
 3. Move the MIDI outputs, virtual ports and BLE onto `aud_midi`; add the
    inputs over the bridge.
-4. Remove `audio_engine`, `flutter_midi_command` and the bundle; fix the
-   tests.
+4. Remove the legacy engine, `flutter_midi_command` and the bundle; fix
+   the tests.
 5. Build and play on the iOS simulator and the Android emulator; measure.
 6. Write the findings into decisions and this plan; review; publish.
 

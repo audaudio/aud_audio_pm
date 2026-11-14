@@ -45,4 +45,4 @@ found in the LICENSE file in the root of this package.
 - Step 4 of the plan, a check that rejects IDs of the organization in an
   example, is left for later.
 - Not every example was built on every platform.
-- `aud_ab_space_widget` of the private family still uses `com.audanika`.
+- An example of a private repo still uses `com.audanika`.

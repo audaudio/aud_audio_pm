@@ -3,7 +3,7 @@
 What the combi patches of SoundPrism Link Edition are, how their
 JavaScript scripts modulate the sound, and what the new engine needs to
 play them. Source: the SoundPrism code base (a private repo), inspected
-2026-10-14 for ticket 31. The legacy Audanika `audio_engine` carries the
+2026-10-14 for ticket 31. The legacy Audanika engine carries the
 same JavaScript interface; there it is switched off.
 
 ## The content package

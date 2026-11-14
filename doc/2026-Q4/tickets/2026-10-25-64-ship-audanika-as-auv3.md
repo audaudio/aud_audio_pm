@@ -59,12 +59,12 @@ through its first user, the app.
 - `aud_dsp_sampler` keeps one sample store per process with a budget
   (lifecycle-002, default 256 MB, preload 8192 frames, streaming): the
   instances in one extension process share their samples.
-- `audanika_app` 4.6.0+171: the Mac app with the VST3 inside (ticket 37),
-  `PluginBundle` exports `macos/plugin/document.json` and `presets.json`
-  (app-009), the editor is the app in the profile `pluginEditor` with
-  `ShellSoundEngine` (app-010), the library of bought albums reaches the
-  editor through the app group's defaults. iOS ships through fastlane;
-  `ios/Audanika FX` is an unused AUv3 template of the initial commit.
+- The Audanika app 4.6.0+171: the Mac app with the VST3 inside (ticket 37),
+  its plugin bundle exports `document.json` and `presets.json` (app-009),
+  the editor is the app in its plugin editor profile with a sound engine
+  over the shell protocol (app-010), the library of bought albums reaches
+  the editor through the app group's defaults. iOS ships through fastlane;
+  the iOS project holds an unused AUv3 template of the initial commit.
 
 ## Concept
 
@@ -161,10 +161,10 @@ registers only the Flutter plugins the editor needs; none may touch
   budget, editor bridge, build tool, test host and `auval`; spike leftovers
   removed (ballast, measurement parameters, measurement app); a minor
   version.
-- `audanika_app`: the extension targets of the macOS and iOS projects, the
+- The app: the extension targets of the macOS and iOS projects, the
   configuration of the AUv3, the editor's entry point and AUv3 transport,
-  the app group on iOS, the release lanes carrying the extension, `ios/
-  Audanika FX` removed; a minor version.
+  the app group on iOS, the release lanes carrying the extension, the
+  unused AUv3 template removed; a minor version.
 - Added when a step needs them (process-005): `aud_audio_graph`,
   `aud_dsp_sampler`, `aud_dsp_effects`, `aud_audio_script` (iOS builds of
   their recipes, the sample cache budget through the headless host).
@@ -207,9 +207,9 @@ Phase C — the shell:
 
 Phase D — the Mac:
 
-7. `audanika_app`: the AUv3's configuration next to the VST3's, the macOS
+7. The app: the AUv3's configuration next to the VST3's, the macOS
    extension target linking the shell, embedded and signed with the app
-   group; the editor's entry point and `ShellSoundEngine` over
+   group; the editor's entry point and its sound engine over
    `AudAuv3Shell`.
 8. Logic Pro and GarageBand on the Mac: every preset from a MIDI region,
    automation, save and reopen, offline bounce, two instances, the editor;
@@ -217,18 +217,17 @@ Phase D — the Mac:
 
 Phase E — iOS:
 
-9. `audanika_app`: the iOS extension target, the app group on iOS and the
-   bought albums in its defaults, the Flutter plugins of the editor.
+9. The app: the iOS extension target, the app group on iOS and the bought
+   albums in its defaults, the Flutter plugins of the editor.
 10. Loopy Pro, GarageBand and Cubasis on the iPhone: every preset, save and
     reopen, the editor; one, two and four instances for 10 minutes each
     with the footprint recorded (req-auv3-005).
 
 Phase F — ship:
 
-11. `audanika_app`: the extension in the iOS lane (fastlane) and the macOS
-    lane (`tool/release-mac.js`); TestFlight builds for iOS and macOS
-    uploaded only on the user's go, installed and tried in the hosts of
-    req-auv3-001.
+11. The app: the extension in the iOS lane (fastlane) and the macOS lane;
+    TestFlight builds for iOS and macOS uploaded only on the user's go,
+    installed and tried in the hosts of req-auv3-001.
 12. `/code-review`, documentation (blog posts, `index.jsonc`, READMEs, the
     architecture), review, publish; the requirements set to `done`.
 

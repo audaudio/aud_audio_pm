@@ -24,9 +24,9 @@ no file in `bugs`; the Goal describes it.
 
 ## Affected repos
 
-- `audanika_app`: R8 keep rules for the plugin's classes and the Kotlin
-  classes that JNI names (`android/app/proguard-rules.pro`), applied to the
-  release build; a patch (4.4.0 → 4.4.1). The release of 4.4.0 to the
+- The app: R8 keep rules for the plugin's classes and the Kotlin
+  classes that JNI names (in its ProGuard rules), applied to the release
+  build; a patch (4.4.0 → 4.4.1). The release of 4.4.0 to the
   stores showed two more faults, fixed here too: App Store Connect
   rejected build 166 (ITMS-90683) because `Info.plist` lacked
   `NSMicrophoneUsageDescription` — `aud_audio_io` links the record

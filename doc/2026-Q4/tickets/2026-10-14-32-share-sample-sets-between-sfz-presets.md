@@ -71,9 +71,9 @@ write this layout. Refines app-001; serves the app integration of S29a.
    fails, the fork gets an opt-in that keeps the bounds open.
 5. **FLAC**: the converter stores every sample as FLAC
    (`samples/NNN.flac`); the WAVs leave the app.
-6. **The converters**: `tool/convert-content-bundle.js` writes the new
-   layout; `tool/convert-soundprism-link-edition.js` of ticket 31 uses it
-   from the start (46 sets, 69 channel presets).
+6. **The converters**: the app's content converter writes the new layout;
+   the converter of ticket 31 uses it from the start (46 sets, 69 channel
+   presets).
 7. **Tests**: every preset renders the same before and after (an offline
    render of a set of notes per preset, within sampler-007), FLAC
    included; loads through `apk:/` on Android and from the bundle on iOS;
@@ -85,8 +85,8 @@ write this layout. Refines app-001; serves the app integration of S29a.
 
 ## Affected repos (expected)
 
-- `audanika_app`: the converter, the regenerated content as FLAC (no
-  audible change), the render comparison, the measurements.
+- The app: the converter, the regenerated content as FLAC (no audible
+  change), the render comparison, the measurements.
 - `aud_dsp_sampler`: tests of includes, `$` variables, `default_path`
   and `note_offset` over virtual paths and text loads; a patch version,
   or a minor one if the opt-in for the bounds is needed.
